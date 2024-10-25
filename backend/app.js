@@ -14,6 +14,8 @@ async function main() {
 main()
 
 
-app.listen(3000, () => {
+app.listen(3000, async () => {
   console.log('Server is running on port 3000');
+  await sequelize.authenticate();
+  console.log("Database connected!");
 });
