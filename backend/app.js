@@ -2,11 +2,16 @@ const express = require('express');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, "../.env") });
 
-const sequelize = require('./config/session')
+const { sequelize } = require('./models')
 
 const app = express();
-console.log(process.env.DB_USER);
 
+
+async function main() {
+  await sequelize.sync({ force: true });
+}
+
+main()
 
 
 app.listen(3000, () => {
