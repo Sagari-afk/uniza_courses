@@ -14,6 +14,7 @@ app.use(express.json());
 app.use(authMiddleware);
 
 app.use("/api/user/", require("./routes/user.router"))
+app.use("/api/course/", require("./routes/course.router"))
 
 
 app.listen(3000, async () => {

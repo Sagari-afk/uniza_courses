@@ -50,18 +50,13 @@ module.exports = (sequelize, DataTypes) => {
     },
   }, {
     hooks: {
-      beforeValidate: (user, options) => {
+      beforeCreate: (user, options) => {
         const salt = crypto.randomBytes(16).toString('hex');
+        console.log(salt, user.password);
         user.salt = salt;
         user.password = crypto.pbkdf2Sync(user.password, salt, 100, 64, 'sha512').toString('hex');
       },
     },
-    // instanceMethods: {
-    //   checkPassword: function(user, password) {
-    //     const hash_pwd = crypto.pbkdf2Sync(user.password, user.salt, 100, 64, 'sha512').toString('hex');
-    //     return password === hash_pwd;
-    //   }
-    // },
     sequelize,
     tableName: 'user',
     modelName: 'User',

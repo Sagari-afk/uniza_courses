@@ -96,17 +96,19 @@ const loginUser = [
 
 const updateUser = async (req, res) => {
     try {
-    let data = req.body;
-    for (const [key, value] of Object.entries(data)) {
-        await User.update(
-            { [key]: value },
-            {
-              where: {
-                id: req.params.id,
-              },
-            },
-        );
-    }
+        let data = req.body;
+        const existingUser = await User.findByPk(req.params.id)
+        if (!existingUser) return res.status(400).json('User s takym id neexistuje!')
+        for (const [key, value] of Object.entries(data)) {
+            await User.update(
+                { [key]: value },
+                {
+                where: {
+                    id: req.params.id,
+                },
+                },
+            );
+        }
         return res.status(200).json("Success");
     } catch (error) {
         console.log(error);
@@ -116,6 +118,8 @@ const updateUser = async (req, res) => {
   
   const deleteUser = async (req, res) => {
     try {
+        const existingUser = await User.findByPk(req.params.id);
+        if (!existingUser) return res.status(400).json('User s takym id neexistuje!');
         await User.destroy({
             where: {
               id: req.params.id,
