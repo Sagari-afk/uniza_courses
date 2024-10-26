@@ -3,11 +3,18 @@ const {
   Model
 } = require('sequelize');
 const usertypes = require('./usertypes');
+const crypto = require('crypto');
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
 
     static associate({ UserType }) {
       this.belongsTo(UserType, { foreignKey: 'type_id' })
+    }
+
+    static checkPassword(user, password) {
+      const hash_pwd = crypto.pbkdf2Sync(user.password, user.salt, 100, 64, 'sha512').toString('hex');
+      return password === hash_pwd;
     }
   }
   User.init({
@@ -27,6 +34,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
@@ -41,6 +49,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   }, {
+    hooks: {
+      beforeValidate: (user, options) => {
+        const salt = crypto.randomBytes(16).toString('hex');
+        user.salt = salt;
+        user.password = crypto.pbkdf2Sync(user.password, salt, 100, 64, 'sha512').toString('hex');
+      },
+    },
+    // instanceMethods: {
+    //   checkPassword: function(user, password) {
+    //     const hash_pwd = crypto.pbkdf2Sync(user.password, user.salt, 100, 64, 'sha512').toString('hex');
+    //     return password === hash_pwd;
+    //   }
+    // },
     sequelize,
     tableName: 'user',
     modelName: 'User',

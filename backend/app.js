@@ -1,17 +1,19 @@
 const express = require('express');
 const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, "../.env") });
+const { sequelize } = require('./models');
+const authMiddleware = require('./middlewares/auth.middleware');
 
-const { sequelize } = require('./models')
-
-const app = express();
-
-
-async function main() {
-  await sequelize.sync({ force: true });
+if (!process.env.API_KEY) {
+  console.log('Missing API KEY');
+  process.exit(1)
 }
 
-main()
+const app = express();
+app.use(express.json());
+app.use(authMiddleware);
+
+app.use("/api/user/", require("./routes/user.router"))
 
 
 app.listen(3000, async () => {

@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      type: {
+      type_id: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
@@ -26,6 +26,7 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
         allowNull: false,
+        unique: true,
       },
       password: {
         type: Sequelize.STRING,
