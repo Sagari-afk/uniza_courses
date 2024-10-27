@@ -16,6 +16,10 @@ module.exports = (sequelize, DataTypes) => {
       const hash_pwd = crypto.pbkdf2Sync(user.password, user.salt, 100, 64, 'sha512').toString('hex');
       return password === hash_pwd;
     }
+
+    toJSON() {
+      return { ...this.get(), salt:undefined, password:undefined }
+    }
   }
   User.init({
     type_id: {
@@ -46,15 +50,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     salt: {
       type: DataTypes.STRING,
-      allowNull: false,
     },
   }, {
     hooks: {
       beforeCreate: (user, options) => {
-        const salt = crypto.randomBytes(16).toString('hex');
-        console.log(salt, user.password);
-        user.salt = salt;
-        user.password = crypto.pbkdf2Sync(user.password, salt, 100, 64, 'sha512').toString('hex');
+        if (user.isNewRecord) {  // Check if it's a new record
+          const salt = crypto.randomBytes(16).toString('hex');
+          console.log(salt, user.password);
+          user.salt = salt;
+          user.password = crypto.pbkdf2Sync(user.password, salt, 100, 64, 'sha512').toString('hex');
+        }
       },
     },
     sequelize,
