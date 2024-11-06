@@ -1,0 +1,78 @@
+:root {
+  font-family: Roboto;
+  line-height: 1.5;
+  font-weight: 500;
+
+  /* color-scheme: light dark; */
+  color: rgba(255, 255, 255, 0.87);
+  
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #000000;
+  background-image: url('./assets/mlem.gif');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-blend-mode: screen;
+  background-position-y: top;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 4em;
+  line-height: 1.1;
+  font-weight: 500;
+  line-height: 100%;
+}
+
+.c-white {
+  color: white;
+}
+.flex {
+  display: flex;
+}
+.center {
+  justify-content: center;
+}
+
+.btn {
+  border-radius: 0.75rem;
+  padding: 1rem 2rem;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+
+  font-size: 1rem;
+  font-style: normal;
+  font-weight: 800;
+  line-height: normal;
+  text-transform: uppercase;
+}
+
+.btn-with-bc {
+  background: linear-gradient(94deg, #DF6690 11.3%, #FFC65A 101.52%);
+  color: #161719;
+
+}
+.btn-without-bc {
+  border: 2px solid #DF6690;
+  color: #FFF;
+}
+
+.gap-1-5 {
+  gap: 1.5rem;
+}
