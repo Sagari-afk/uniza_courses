@@ -2,26 +2,32 @@
   font-family: Roboto;
   line-height: 1.5;
   font-weight: 500;
+  width: 100%;
 
   /* color-scheme: light dark; */
   color: rgba(255, 255, 255, 0.87);
-  
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #000000;
-  background-image: url('./assets/mlem-min.gif');
+  background-image: url("./assets/mlem-min.gif");
   background-repeat: no-repeat;
   background-position: center;
   background-blend-mode: screen;
   background-position-y: top;
+}
+#root {
+  width: 100%;
+  margin-top: 1rem;
 }
 
 a {
   font-weight: 500;
   color: #646cff;
   text-decoration: inherit;
+  display: inline-flex;
 }
 
 body {
@@ -43,34 +49,56 @@ h1 {
   color: white;
 }
 .flex {
-  display: flex;
+  display: flex !important;
+}
+.flex-row {
+  flex-direction: row !important;
+}
+.flex-column {
+  flex-direction: column;
 }
 .center {
   justify-content: center;
 }
+.align-center {
+  align-items: center;
+  text-align: center;
+}
+.space-between {
+  justify-content: space-between;
+}
+
+p {
+  margin: 0;
+}
+.gap-4 {
+  gap: 4px;
+}
+.gap-16 {
+  gap: 16px;
+}
 
 .btn {
-  border-radius: 0.75rem;
-  padding: 1rem 2rem;
+  border-radius: 0.75rem !important;
+  padding: 1rem 2rem !important;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.5rem !important;
 
-  font-size: 1rem;
-  font-style: normal;
-  font-weight: 800;
-  line-height: normal;
-  text-transform: uppercase;
+  font-size: 1rem !important;
+  font-style: normal !important;
+  font-weight: 800 !important;
+  line-height: normal !important;
+  text-transform: uppercase !important;
 }
 
 .btn-with-bc {
-  background: linear-gradient(94deg, #DF6690 11.3%, #FFC65A 101.52%);
+  background: linear-gradient(94deg, #df6690 11.3%, #ffc65a 101.52%);
   color: #161719;
-
 }
 .btn-without-bc {
-  border: 2px solid #DF6690;
-  color: #FFF;
+  border: 2px solid #df6690 !important;
+  color: #fff;
 }
 
 .gap-1-5 {

@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-require('dotenv').config({ path: path.resolve(__dirname, "../.env") });
+require('dotenv').config({ path: path.resolve(__dirname, ".env") });
 const { sequelize } = require('./models');
 const authMiddleware = require('./middlewares/auth.middleware');
 
