@@ -1,15 +1,21 @@
 import SelectLanguage from "./SelectLanguage";
 import logo from "../assets/logo_text.png";
+import { Link } from "react-router-dom";
+import { ThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
 
-const Header = () => {
+const Header = ({ theme }) => {
   return (
-    <header className="flex center space-between">
-      <a href="">
-        <img src={logo} style={{ height: "2.5rem", width: "auto" }} />
-      </a>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <header className="flex center space-between">
+        <Link to="/">
+          <img src={logo} style={{ height: "2.5rem", width: "auto" }} />
+        </Link>
 
-      <SelectLanguage />
-    </header>
+        <SelectLanguage />
+      </header>
+    </ThemeProvider>
   );
 };
 

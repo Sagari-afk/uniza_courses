@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<flowgorithm fileversion="4.2">
+    <attributes>
+        <attribute name="name" value="semestralka"/>
+        <attribute name="authors" value="masar2"/>
+        <attribute name="about" value=""/>
+        <attribute name="saved" value="2024-11-28 02:41:42 PM"/>
+        <attribute name="created" value="bWFzYXIyO1JBMjAxLTA4OzIwMjQtMTEtMjY7MDE6NTc6MjYgUE07MjMwOA=="/>
+        <attribute name="edited" value="bWFzYXIyO1JBMjAxLTA4OzIwMjQtMTEtMjY7MDI6NDE6NDUgUE07MzsyNDEz"/>
+        <attribute name="edited" value="cmFkb3M7REVTS1RPUC1QUVU3M0U0OzIwMjQtMTEtMjg7MDI6NDE6NDIgUE07MTsyOTc4"/>
+    </attributes>
+    <function name="Main" type="None" variable="">
+        <parameters/>
+        <body>
+            <declare name="SumaPenazi" type="Integer" array="False" size=""/>
+            <output expression="&quot;Zadaj sumu penazi ktore mame k dispozicii v penazenke&quot;" newline="True"/>
+            <input variable="SumaPenazi"/>
+            <declare name="SumyMinuteZaJednotliveDni" type="Integer" array="True" size="7"/>
+            <call expression="SumyMinuteZaNakup(SumyMinuteZaJednotliveDni)"/>
+            <call expression="VolanieSum(SumyMinuteZaJednotliveDni, SumaPenazi)"/>
+        </body>
+    </function>
+    <function name="SumyMinuteZaNakup" type="None" variable="">
+        <parameters>
+            <parameter name="pole" type="Integer" array="True"/>
+        </parameters>
+        <body>
+            <declare name="poradie" type="Integer" array="False" size=""/>
+            <for variable="poradie" start="0" end="SIZE(pole)-1" direction="inc" step="1">
+                <assign variable="pole[poradie]" expression="1 + RANDOM(50)"/>
+            </for>
+        </body>
+    </function>
+    <function name="VolanieSum" type="None" variable="SumaPenazi">
+        <parameters>
+            <parameter name="SumyMinuteZaJednotliveDni" type="Integer" array="True"/>
+            <parameter name="SumaPenazi" type="Integer" array="False"/>
+        </parameters>
+        <body>
+            <declare name="poradie" type="Integer" array="False" size=""/>
+            <for variable="poradie" start="0" end="SIZE(SumyMinuteZaJednotliveDni)-1" direction="inc" step="1">
+                <output expression="&quot;Suma minuta za &quot; &amp; poradie + 1 &amp; &quot;. den = &quot; &amp; SumyMinuteZaJednotliveDni[poradie]" newline="True"/>
+                <assign variable="SumaPenazi" expression="SumaPenazi - SumyMinuteZaJednotliveDni[poradie]"/>
+                <output expression="&quot;zostatok = &quot; &amp; SumaPenazi" newline="True"/>
+            </for>
+            <output expression="&quot;Na konci tyzdna ostalo &quot;  &amp; SumaPenazi" newline="True"/>
+        </body>
+    </function>
+</flowgorithm>

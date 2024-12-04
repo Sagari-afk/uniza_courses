@@ -46,7 +46,10 @@ h1 {
 }
 
 .c-white {
-  color: white;
+  color: #f6f6f6 !important;
+}
+.bc-white {
+  background-color: #f6f6f6 !important;
 }
 .flex {
   display: flex !important;
@@ -67,6 +70,20 @@ h1 {
 .space-between {
   justify-content: space-between;
 }
+.uppercase {
+  text-transform: uppercase;
+}
+h2 {
+  color: #161719;
+  font-family: Roboto;
+  font-size: 2.5rem;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.c-black {
+  color: #161719 !important;
+}
 
 p {
   margin: 0;
@@ -77,9 +94,13 @@ p {
 .gap-16 {
   gap: 16px;
 }
-
-.btn {
+.border-radius-075 {
   border-radius: 0.75rem !important;
+}
+.border-radius-20 {
+  border-radius: 2rem !important;
+}
+.btn {
   padding: 1rem 2rem !important;
   justify-content: center;
   align-items: center;
@@ -89,18 +110,20 @@ p {
   font-style: normal !important;
   font-weight: 800 !important;
   line-height: normal !important;
-  text-transform: uppercase !important;
 }
 
 .btn-with-bc {
   background: linear-gradient(94deg, #df6690 11.3%, #ffc65a 101.52%);
-  color: #161719;
+  color: #161719 !important;
 }
 .btn-without-bc {
   border: 2px solid #df6690 !important;
-  color: #fff;
 }
 
 .gap-1-5 {
   gap: 1.5rem;
+}
+
+.c-main-purple {
+  color: #df6690;
 }

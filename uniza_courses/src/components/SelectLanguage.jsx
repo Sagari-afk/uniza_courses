@@ -8,6 +8,7 @@ export default function SelectSmall() {
 
   const handleChange = (event) => {
     setLanguage(event.target.value);
+    console.log("Mlem");
   };
 
   return (
@@ -32,7 +33,7 @@ export default function SelectSmall() {
           onChange: { handleChange },
         }}
       >
-        <option value={10}>SLovenčina</option>
+        <option value={10}>Slovenčina</option>
         <option value={20}>Ukrajinčina</option>
         <option value={30}>Angličtina</option>
       </NativeSelect>
