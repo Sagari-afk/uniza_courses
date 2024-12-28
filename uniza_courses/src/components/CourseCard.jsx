@@ -3,29 +3,43 @@ import cardClasses from "../styles/CourseCard.module.css";
 import testImg from "../assets/testImg.png";
 import Badge from "@mui/material/Badge";
 import { Icon } from "@iconify/react";
+import { Box, Typography } from "@mui/material";
 
 const CourseCard = ({ name, img_url, description, updatedAt }) => {
   const date = new Date(updatedAt);
 
   return (
-    <div className={`${cardClasses.courseCard} flex flex-column space-between`}>
-      <div
-        className={`flex space-between ${cardClasses.courseHeader}`}
-        style={{ gap: "42px" }}
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
+      className={`${cardClasses.courseCard}`}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          gap: "42px",
+        }}
+        className={`${cardClasses.courseHeader}`}
       >
-        <div className={cardClasses.courseTitle}>
-          <p className={cardClasses.courseName}>{name}</p>
-          <p
+        <Box className={cardClasses.courseTitle}>
+          <Typography variant="h5" className={cardClasses.courseName}>
+            {name}
+          </Typography>
+          <Typography
             className={cardClasses.courseDescription}
-            style={{ display: "inline" }}
+            sx={{ display: "inline" }}
           >
             {description.slice(0, 50)}
             <span>...</span>
-          </p>
-        </div>
+          </Typography>
+        </Box>
         <Badge
           badgeContent={
-            <div className={cardClasses.badge}>
+            <Box className={cardClasses.badge}>
               <Icon
                 icon="tabler:heart"
                 style={{
@@ -33,44 +47,52 @@ const CourseCard = ({ name, img_url, description, updatedAt }) => {
                   height: "auto",
                 }}
               ></Icon>
-            </div>
+            </Box>
           }
           className="c-main-purple"
         >
           <img src={img_url} className={cardClasses.img} />
         </Badge>
-      </div>
-      <div>
-        <p className={cardClasses.courseInstructor}>Meno a prizvisko ucitela</p>
-        <div className={`${cardClasses.courseFooter} flex space-between`}>
-          <div className="flex gap-4">
-            <p>
+      </Box>
+      <Box>
+        <Typography className={cardClasses.courseInstructor}>
+          Meno a prizvisko ucitela
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          className={`${cardClasses.courseFooter}`}
+        >
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Typography>
               <Icon
                 icon="material-symbols:star"
                 style={{ width: "12px", height: "12px" }}
               ></Icon>{" "}
               5
-            </p>
-            <p style={{ display: "flex", alignItems: "center" }}>
+            </Typography>
+            <Typography style={{ display: "flex", alignItems: "center" }}>
               <Icon
                 icon="material-symbols:person"
                 style={{ width: "12px", height: "12px" }}
               ></Icon>{" "}
               10
-            </p>
-            <p style={{ display: "flex", alignItems: "center" }}>
+            </Typography>
+            <Typography style={{ display: "flex", alignItems: "center" }}>
               <Icon
                 icon="majesticons:clock"
                 style={{ width: "12px", height: "12px" }}
               ></Icon>{" "}
               1 h
-            </p>
-          </div>
+            </Typography>
+          </Box>
 
-          <p>{date.toDateString()}</p>
-        </div>
-      </div>
-    </div>
+          <Typography>{date.toDateString()}</Typography>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

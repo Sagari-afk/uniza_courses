@@ -1,32 +1,47 @@
 import Header from "../components/header";
 import Container from "@mui/material/Container";
-import classes from "../styles/HomePage.module.css";
-import Button from "@mui/material/Button";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { Box, Typography } from "@mui/material";
+import PrimaryBtn from "../components/PrimaryBtn";
+import SecundaryBtn from "../components/SecundaryBtn";
 
-const HomePage = ({ theme }) => {
+const HomePage = () => {
   return (
-    <Container className={classes.Body}>
-      <Header theme={theme} />
-
-      <div className={`${classes.HomePage} page-center`}>
-        <h1 className="c-white align-center">
+    <Container
+      backgroundColor="black.main"
+      sx={{ overflow: "hidden", height: "100%" }}
+    >
+      <Header />
+      <Box
+        sx={{
+          display: "flex",
+          gap: 3,
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100%",
+          paddingBottom: "10rem",
+        }}
+      >
+        <Typography
+          variant="h1"
+          color="white"
+          sx={{
+            textAlign: "center",
+          }}
+        >
           Uč sa rýchlo a<br /> efektívne.
-        </h1>
+        </Typography>
 
-        <div className="flex center gap-1-5">
+        <Box sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
           <Link to="/SignUp">
-            <Button variant="contained btn btn-with-bc uppercase border-radius-075">
-              Prihlasiť
-            </Button>
+            <PrimaryBtn>Prihlásiť</PrimaryBtn>
           </Link>
           <Link to="/Courses">
-            <Button variant="outlined btn btn-without-bc c-white uppercase border-radius-075">
-              Kurzy
-            </Button>
+            <SecundaryBtn>Kurzy</SecundaryBtn>
           </Link>
-        </div>
-      </div>
+        </Box>
+      </Box>
     </Container>
   );
 };

@@ -1,19 +1,15 @@
-import { Container } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import Header from "../components/header";
-import { ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import classes from "../styles/Courses.module.css";
 import CourseCard from "../components/CourseCard";
 import FormControl from "@mui/material/FormControl";
-import NativeSelect from "@mui/material/NativeSelect";
 import React, { useState, useEffect } from "react";
 import Select from "@mui/material/Select";
-import Button from "@mui/material/Button";
 import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
+import SecundaryBtn from "../components/SecundaryBtn";
 
-const Courses = ({ theme }) => {
+const Courses = () => {
   const [studOdbor, setStudOdbor] = React.useState("Vsetky");
   const [rocnik, setRocnik] = React.useState("Vsetky");
   const handleChangeOdbor = (event) => {
@@ -48,12 +44,23 @@ const Courses = ({ theme }) => {
   }, []);
   return (
     <Container>
-      <Header theme={theme} />
-      <div className={`${classes.bodyCourses} c-black`}>
-        <div>
-          <h2>Kurzy podľa predmetov</h2>
-          <div className="flex space-between">
-            <div className="flex">
+      <Header />
+      <Box
+        sx={{
+          borderRadius: "42px 42px 0px 0px",
+          backgroundColor: "white.main",
+          minHeight: "100vh",
+          padding: "2rem",
+          marginTop: "1rem",
+          color: "black.main",
+        }}
+      >
+        <Box>
+          <Typography variant="h3" sx={{ my: "1rem" }}>
+            Kurzy podľa predmetov
+          </Typography>
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Box sx={{ display: "flex" }}>
               <FormControl sx={{ m: 1, minWidth: 180 }}>
                 <InputLabel id="stud-odbor-label">Studijny odbor</InputLabel>
                 <Select
@@ -87,7 +94,7 @@ const Courses = ({ theme }) => {
                   <MenuItem value="3">3</MenuItem>
                 </Select>
               </FormControl>
-            </div>
+            </Box>
             <div className="flex">
               <FormControl sx={{ m: 1, minWidth: 350 }}>
                 <TextField
@@ -98,38 +105,31 @@ const Courses = ({ theme }) => {
                 />
               </FormControl>
               <FormControl sx={{ m: 1, minWidth: 180 }}>
-                <Button variant="outlined btn btn-without-bc border-radius-20 c-black">
+                <SecundaryBtn
+                  sxChildren={{
+                    color: "black.main",
+                    backgroundColor: "white.main",
+                  }}
+                >
                   Hladat
-                </Button>
+                </SecundaryBtn>
               </FormControl>
             </div>
-          </div>
-        </div>
+          </Box>
+        </Box>
 
         <section>
-          {/* {error ? (
-            <p>Error: {error}</p>
-          ) : (
-            <div className="grid">
-              {restData.length > 0 ? (
-                restData.map((course, index) => (
-                  <div key={index} className="course-card">
-                    <h3>{course.name}</h3>
-                    <p>{course.img_url}</p>
-                    <p>{course.description}</p>
-                    <p>Date: {course.updatedAt}</p>
-                  </div>
-                ))
-              ) : (
-                <p>Loading...</p> // Показываем, пока данные не загружены
-              )}
-            </div>
-          )} */}
-
           {error ? (
-            <p>Error: {error}</p>
+            <Typography>Error: {error}</Typography>
           ) : (
-            <div className={classes.grid}>
+            <Box
+              sx={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
+                gap: "20px",
+                padding: "20px",
+              }}
+            >
               {restData.length > 0 ? (
                 restData.map((course, index) => (
                   <CourseCard
@@ -142,12 +142,12 @@ const Courses = ({ theme }) => {
                   />
                 ))
               ) : (
-                <p>Loading...</p> // Показываем, пока данные не загружены
+                <Typography>Loading...</Typography> // Показываем, пока данные не загружены
               )}
-            </div>
+            </Box>
           )}
         </section>
-      </div>
+      </Box>
     </Container>
   );
 };

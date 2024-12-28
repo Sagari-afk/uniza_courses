@@ -1,21 +1,45 @@
+import React from "react";
 import { Icon } from "@iconify/react";
-import * as React from "react";
-import FormControl from "@mui/material/FormControl";
-import NativeSelect from "@mui/material/NativeSelect";
+import { Select, MenuItem, FormControl, InputLabel } from "@mui/material";
+import { styled } from "@mui/system";
 
-export default function SelectSmall() {
-  const [language, setLanguage] = React.useState("");
+export default function CustomStyledSelect() {
+  const [language, setLanguage] = React.useState("Slovenčina");
 
   const handleChange = (event) => {
     setLanguage(event.target.value);
-    console.log("Mlem");
   };
 
+  const CustomSelect = styled(Select)({
+    color: "#f1f1f1",
+    borderRadius: "4px",
+    "& .MuiSelect-icon": {
+      color: "#f1f1f1",
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline ": {
+      borderColor: "black.main",
+    },
+  });
+
+  const CustomMenuItem = styled(MenuItem)({
+    backgroundColor: "primary.main",
+    color: "#f1f1f1",
+    "&:hover": {
+      backgroundColor: "black.main",
+    },
+    "&.Mui-selected": {
+      backgroundColor: "black.main",
+    },
+  });
   return (
     <FormControl
-      sx={{ m: 1, minWidth: 150 }}
-      size="small"
-      className="flex flex-row gap-4 align-center"
+      fullWidth
+      sx={{
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        width: "fit-content",
+      }}
     >
       <Icon
         icon="ion:language"
@@ -26,17 +50,24 @@ export default function SelectSmall() {
           height: "1.375rem",
         }}
       />
-      <NativeSelect
-        defaultValue={10}
-        inputProps={{
-          id: "uncontrolled-native",
-          onChange: { handleChange },
+      <CustomSelect
+        labelId="language-select-label"
+        id="language-select"
+        value={language}
+        onChange={handleChange}
+        MenuProps={{
+          PaperProps: {
+            style: {
+              backgroundColor: "rgba(0, 0, 0, 0.75)",
+              color: "#f1f1f1",
+            },
+          },
         }}
       >
-        <option value={10}>Slovenčina</option>
-        <option value={20}>Ukrajinčina</option>
-        <option value={30}>Angličtina</option>
-      </NativeSelect>
+        <CustomMenuItem value="Slovenčina">Slovenčina</CustomMenuItem>
+        <CustomMenuItem value="English">Angličtina</CustomMenuItem>
+        <CustomMenuItem value="Ukrajinčina">Ukrajinčina</CustomMenuItem>
+      </CustomSelect>
     </FormControl>
   );
 }
