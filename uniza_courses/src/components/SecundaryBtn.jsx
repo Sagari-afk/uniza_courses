@@ -1,12 +1,12 @@
 import { Button } from "@mui/material";
 
-const SecundaryBtn = ({ children, sxChildren, onClick }) => {
+const SecundaryBtn = ({ type, children, sxChildren, onClick, ...props }) => {
   return (
     <Button
       onClick={onClick}
-      variant="contained"
       sx={{
         padding: "8px 36px",
+        width: "100%",
 
         borderRadius: "0.75rem",
         fontSize: "1rem",
@@ -17,6 +17,7 @@ const SecundaryBtn = ({ children, sxChildren, onClick }) => {
         boxShadow: "none",
         ...sxChildren,
       }}
+      {...props}
     >
       {children}
     </Button>

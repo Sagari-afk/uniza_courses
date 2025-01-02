@@ -1,10 +1,24 @@
 import HomePage from "./pages/HomePage";
 import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
 import Courses from "./pages/Courses";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useState } from "react";
+import { useEffect } from "react";
 
 function App() {
+  const [authToken, setAuthToken] = useState(null);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token =
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
+    if (token) {
+      setAuthToken(token);
+    }
+  }, []);
+
   const theme = createTheme({
     palette: {
       primary: {
@@ -50,36 +64,34 @@ function App() {
         fontWeight: 300, // Lighter body text
       },
     },
-    // components: {
-    //   MuiOutlinedInput: {
-    //     styleOverrides: {
-    //       root: {
-    //         "& .MuiOutlinedInput-notchedOutline": {
-    //           borderColor: "#E8E8E8", // Change the outline color to the light blue
-    //         },
-    //         "&:hover .MuiOutlinedInput-notchedOutline": {
-    //           borderColor: "#FFC65A", // Change the outline color on hover
-    //         },
-    //         "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-    //           borderColor: "#DF6690", // Keep the default primary color when focused
-    //         },
-    //       },
-    //     },
-    //   },
-    // },
   });
+
+  const handleLogout = () => {
+    localStorage.removeItem("authToken");
+    sessionStorage.removeItem("authToken");
+    navigate("/");
+    console.log("Logged out successfully");
+  };
 
   return (
     <ThemeProvider theme={theme}>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="signUp" element={<SignIn />} />
-          <Route path="courses" element={<Courses />} />
-        </Routes>
-      </BrowserRouter>
+      <Routes>
+        {!authToken && <Route path="/" element={<HomePage />} />}
+        {!authToken && <Route path="signIn" element={<SignIn />} />}
+        {!authToken && <Route path="signUp" element={<SignUp />} />}
+        <Route
+          path="courses"
+          element={<Courses handleLogout={handleLogout} />}
+        />
+      </Routes>
     </ThemeProvider>
   );
 }
 
-export default App;
+export default function WrappedApp() {
+  return (
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  );
+}

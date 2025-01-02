@@ -7,10 +7,7 @@ import SecundaryBtn from "../components/SecundaryBtn";
 
 const HomePage = () => {
   return (
-    <Container
-      backgroundColor="black.main"
-      sx={{ overflow: "hidden", height: "100%" }}
-    >
+    <Container sx={{ overflow: "hidden", height: "100%" }}>
       <Header />
       <Box
         sx={{
@@ -34,7 +31,7 @@ const HomePage = () => {
         </Typography>
 
         <Box sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
-          <Link to="/SignUp">
+          <Link to="/SignIn">
             <PrimaryBtn>Prihlásiť</PrimaryBtn>
           </Link>
           <Link to="/Courses">

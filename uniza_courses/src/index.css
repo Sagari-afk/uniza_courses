@@ -17,6 +17,7 @@
   background-position: center;
   background-blend-mode: screen;
   background-position-y: top;
+  color-scheme: light dark;
 }
 #root {
   width: 100%;
@@ -29,4 +30,14 @@ body {
   /* place-items: center; */
   min-width: 320px;
   min-height: 100vh;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
 }

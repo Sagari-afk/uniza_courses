@@ -4,8 +4,10 @@ import testImg from "../assets/testImg.png";
 import Badge from "@mui/material/Badge";
 import { Icon } from "@iconify/react";
 import { Box, Typography } from "@mui/material";
+import SecundaryBtn from "./SecundaryBtn";
+import { Link } from "react-router-dom";
 
-const CourseCard = ({ name, img_url, description, updatedAt }) => {
+const CourseCard = ({ name, img_url, description, updatedAt, linkTo }) => {
   const date = new Date(updatedAt);
 
   return (
@@ -55,9 +57,27 @@ const CourseCard = ({ name, img_url, description, updatedAt }) => {
         </Badge>
       </Box>
       <Box>
-        <Typography className={cardClasses.courseInstructor}>
-          Meno a prizvisko ucitela
-        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+          className={`${cardClasses.courseFooter}`}
+        >
+          <Typography className={cardClasses.courseInstructor}>
+            Meno a prizvisko ucitela
+          </Typography>
+          <Link to={linkTo}>
+            <SecundaryBtn
+              sxChildren={{
+                color: "black.main",
+                backgroundColor: "transperent",
+              }}
+            >
+              Viac...
+            </SecundaryBtn>
+          </Link>
+        </Box>
         <Box
           sx={{
             display: "flex",

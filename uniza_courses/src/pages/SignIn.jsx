@@ -1,4 +1,4 @@
-import Header from "../components/header";
+import Header from "../components/Header";
 import Container from "@mui/material/Container";
 import * as React from "react";
 import Checkbox from "@mui/material/Checkbox";
@@ -6,17 +6,83 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Alert, Snackbar } from "@mui/material";
 import PrimaryBtn from "../components/PrimaryBtn";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import SecundaryBtn from "../components/SecundaryBtn";
 
 const SignIn = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [rememberMe, setRememberMe] = useState(true);
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
+
+  const navigate = useNavigate(); // Hook to navigate programmatically
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Clear previous error
+    setError(null);
+    setLoading(true);
+
+    const payload = {
+      email,
+      password,
+    };
+
+    console.log("Logging in with", payload);
+
+    try {
+      const response = await fetch("http://localhost:3000/api/user/logIn", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        console.log("Login successful", data);
+        const token = data.token;
+
+        if (rememberMe) {
+          localStorage.setItem("authToken", token);
+        } else {
+          sessionStorage.setItem("authToken", token);
+        }
+        setSnackbarMessage("Login successful!");
+        setOpenSnackbar(true);
+
+        navigate("/Courses"); // Redirect to the Courses page
+      } else {
+        setError(data || "Login failed");
+      }
+    } catch (err) {
+      console.log(err);
+      setError(err || "Login failed");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
   return (
     <>
+      <Header />
       <Container
         sx={{ overflow: "hidden", height: "100%", backgroundColor: "black" }}
       >
-        <Header />
-
         <Box
           sx={{
             display: "flex",
@@ -31,9 +97,11 @@ const SignIn = () => {
           }}
         >
           <Typography variant="h3" color="primary.main">
-            Sign in
+            Prihlasiť sa
           </Typography>
           <FormControl
+            component="form"
+            onSubmit={handleSubmit}
             sx={{
               display: "flex",
               gap: 2,
@@ -56,6 +124,8 @@ const SignIn = () => {
               required
               fullWidth
               variant="outlined"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               InputLabelProps={{ style: { color: "white" } }}
               InputProps={{ style: { color: "white" } }}
               sx={{
@@ -78,6 +148,8 @@ const SignIn = () => {
               required
               fullWidth
               variant="outlined"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               InputLabelProps={{ style: { color: "white" } }}
               InputProps={{ style: { color: "white" } }}
               sx={{
@@ -93,14 +165,38 @@ const SignIn = () => {
                 <Checkbox
                   value="remember"
                   color="primary"
-                  defaultChecked
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)} // Update the rememberMe state
                   sx={{ color: "white" }}
                 />
               }
-              label="Remember me"
+              label="Zapamatať si ma"
               sx={{ color: "white" }}
             />
-            <PrimaryBtn type="submit">Sign in</PrimaryBtn>
+            {error && (
+              <Typography color="error" sx={{ marginBottom: 2 }}>
+                {error}
+              </Typography>
+            )}
+            <PrimaryBtn type="submit">Prihlasiť sa</PrimaryBtn>
+            <Link to="/SignUp">
+              <SecundaryBtn>Vytvoriť nový učet</SecundaryBtn>
+            </Link>
+
+            <Snackbar
+              open={openSnackbar}
+              autoHideDuration={3000}
+              onClose={handleCloseSnackbar}
+              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            >
+              <Alert
+                onClose={handleCloseSnackbar}
+                severity="success"
+                sx={{ width: "100%" }}
+              >
+                {snackbarMessage}
+              </Alert>
+            </Snackbar>
           </FormControl>
         </Box>
       </Container>
