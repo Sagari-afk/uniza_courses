@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { useEffect } from "react";
+import Course from "./pages/Course";
 
 function App() {
   const [authToken, setAuthToken] = useState(null);
@@ -23,7 +24,7 @@ function App() {
     palette: {
       primary: {
         main: "#DF6690",
-        dark: "#C04F77",
+        dark: "#e7407b",
       },
       secondary: {
         main: "#FFC65A",
@@ -83,6 +84,7 @@ function App() {
           path="courses"
           element={<Courses handleLogout={handleLogout} />}
         />
+        {authToken && <Route path="/Course/:courseName" element={<Course />} />}
       </Routes>
     </ThemeProvider>
   );

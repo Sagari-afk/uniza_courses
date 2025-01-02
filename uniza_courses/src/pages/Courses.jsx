@@ -55,7 +55,7 @@ const Courses = ({ handleLogout }) => {
   }, []);
   return (
     // <Container>
-    <Box>
+    <>
       <Header />
       <Box sx={{ display: "flex" }}>
         <Box
@@ -64,7 +64,7 @@ const Courses = ({ handleLogout }) => {
             flexDirection: "column",
             justifyContent: "space-between",
             margin: "4rem 1rem 0 3rem",
-            maxHeight: "550px",
+            minHeight: "550px",
           }}
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -330,7 +330,7 @@ const Courses = ({ handleLogout }) => {
           </section>
         </Box>
       </Box>
-    </Box>
+    </>
     // </Container>
   );
 };
