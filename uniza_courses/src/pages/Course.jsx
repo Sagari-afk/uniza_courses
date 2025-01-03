@@ -1,75 +1,274 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import { Box, Container, Typography } from "@mui/material";
 import img_url from "../assets/testImg.png";
+import { Icon } from "@iconify/react";
+import PrimaryBtn from "../components/PrimaryBtn";
+import SecundaryBtn from "../components/SecundaryBtn";
 
 const Course = () => {
   const courseName = "Course Name";
+
   return (
     <>
       <Header />
       <Box sx={{ backgroundColor: "white.main", minHeight: "800px" }}>
         <Box sx={{ py: 14 }} className="gradient-background-animation">
-          <Container
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
+          <Container>
             <Box
               sx={{
-                width: "70%",
                 display: "flex",
-                flexDirection: "column",
-                gap: 2,
+                justifyContent: "space-between",
+                alignItems: "center",
               }}
             >
               <Box
                 sx={{
+                  width: "70%",
                   display: "flex",
                   flexDirection: "column",
-                  gap: 1,
+                  gap: 2,
                 }}
               >
-                <Typography
+                <Box
                   sx={{
-                    padding: "2px 19px",
-                    backgroundColor: "primary.dark",
-                    width: "fit-content",
-                    borderRadius: "12px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
                   }}
                 >
-                  Course
-                </Typography>
-                <Typography variant="h2" className="font-gradient">
-                  {courseName}
+                  <Typography
+                    sx={{
+                      padding: "2px 19px",
+                      backgroundColor: "primary.dark",
+                      width: "fit-content",
+                      borderRadius: "12px",
+                    }}
+                  >
+                    Course
+                  </Typography>
+                  <Typography variant="h2" className="font-gradient">
+                    {courseName}
+                  </Typography>
+                </Box>
+                <Typography>
+                  Pellentesque habitant morbi tristique senectus et netus et
+                  malesuada fames ac turpis egestas. Vestibulum tortor quam,
+                  feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu
+                  libero sit amet quam egestas semper. Aenean ultricies mi vitae
+                  est. Mauris placerat eleifend leo. Quisque sit amet est et
+                  sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum
+                  sed, commodo vitae, ornare sit amet, wisi.
                 </Typography>
               </Box>
-              <Typography>
-                Pellentesque habitant morbi tristique senectus et netus et
-                malesuada fames ac turpis egestas. Vestibulum tortor quam,
-                feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu
-                libero sit amet quam egestas semper. Aenean ultricies mi vitae
-                est. Mauris placerat eleifend leo. Quisque sit amet est et
-                sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum
-                sed, commodo vitae, ornare sit amet, wisi.
-              </Typography>
+              <img
+                src={img_url}
+                style={{
+                  width: "200px",
+                  height: "200px",
+                  flexShrink: "0",
+                  borderRadius: "32px",
+                  border: "4px solid #FFF",
+                  background:
+                    " url(<path-to-image>) lightgray 50% / cover no-repeat",
+                }}
+              />
             </Box>
-            <img
-              src={img_url}
-              style={{
-                width: "200px",
-                height: "200px",
-                flexShrink: "0",
-                borderRadius: "32px",
-                border: "4px solid #FFF",
-                background:
-                  " url(<path-to-image>) lightgray 50% / cover no-repeat",
+            <Box
+              sx={{
+                display: "flex",
+                gap: 4,
+                py: 4,
+                fontSize: "2rem",
+                color: "primary.dark",
               }}
-            />
+            >
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Typography color="white.main">Hodnotenie 5</Typography>
+                <Icon icon="material-symbols:star"></Icon>
+              </Box>
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Typography color="white.main">Už mali 10</Typography>
+                <Icon icon="material-symbols:person"></Icon>
+              </Box>
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Typography color="white.main">Trvá 1 h</Typography>
+                <Icon icon="majesticons:clock"></Icon>
+              </Box>
+              <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
+                <Typography color="white.main">Prídan 12.10.2024</Typography>
+                <Icon icon="solar:calendar-bold"></Icon>
+              </Box>
+            </Box>
           </Container>
         </Box>
+
+        <Container
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            py: 8,
+            color: "black.main",
+          }}
+        >
+          <Box
+            sx={{
+              width: "65%",
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+            }}
+          >
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 4,
+              }}
+            >
+              <Typography variant="h4" className="font-gradient">
+                O kurze
+              </Typography>
+              <Typography sx={{ lineHeight: "200%" }}>
+                Pellentesque habitant morbi tristique senectus et netus et
+                malesuada fames ac turpis egestas. Vestibulum tortor quam,
+                feugiat vitae, ultricies eget, tempor sit amet, ante.
+                <br />
+                <br />
+                Donec eu libero sit amet quam egestas semper. Aenean ultricies
+                mi vitae est. Mauris placerat eleifend leo. Quisque sit amet est
+                et sapien ullamcorper pharetra. Vestibulum erat wisi,
+                condimentum sed, commodo vitae, ornare sit amet, wisi.
+                <br />
+                <br />
+                Aenean fermentum, elit eget tincidunt condimentum, eros ipsum
+                rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim
+                in turpis pulvinar facilisis. Ut felis. Praesent dapibus, neque
+                id cursus faucibus, tortor neque egestas augue, eu vulputate
+                magna eros eu erat. Aliquam erat volutpat. Nam dui mi, tincidunt
+                quis, accumsan porttitor, facilisis luctus, metus Pellentesque
+                habitant morbi tristique senectus et netus et malesuada fames ac
+                turpis egestas. Vestibulum tortor quam, feugiat vitae, ultricies
+                eget, tempor sit amet, ante.
+              </Typography>
+            </Box>
+
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box>
+                <Typography variant="h4" className="font-gradient">
+                  Pre koho je tento kurz
+                </Typography>
+                <Typography sx={{ lineHeight: "200%" }}>
+                  Študenti Multymedialných technologií 1 ročník 1 semester
+                </Typography>
+              </Box>
+
+              <Box>
+                <Typography variant="h4" className="font-gradient">
+                  Zakladné požiadavky
+                </Typography>
+                <Typography sx={{ lineHeight: "200%" }}>
+                  požiadavka 1
+                  <br />
+                  požiadavka 2
+                  <br />
+                  požiadavka 3
+                </Typography>
+              </Box>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+              gap: "20px",
+            }}
+          >
+            <Box
+              sx={{
+                position: "sticky",
+                top: "7rem",
+                height: "fit-content",
+                display: "flex",
+                gap: 4,
+                flexDirection: "column",
+              }}
+            >
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <PrimaryBtn style={{ color: "white" }}>ZAčAť TERAZ</PrimaryBtn>
+
+                <SecundaryBtn
+                  style={{
+                    color: "#DF6690",
+                    backgroundColor: "rgba(255, 255, 255, 0.74)",
+                    border: "2px solid #E8E8E8",
+                    display: "flex",
+                    gap: 3,
+                    alignItems: "center",
+                  }}
+                >
+                  <Icon icon="tabler:clock" style={{ fontSize: "2rem" }}></Icon>{" "}
+                  Chem začať neskor
+                </SecundaryBtn>
+
+                <SecundaryBtn
+                  style={{
+                    color: "#DF6690",
+                    backgroundColor: "rgba(255, 255, 255, 0.74)",
+                    border: "2px solid #E8E8E8",
+                    display: "flex",
+                    gap: 3,
+                    alignItems: "center",
+                  }}
+                >
+                  <Icon icon="tabler:heart" style={{ fontSize: "2rem" }}></Icon>{" "}
+                  pridať k obľubeným
+                </SecundaryBtn>
+              </Box>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 5,
+                  padding: "15px 37px",
+                  border: "2px solid #E8E8E8",
+                  background: "rgba(255, 255, 255, 0.74)",
+                  borderRadius: "17px",
+                }}
+              >
+                <Box display={"flex"} flexDirection={"column"} gap={2}>
+                  <Typography>
+                    <b>Kurz obsahuje</b>
+                  </Typography>{" "}
+                  <Box>
+                    <Typography>
+                      <b>12 </b>prednašok
+                    </Typography>
+                    <Typography>
+                      <b>12</b> testov
+                    </Typography>
+                    <Typography>
+                      <b>1</b> hodina <b>15</b> minut
+                    </Typography>
+                  </Box>
+                </Box>
+
+                <Box
+                  sx={{
+                    color: "primary.main",
+                    textDecorationLine: "underline",
+                    cursor: "pointer",
+                  }}
+                >
+                  Obsah kurzu
+                </Box>
+              </Box>
+            </Box>
+          </Box>
+        </Container>
       </Box>
     </>
   );

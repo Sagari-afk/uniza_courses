@@ -3,10 +3,46 @@ import logo from "../assets/logo_text.png";
 import profile_pic from "../assets/profile_pic.jpg";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const Header = () => {
+  const [isSticky, setIsSticky] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const header = document.getElementById("header");
+      if (window.pageYOffset > header.offsetTop) {
+        setIsSticky(true);
+      } else {
+        setIsSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between", px: 4 }}>
+    <Box
+      id="header"
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        px: 4,
+        py: 1,
+        marginTop: -2,
+        alignItems: "center",
+
+        position: isSticky ? "fixed" : "relative",
+        // top: isSticky ? 0 : "auto",
+        width: "-webkit-fill-available",
+        zIndex: 1000,
+        backgroundColor: "black.main",
+      }}
+    >
       <Link
         to={
           localStorage.getItem("authToken") ||

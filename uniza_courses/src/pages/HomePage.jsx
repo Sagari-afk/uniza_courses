@@ -1,4 +1,4 @@
-import Header from "../components/header";
+import Header from "../components/Header";
 import Container from "@mui/material/Container";
 import { Link } from "react-router-dom";
 import { Box, Typography } from "@mui/material";

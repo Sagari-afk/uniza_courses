@@ -30,7 +30,7 @@ function App() {
         main: "#FFC65A",
       },
       black: {
-        main: "#161719",
+        main: "#121212",
       },
       white: {
         main: "#F2F2F2",
