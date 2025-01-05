@@ -14,7 +14,9 @@ const getUsers = async (req, res) => {
 
 const getUserBy = async (req, res) => {
   try {
-    const records = await User.findByPk(req.params.id);
+    const records = await User.findByPk(req.params.id, {
+      include: "UserType",
+    });
 
     return res.status(200).json(records);
   } catch (error) {

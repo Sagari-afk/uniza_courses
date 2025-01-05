@@ -2,9 +2,9 @@
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class UserTypes extends Model {
-    // static associate({ User }) {
-    //   this.hasMany(User, { foreignKey: "type_id" });
-    // }
+    static associate({ User }) {
+      UserTypes.hasMany(User, { foreignKey: "type_id", onDelete: "CASCADE" });
+    }
   }
   UserTypes.init(
     {
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
         autoIncrement: true,
       },
-      name: {
+      type: {
         type: DataTypes.STRING,
         allowNull: false,
       },

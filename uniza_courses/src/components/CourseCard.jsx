@@ -1,5 +1,5 @@
 import cardClasses from "../styles/CourseCard.module.css";
-
+import { useNavigate } from "react-router-dom";
 import testImg from "../assets/testImg.png";
 import Badge from "@mui/material/Badge";
 import { Icon } from "@iconify/react";
@@ -7,8 +7,16 @@ import { Box, Typography } from "@mui/material";
 import SecundaryBtn from "./SecundaryBtn";
 import { Link } from "react-router-dom";
 
-const CourseCard = ({ name, img_url, description, updatedAt, linkTo }) => {
+const CourseCard = ({
+  name,
+  img_url,
+  description,
+  updatedAt,
+  linkTo,
+  courseId,
+}) => {
   const date = new Date(updatedAt);
+  const navigate = useNavigate();
 
   return (
     <Box
@@ -67,16 +75,16 @@ const CourseCard = ({ name, img_url, description, updatedAt, linkTo }) => {
           <Typography className={cardClasses.courseInstructor}>
             Meno a prizvisko ucitela
           </Typography>
-          <Link to={linkTo}>
-            <SecundaryBtn
-              sxChildren={{
-                color: "black.main",
-                backgroundColor: "transperent",
-              }}
-            >
-              Viac...
-            </SecundaryBtn>
-          </Link>
+          <SecundaryBtn
+            sxChildren={{
+              color: "black.main",
+              backgroundColor: "transperent",
+              width: "auto",
+            }}
+            onClick={() => navigate(linkTo, { state: { courseId } })}
+          >
+            Viac...
+          </SecundaryBtn>
         </Box>
         <Box
           sx={{

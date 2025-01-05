@@ -1,12 +1,18 @@
 "use strict";
 const { Model } = require("sequelize");
-const usertypes = require("./usertypes");
 const crypto = require("crypto");
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate = function (models) {
-      User.belongsTo(models.UserType, { foreignKey: "type_id" });
+      User.belongsTo(models.UserType, {
+        foreignKey: "type_id",
+        onDelete: "CASCADE",
+      });
+      User.hasMany(models.CourseComments, {
+        foreignKey: "id",
+        onDelete: "CASCADE",
+      });
     };
 
     static checkPassword(user, password) {

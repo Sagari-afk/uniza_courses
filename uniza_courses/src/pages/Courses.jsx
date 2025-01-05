@@ -320,6 +320,7 @@ const Courses = ({ handleLogout }) => {
                       updatedAt={course.updatedAt}
                       description={course.description}
                       linkTo={`/Course/${course.name}`}
+                      courseId={course.id}
                     />
                   ))
                 ) : (
