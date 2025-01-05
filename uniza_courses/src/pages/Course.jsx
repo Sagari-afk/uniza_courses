@@ -1,18 +1,50 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
-import { Box, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Container,
+  FormControl,
+  FormLabel,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { Icon } from "@iconify/react";
 import PrimaryBtn from "../components/PrimaryBtn";
 import SecundaryBtn from "../components/SecundaryBtn";
 import { useLocation } from "react-router-dom";
+import Comment from "../components/Comment";
 
 const Course = () => {
   const location = useLocation();
   const { courseId } = location.state || {};
-  // const [courseName, setCourseName] = useState("Course Name");
   const [restData, setRestData] = useState([]);
   const [error, setError] = useState(null);
+  const [averageRate, setAverageRate] = useState([]);
+  const [newComment, setNewComment] = useState("");
   const date = new Date(restData.createdAt);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:3000/api/user/signUp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ comment: newComment }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setError(data || "Failed");
+      }
+    } catch (err) {
+      console.log(err);
+      setError(err.message || "Failed");
+    }
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -23,6 +55,14 @@ const Course = () => {
         if (response.ok) {
           const responseData = await response.json();
           setRestData(responseData);
+
+          const values = Object.values(responseData.CourseComments);
+          setAverageRate(
+            values.length > 0
+              ? values.reduce((sum, rating) => sum + rating.commentRate, 0) /
+                  values.length
+              : 0
+          );
         } else {
           throw new Error("Failed to fetch courses");
         }
@@ -105,7 +145,9 @@ const Course = () => {
                 }}
               >
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
-                  <Typography color="white.main">Hodnotenie 5</Typography>
+                  <Typography color="white.main">
+                    Hodnotenie {averageRate}
+                  </Typography>
                   <Icon icon="material-symbols:star"></Icon>
                 </Box>
                 <Box sx={{ display: "flex", gap: 1, alignItems: "center" }}>
@@ -198,6 +240,84 @@ const Course = () => {
                     požiadavka 3
                   </Typography>
                 </Box>
+              </Box>
+
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <Typography variant="h4" className="font-gradient">
+                  Hodnotenia
+                </Typography>
+                {restData.CourseComments &&
+                Array.isArray(restData.CourseComments) &&
+                restData.CourseComments.length > 0 ? (
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 5 }}
+                  >
+                    {restData.CourseComments.map((comment, index) => (
+                      <Comment
+                        key={index}
+                        rate={comment.commentRate}
+                        user={comment.User.name}
+                        commentText={comment.commentText}
+                        updatedAt={comment.updatedAt}
+                      />
+                    ))}
+                  </Box>
+                ) : (
+                  <Typography>Zatial ešte nie sú žiadné hodnotenia</Typography>
+                )}
+
+                <FormControl
+                  component="form"
+                  onSubmit={handleSubmit}
+                  sx={{
+                    display: "flex",
+                    gap: 2,
+                    width: "auto",
+                  }}
+                >
+                  <FormLabel
+                    htmlFor="new-comment"
+                    sx={{ fontSize: "24px", color: "primary.main" }}
+                  >
+                    Pridať komentar
+                  </FormLabel>
+                  <TextField
+                    id="new-comment"
+                    multiline
+                    type="text"
+                    name="new-comment"
+                    required
+                    variant="outlined"
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    sx={{
+                      "& .MuiOutlinedInput-root": {
+                        "& fieldset": {
+                          border: "2px solid #E8E8E8",
+                          borderRadius: "17px",
+                        },
+                        "&:hover fieldset": {
+                          border: "2px solid #E8E8E8",
+                          borderRadius: "17px",
+                        },
+                        "&.Mui-focused fieldset": {
+                          border: "2px solid #E8E8E8",
+                          borderRadius: "17px",
+                        },
+                      },
+                    }}
+                  />
+                  <SecundaryBtn
+                    type="submit"
+                    sxChildren={{
+                      width: "20%",
+                      backgroundColor: "transperent",
+                      alignSelf: "end",
+                    }}
+                  >
+                    Odoslať
+                  </SecundaryBtn>
+                </FormControl>
               </Box>
             </Box>
 
