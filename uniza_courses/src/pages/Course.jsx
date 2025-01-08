@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Header from "../components/Header";
 import {
   Box,
   Container,
   FormControl,
   FormLabel,
+  Rating,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -23,55 +25,71 @@ const Course = () => {
   const [newComment, setNewComment] = useState("");
   const date = new Date(restData.createdAt);
 
-  const handleSubmit = async (e) => {
+  const [rate, setRate] = React.useState(2);
+
+  const load = useCallback(async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/course/getCourse/" + courseId
+      );
+      if (response.ok) {
+        const responseData = await response.json();
+        setRestData(responseData);
+
+        const values = Object.values(responseData.CourseComments);
+        setAverageRate(
+          values.length > 0
+            ? Math.round(
+                (values.reduce((sum, rating) => sum + rating.commentRate, 0) /
+                  values.length) *
+                  100
+              ) / 100
+            : 0
+        );
+      } else {
+        throw new Error("Failed to fetch courses");
+      }
+    } catch (error) {
+      setError(error.message);
+      alert("Error loading courses: " + error.message);
+    }
+  }, []);
+
+  const handleSubmitComment = async (e) => {
     e.preventDefault();
+    console.log("wtf");
 
     try {
-      const response = await fetch("http://localhost:3000/api/user/signUp", {
+      const response = await fetch("http://localhost:3000/api/comment/new", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
         },
-        body: JSON.stringify({ comment: newComment }),
+        body: JSON.stringify({
+          commentText: newComment,
+          courseId,
+          commentRate: rate,
+        }),
       });
 
       const data = await response.json();
 
+      load();
+
       if (!response.ok) {
-        setError(data || "Failed");
+        console.log(data);
+        // setError(data || "Failed");
       }
     } catch (err) {
       console.log(err);
-      setError(err.message || "Failed");
+      // setError(err.message || "Failed");
     }
   };
 
   useEffect(() => {
-    const load = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/course/getCourse/" + courseId
-        );
-        if (response.ok) {
-          const responseData = await response.json();
-          setRestData(responseData);
-
-          const values = Object.values(responseData.CourseComments);
-          setAverageRate(
-            values.length > 0
-              ? values.reduce((sum, rating) => sum + rating.commentRate, 0) /
-                  values.length
-              : 0
-          );
-        } else {
-          throw new Error("Failed to fetch courses");
-        }
-      } catch (error) {
-        setError(error.message);
-        alert("Error loading courses: " + error.message);
-      }
-    };
-
     load();
   }, []);
 
@@ -268,7 +286,7 @@ const Course = () => {
 
                 <FormControl
                   component="form"
-                  onSubmit={handleSubmit}
+                  onSubmit={handleSubmitComment}
                   sx={{
                     display: "flex",
                     gap: 2,
@@ -281,12 +299,21 @@ const Course = () => {
                   >
                     Pridať komentar
                   </FormLabel>
+                  <Rating
+                    name="simple-controlled"
+                    value={rate}
+                    onChange={(event, newValue) => {
+                      setRate(newValue);
+                    }}
+                  />
                   <TextField
                     id="new-comment"
                     multiline
                     type="text"
                     name="new-comment"
                     required
+                    fullWidth
+                    placeholder="Tu napiš svoj komentar..."
                     variant="outlined"
                     value={newComment}
                     onChange={(e) => setNewComment(e.target.value)}
@@ -296,17 +323,10 @@ const Course = () => {
                           border: "2px solid #E8E8E8",
                           borderRadius: "17px",
                         },
-                        "&:hover fieldset": {
-                          border: "2px solid #E8E8E8",
-                          borderRadius: "17px",
-                        },
-                        "&.Mui-focused fieldset": {
-                          border: "2px solid #E8E8E8",
-                          borderRadius: "17px",
-                        },
                       },
                     }}
                   />
+
                   <SecundaryBtn
                     type="submit"
                     sxChildren={{

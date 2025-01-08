@@ -2,30 +2,38 @@ const { sequelize, CourseComments } = require("../models");
 const { body, validationResult } = require("express-validator");
 
 const newComment = [
-  body("comment").not().isEmpty(),
+  body("commentText").not().isEmpty(),
+  body("commentRate").not().isEmpty(),
+  body("courseId").not().isEmpty(),
 
   async (req, res) => {
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
+      console.log(errors);
       const errMessage = errors
         .array()
         .map((item) => `${item.path} - ${item.msg}`)
         .join(",");
-      res.status(400).json(errMessage);
+      return res.status(400).json(errMessage);
     }
 
-    const { comment } = req.body;
+    const { commentText, commentRate, courseId } = req.body;
 
     try {
-      const courseComment = await CourseComment.create({});
+      const courseComment = await CourseComments.create({
+        commentText,
+        commentRate,
+        courseId,
+        userId: res.user.userId,
+      });
 
-      return res.json(course);
+      return res.json(courseComment);
     } catch (error) {
       console.log(error);
-      res.status(500).json(error.message);
+      return res.status(500).json(error.message);
     }
   },
 ];
 
-module.exports = {};
+module.exports = { newComment };

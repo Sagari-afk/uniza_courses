@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 const SecundaryBtn = ({ type, children, sxChildren, onClick, ...props }) => {
   return (
     <Button
+      type={type}
       onClick={onClick}
       sx={{
         padding: "8px 36px",
