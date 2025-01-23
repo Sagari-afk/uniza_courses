@@ -1,4 +1,4 @@
-const { sequelize, User } = require("../models");
+const { sequelize, User, Teacher, Student } = require("../models");
 const jwt = require("jsonwebtoken");
 const { body, validationResult } = require("express-validator");
 
@@ -26,8 +26,9 @@ const getUserBy = async (req, res) => {
 };
 
 const newUser = [
-  body("name").not().isEmpty(),
-  body("personal_num")
+  body("firstName").not().isEmpty(),
+  body("secondName").not().isEmpty(),
+  body("personalNum")
     .optional({ checkFalsy: true })
     .isLength({ min: 6, max: 6 })
     .withMessage("Personal number must be 6 characters long, numbers only"),
@@ -39,10 +40,8 @@ const newUser = [
     .withMessage(
       "Password must be strong (at least 8 characters, one lowercase, one uppercase, one number, one symbol)"
     ),
-  body("type_id").not().isEmpty(),
 
   async (req, res) => {
-    console.log("newUser");
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -53,9 +52,7 @@ const newUser = [
       return res.status(400).json(errMessage);
     }
 
-    const { name, personal_num, email, password, institute, salt, type_id } =
-      req.body;
-    console.log(name, personal_num, email, password, institute, salt, type_id);
+    const { firstName, secondName, email, userType, password } = req.body;
 
     const existingUser = await User.findOne({ where: { email: email } });
     if (existingUser) {
@@ -66,14 +63,27 @@ const newUser = [
 
     try {
       const user = await User.create({
-        name,
-        personal_num,
+        firstName,
+        secondName,
         email,
         password,
-        institute,
-        salt,
-        type_id,
+        role: userType ? "student" : "teacher",
+        salt: "",
       });
+
+      if (!userType) {
+        await Teacher.create({
+          userId: user.id,
+          institute: req.body.institute,
+          office: req.body.office,
+          phone: req.body.phone,
+        });
+      } else if (userType) {
+        await Student.create({
+          userId: user.id,
+          personalNum: req.body.personalNum,
+        });
+      }
 
       const token = jwt.sign(
         {

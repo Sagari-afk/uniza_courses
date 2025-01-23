@@ -9,16 +9,13 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      type_id: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
-      },
-      name: {
+      firstName: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      personal_num: {
+      secondName: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
       email: {
         type: Sequelize.STRING,
@@ -28,11 +25,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      institute: {
-        type: Sequelize.STRING,
-      },
       salt: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      role: {
+        type: Sequelize.ENUM("teacher", "student"),
         allowNull: false,
       },
       createdAt: {

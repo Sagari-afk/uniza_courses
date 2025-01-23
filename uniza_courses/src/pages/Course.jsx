@@ -57,7 +57,6 @@ const Course = () => {
 
   const handleSubmitComment = async (e) => {
     e.preventDefault();
-    console.log("wtf");
 
     try {
       const response = await fetch("http://localhost:3000/api/comment/new", {
@@ -74,7 +73,7 @@ const Course = () => {
           commentRate: rate,
         }),
       });
-
+      setNewComment("");
       const data = await response.json();
 
       load();
@@ -274,7 +273,7 @@ const Course = () => {
                       <Comment
                         key={index}
                         rate={comment.commentRate}
-                        user={comment.User.name}
+                        user={comment.User}
                         commentText={comment.commentText}
                         updatedAt={comment.updatedAt}
                       />

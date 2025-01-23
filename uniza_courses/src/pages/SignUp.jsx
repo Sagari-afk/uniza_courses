@@ -15,8 +15,11 @@ import SecundaryBtn from "../components/SecundaryBtn";
 const SignUp = () => {
   const [email, setEmail] = useState("");
   const [personalNum, setPersonalNum] = useState("");
-  const [name, setName] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [secondName, setSecondName] = useState("");
   const [institute, setInstitute] = useState("");
+  const [office, setOffice] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [passwordCheck, setpasswordCheck] = useState("");
   const [loading, setLoading] = useState(false);
@@ -46,17 +49,16 @@ const SignUp = () => {
       return;
     }
 
-    let st;
-    status ? (st = 1) : (st = 2);
-    console.log(st);
-
     const payloadRegister = {
       email,
       password,
-      personal_num: personalNum,
+      personalNum: personalNum,
       institute,
-      name,
-      type_id: st,
+      secondName,
+      office,
+      phone,
+      firstName,
+      userType: status,
     };
 
     console.log("Logging in with", payloadRegister);
@@ -129,7 +131,7 @@ const SignUp = () => {
             sx={{
               display: "flex",
               gap: 2,
-              width: "30rem",
+              width: "fit-content",
               border: "solid rgba(255, 255, 255, 0.1)",
               padding: "1rem",
               borderRadius: "8px",
@@ -155,23 +157,23 @@ const SignUp = () => {
               sx={{
                 alignItems: "center",
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "space-between",
               }}
             >
-              <FormLabel htmlFor="name" sx={{ color: "white.main" }}>
+              <FormLabel htmlFor="firstName" sx={{ color: "white.main" }}>
                 Meno
               </FormLabel>
               <TextField
-                id="name"
+                id="firstName"
                 type="text"
-                name="name"
-                placeholder="Zuzana Nováková"
+                name="firstName"
+                placeholder="Zuzana"
                 required
                 fullWidth
                 autoFocus
                 variant="outlined"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
                 InputLabelProps={{ style: { color: "white" } }}
                 InputProps={{ style: { color: "white" } }}
                 sx={{
@@ -182,7 +184,30 @@ const SignUp = () => {
                   },
                 }}
               />
-
+              <FormLabel htmlFor="secondName" sx={{ color: "white.main" }}>
+                Novakova
+              </FormLabel>
+              <TextField
+                id="secondName"
+                type="text"
+                name="secondName"
+                placeholder="Zuzana"
+                required
+                fullWidth
+                autoFocus
+                variant="outlined"
+                value={secondName}
+                onChange={(e) => setSecondName(e.target.value)}
+                InputLabelProps={{ style: { color: "white" } }}
+                InputProps={{ style: { color: "white" } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "white" },
+                    "&:hover fieldset": { borderColor: "white" },
+                    "&.Mui-focused fieldset": { borderColor: "white" },
+                  },
+                }}
+              />
               <FormLabel htmlFor="email" sx={{ color: "white.main" }}>
                 Email
               </FormLabel>
@@ -208,9 +233,16 @@ const SignUp = () => {
                 }}
               />
             </Stack>
-
             {!status ? (
-              <>
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{
+                  alignItems: "center",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
                 <FormLabel htmlFor="institute" sx={{ color: "white.main" }}>
                   Pracovisko
                 </FormLabel>
@@ -234,24 +266,19 @@ const SignUp = () => {
                     },
                   }}
                 />
-              </>
-            ) : null}
-
-            {status ? (
-              <>
-                <FormLabel htmlFor="personal_nam" sx={{ color: "white.main" }}>
-                  Osobne číslo
+                <FormLabel htmlFor="office" sx={{ color: "white.main" }}>
+                  Kancelaria
                 </FormLabel>
                 <TextField
-                  id="personal_nam"
-                  type="number"
-                  name="personal_nam"
-                  placeholder="12345"
+                  id="office"
+                  type="text"
+                  name="office"
+                  placeholder="BD300"
                   required
                   fullWidth
                   variant="outlined"
-                  value={personalNum}
-                  onChange={(e) => setPersonalNum(e.target.value)}
+                  value={office}
+                  onChange={(e) => setOffice(e.target.value)}
                   InputLabelProps={{ style: { color: "white" } }}
                   InputProps={{ style: { color: "white" } }}
                   sx={{
@@ -262,7 +289,67 @@ const SignUp = () => {
                     },
                   }}
                 />
-              </>
+
+                <FormLabel htmlFor="phone" sx={{ color: "white.main" }}>
+                  Telefonné číslo
+                </FormLabel>
+                <TextField
+                  id="phone"
+                  type="text"
+                  name="phone"
+                  placeholder="+421 950 849 2494"
+                  required
+                  fullWidth
+                  variant="outlined"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  InputLabelProps={{ style: { color: "white" } }}
+                  InputProps={{ style: { color: "white" } }}
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "white" },
+                      "&:hover fieldset": { borderColor: "white" },
+                      "&.Mui-focused fieldset": { borderColor: "white" },
+                    },
+                  }}
+                />
+              </Stack>
+            ) : null}
+
+            {status ? (
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{
+                  alignItems: "center",
+                  display: "flex",
+                  justifyContent: "space-between",
+                }}
+              >
+                <FormLabel htmlFor="personal_nam" sx={{ color: "white.main" }}>
+                  Osobne číslo
+                </FormLabel>
+                <TextField
+                  id="personal_nam"
+                  type="number"
+                  name="personal_nam"
+                  placeholder="12345"
+                  required
+                  variant="outlined"
+                  value={personalNum}
+                  onChange={(e) => setPersonalNum(e.target.value)}
+                  InputLabelProps={{ style: { color: "white" } }}
+                  InputProps={{ style: { color: "white" } }}
+                  sx={{
+                    width: "80%",
+                    "& .MuiOutlinedInput-root": {
+                      "& fieldset": { borderColor: "white" },
+                      "&:hover fieldset": { borderColor: "white" },
+                      "&.Mui-focused fieldset": { borderColor: "white" },
+                    },
+                  }}
+                />
+              </Stack>
             ) : null}
 
             <Stack
@@ -271,7 +358,7 @@ const SignUp = () => {
               sx={{
                 alignItems: "center",
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "space-between",
               }}
             >
               <FormLabel htmlFor="password" sx={{ color: "white.main" }}>

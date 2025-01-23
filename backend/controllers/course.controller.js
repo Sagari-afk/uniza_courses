@@ -19,7 +19,7 @@ const getCourseBy = async (req, res) => {
           model: CourseComments,
           include: {
             model: User, // Use the actual model reference here
-            attributes: ["id", "name"], // Specify the fields you want to include from User
+            attributes: ["id", "firstName", "secondName", "role"], // Specify the fields you want to include from User
           },
         },
       ],
@@ -49,6 +49,8 @@ const newCourse = [
     }
 
     const { name, img_url, description } = req.body;
+
+    teacher
 
     try {
       const course = await Course.create({

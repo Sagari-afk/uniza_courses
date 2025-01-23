@@ -5,13 +5,19 @@ const crypto = require("crypto");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate = function (models) {
-      User.belongsTo(models.UserType, {
-        foreignKey: "type_id",
-        onDelete: "CASCADE",
-      });
       User.hasMany(models.CourseComments, {
         foreignKey: "id",
         onDelete: "CASCADE",
+      });
+
+      User.hasOne(models.Teacher, {
+        foreignKey: "userId",
+        as: "teacher",
+      });
+
+      User.hasOne(models.Student, {
+        foreignKey: "userId",
+        as: "student",
       });
     };
 
@@ -28,17 +34,13 @@ module.exports = (sequelize, DataTypes) => {
   }
   User.init(
     {
-      type_id: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      name: {
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      personal_num: {
-        type: DataTypes.INTEGER,
-        unique: true,
+      secondName: {
+        type: DataTypes.STRING,
+        allowNull: false,
       },
       email: {
         type: DataTypes.STRING,
@@ -49,11 +51,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      institute: {
-        type: DataTypes.STRING,
-      },
       salt: {
         type: DataTypes.STRING,
+      },
+      role: {
+        type: DataTypes.ENUM("teacher", "student"),
+        allowNull: false,
       },
     },
     {
