@@ -52,7 +52,14 @@ const newUser = [
       return res.status(400).json(errMessage);
     }
 
-    const { firstName, secondName, email, userType, password } = req.body;
+    const {
+      firstName,
+      secondName,
+      email,
+      userType,
+      password,
+      profile_img_url,
+    } = req.body;
 
     const existingUser = await User.findOne({ where: { email: email } });
     if (existingUser) {
@@ -69,6 +76,7 @@ const newUser = [
         password,
         role: userType ? "student" : "teacher",
         salt: "",
+        profile_img_url,
       });
 
       if (!userType) {
@@ -118,7 +126,11 @@ const loginUser = [
       const token = jwt.sign(
         {
           userId: existingUser.id,
-          userName: existingUser.name,
+          userFirstName: existingUser.firstName,
+          userSecondName: existingUser.secondName,
+          email: existingUser.email,
+          userRole: existingUser.role,
+          userImg: existingUser.profile_img_url,
         },
         process.env.API_KEY
       );

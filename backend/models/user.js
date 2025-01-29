@@ -23,9 +23,9 @@ module.exports = (sequelize, DataTypes) => {
 
     static checkPassword(user, password) {
       const hash_pwd = crypto
-        .pbkdf2Sync(user.password, user.salt, 100, 64, "sha512")
+        .pbkdf2Sync(password, user.salt, 100, 64, "sha512")
         .toString("hex");
-      return password === hash_pwd;
+      return user.password === hash_pwd;
     }
 
     toJSON() {
@@ -56,6 +56,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       role: {
         type: DataTypes.ENUM("teacher", "student"),
+        allowNull: false,
+      },
+      profile_img_url: {
+        type: DataTypes.STRING,
         allowNull: false,
       },
     },

@@ -33,6 +33,10 @@ module.exports = {
         type: Sequelize.ENUM("teacher", "student"),
         allowNull: false,
       },
+      profile_img_url: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

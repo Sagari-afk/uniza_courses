@@ -7,7 +7,16 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "courseId",
         onDelete: "CASCADE",
       });
-      Course.belongsToMany(models.Teacher, { through: "Teacher_Courses" });
+      Course.belongsToMany(models.Teacher, {
+        through: "teacher_courses",
+        foreignKey: "courseId",
+        as: "teachers",
+      });
+      Course.belongsToMany(models.Discipline, {
+        through: "course_discipline",
+        foreignKey: "courseId",
+        as: "disciplines",
+      });
     }
   }
   Course.init(
@@ -22,6 +31,10 @@ module.exports = (sequelize, DataTypes) => {
       },
       description: {
         type: DataTypes.STRING,
+        allowNull: false,
+      },
+      year: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     },

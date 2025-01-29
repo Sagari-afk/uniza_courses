@@ -16,13 +16,22 @@ module.exports = (sequelize, DataTypes) => {
   }
   CourseComments.init(
     {
-      courseId: { type: DataTypes.INTEGER, allowNull: false },
-      userId: { type: DataTypes.INTEGER, allowNull: false },
+      courseId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
       commentText: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      commentRate: { type: DataTypes.INTEGER, allowNull: false },
+      commentRate: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
     },
     {
       sequelize,

@@ -8,22 +8,32 @@ import MenuItem from "@mui/material/MenuItem";
 import InputLabel from "@mui/material/InputLabel";
 import TextField from "@mui/material/TextField";
 import SecundaryBtn from "../components/SecundaryBtn";
-import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react";
 
 const Courses = ({ handleLogout }) => {
-  const [studOdbor, setStudOdbor] = React.useState("Vsetky");
-  const [rocnik, setRocnik] = React.useState("Vsetky");
+  const [studOdbor, setStudOdbor] = React.useState("");
+  const [rocnik, setRocnik] = React.useState("");
   const [isHovered, setIsHovered] = React.useState(false);
   const [restData, setRestData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [error, setError] = useState(null);
 
-  const handleChangeOdbor = (event) => {
-    setStudOdbor(event.target.value);
+  const filterCourses = (course) => {
+    return (
+      (studOdbor === "all" || studOdbor === "" // If "all" or no filter is selected for study field
+        ? true // Show all courses
+        : course.disciplines.some((d) => d.name === studOdbor)) && // Otherwise, filter by selected discipline
+      (rocnik === "all" || rocnik === "" // If "all" or no filter is selected for year
+        ? true // Show all courses
+        : course.year === parseInt(rocnik)) // Otherwise, filter by selected year
+    );
   };
-  const handleChangeRocnik = (event) => {
-    setRocnik(event.target.value);
-  };
+
+  useEffect(() => {
+    console.log(studOdbor);
+    const filteredCourses = restData.filter(filterCourses);
+    setFilteredData(filteredCourses);
+  }, [studOdbor, rocnik]);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -42,6 +52,7 @@ const Courses = ({ handleLogout }) => {
         if (response.ok) {
           const responseData = await response.json();
           setRestData(responseData.records);
+          setFilteredData(responseData.records);
         } else {
           throw new Error("Failed to fetch courses");
         }
@@ -239,30 +250,36 @@ const Courses = ({ handleLogout }) => {
                   <InputLabel id="stud-odbor-label">Studijny odbor</InputLabel>
                   <Select
                     value={studOdbor}
-                    onChange={handleChangeOdbor}
+                    onChange={(e) => setStudOdbor(e.target.value)}
                     displayEmpty
                     labelId="stud-odbor-label"
                     autoWidth
                     id="stud-odbor-select-autowidth"
                     label="Studijny odbor"
                   >
-                    <MenuItem value="Vsetky">Vsetky</MenuItem>
-                    <MenuItem value="Multimedia">Multimedia</MenuItem>
-                    <MenuItem value="Komunikacne">Komunikacne</MenuItem>
+                    <MenuItem value=""></MenuItem>
+                    <MenuItem value="all">Vsetky</MenuItem>
+                    <MenuItem value="Multimediálne technológie">
+                      Multimediálne technológie
+                    </MenuItem>
+                    <MenuItem value="Komunikačné a informačné technológie">
+                      Komunikačné a informačné technológie
+                    </MenuItem>
                   </Select>
                 </FormControl>
                 <FormControl sx={{ m: 1, minWidth: 180 }}>
                   <InputLabel id="rocnik-label">Rocnik</InputLabel>
                   <Select
                     value={rocnik}
-                    onChange={handleChangeRocnik}
+                    onChange={(e) => setRocnik(e.target.value)}
                     displayEmpty
                     labelId="rocnik-label"
                     autoWidth
                     id="rocnik-select-autowidth"
                     label="Rocnik"
                   >
-                    <MenuItem value="Vsetky">Vsetky</MenuItem>
+                    <MenuItem value=""></MenuItem>
+                    <MenuItem value="all">Vsetky</MenuItem>
                     <MenuItem value="1">1</MenuItem>
                     <MenuItem value="2">2</MenuItem>
                     <MenuItem value="3">3</MenuItem>
@@ -310,8 +327,8 @@ const Courses = ({ handleLogout }) => {
                   padding: "20px",
                 }}
               >
-                {restData.length > 0 ? (
-                  restData.map((course, index) => (
+                {filteredData.length > 0 ? (
+                  filteredData.map((course, index) => (
                     <CourseCard
                       key={index} // Уникальный ключ для каждого элемента
                       name={course.name} // Передаем параметры
@@ -324,7 +341,7 @@ const Courses = ({ handleLogout }) => {
                     />
                   ))
                 ) : (
-                  <Typography>Loading...</Typography> // Показываем, пока данные не загружены
+                  <Typography>Nenasiel sa ziaden kurz</Typography> // Показываем, пока данные не загружены
                 )}
               </Box>
             )}

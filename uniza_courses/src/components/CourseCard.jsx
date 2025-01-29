@@ -72,7 +72,10 @@ const CourseCard = ({
           }}
           className={`${cardClasses.courseFooter}`}
         >
-          <Typography className={cardClasses.courseInstructor}>
+          <Typography
+            className={cardClasses.courseInstructor}
+            sx={{ width: "50%" }}
+          >
             Meno a prizvisko ucitela
           </Typography>
           <SecundaryBtn

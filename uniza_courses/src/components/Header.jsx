@@ -56,17 +56,22 @@ const Header = () => {
 
       <Box sx={{ display: "flex", gap: 2 }}>
         <SelectLanguage />
-        <Link>
-          <img
-            src={profile_pic}
-            style={{
-              height: "2.5rem",
-              width: "auto",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-          />
-        </Link>
+        {localStorage.getItem("authToken") ||
+        sessionStorage.getItem("authToken") ? (
+          <Link>
+            <img
+              src={profile_pic}
+              style={{
+                height: "2.5rem",
+                width: "auto",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+          </Link>
+        ) : (
+          <></>
+        )}
       </Box>
     </Box>
   );

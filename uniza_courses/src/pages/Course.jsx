@@ -259,6 +259,8 @@ const Course = () => {
                 </Box>
               </Box>
 
+              <Box></Box>
+
               <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <Typography variant="h4" className="font-gradient">
                   Hodnotenia

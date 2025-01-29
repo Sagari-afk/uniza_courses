@@ -1,9 +1,46 @@
-const { sequelize, Course, CourseComments, User } = require("../models");
+const {
+  sequelize,
+  Course,
+  CourseComments,
+  User,
+  Discipline,
+  Teacher,
+} = require("../models");
 const { body, validationResult } = require("express-validator");
 
 const getCourses = async (req, res) => {
   try {
-    const records = await Course.findAll();
+    const records = await Course.findAll({
+      include: [
+        {
+          model: CourseComments,
+          include: {
+            model: User, // Use the actual model reference here
+            attributes: ["id", "firstName", "secondName", "role"], // Specify the fields you want to include from User
+          },
+        },
+        {
+          model: Teacher,
+          attributes: ["id", "institute", "office", "phone"],
+          through: { attributes: [] },
+          as: "teachers",
+          include: [
+            {
+              model: User,
+              attributes: ["firstName", "secondName", "email"],
+              as: "user",
+              required: false,
+            },
+          ],
+        },
+        {
+          model: Discipline,
+          attributes: ["name"],
+          through: { attributes: [] },
+          as: "disciplines",
+        },
+      ],
+    });
     return res.status(200).json({ records });
   } catch (error) {
     console.log(error);
@@ -21,6 +58,26 @@ const getCourseBy = async (req, res) => {
             model: User, // Use the actual model reference here
             attributes: ["id", "firstName", "secondName", "role"], // Specify the fields you want to include from User
           },
+        },
+        {
+          model: Teacher,
+          attributes: ["id", "institute", "office", "phone"],
+          through: { attributes: [] },
+          as: "teachers",
+          include: [
+            {
+              model: User,
+              attributes: ["firstName", "secondName", "email"],
+              as: "user",
+              required: false,
+            },
+          ],
+        },
+        {
+          model: Discipline,
+          attributes: ["name"],
+          through: { attributes: [] },
+          as: "disciplines",
         },
       ],
     });
@@ -48,16 +105,33 @@ const newCourse = [
       res.status(400).json(errMessage);
     }
 
-    const { name, img_url, description } = req.body;
-
-    teacher
+    const { name, img_url, description, year, disciplines, teachers } =
+      req.body;
 
     try {
       const course = await Course.create({
         name,
         img_url,
         description,
+        year,
       });
+
+      for (const i of teachers) {
+        if (Teacher.findByPk(i)) {
+          await course.addTeacher(i);
+        } else {
+          res.status(400).json(`The teacher with id ${i} doesnt exist`);
+        }
+      }
+
+      for (const i of disciplines) {
+        if (Discipline.findByPk(i)) {
+          console.log(i);
+          await course.addDiscipline(i);
+        } else {
+          res.status(400).json(`The discipline with id ${i} doesnt exist`);
+        }
+      }
 
       return res.json(course);
     } catch (error) {

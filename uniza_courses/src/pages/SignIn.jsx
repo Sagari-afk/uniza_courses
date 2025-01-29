@@ -63,6 +63,7 @@ const SignIn = () => {
 
         navigate("/Courses"); // Redirect to the Courses page
       } else {
+        console.log("Login failed", data);
         setError(data || "Login failed");
       }
     } catch (err) {
@@ -112,7 +113,7 @@ const SignIn = () => {
             }}
           >
             <FormLabel htmlFor="email" sx={{ color: "white.main" }}>
-              Školský meil
+              Školský email
             </FormLabel>
             <TextField
               id="email"
