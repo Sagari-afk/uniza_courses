@@ -15,6 +15,7 @@ import PrimaryBtn from "../components/PrimaryBtn";
 import SecundaryBtn from "../components/SecundaryBtn";
 import { useLocation } from "react-router-dom";
 import Comment from "../components/Comment";
+import TeacherCard from "../components/teacherCard";
 
 const Course = () => {
   const location = useLocation();
@@ -241,7 +242,12 @@ const Course = () => {
                     Pre koho je tento kurz
                   </Typography>
                   <Typography sx={{ lineHeight: "200%" }}>
-                    Študenti Multymedialných technologií 1 ročník 1 semester
+                    Študenti{" "}
+                    {restData.disciplines && restData.disciplines[0].name}
+                    {restData.disciplines &&
+                      restData.disciplines.length > 1 &&
+                      " a " + restData.disciplines[1].name}
+                    {" " + restData.year} ročníku
                   </Typography>
                 </Box>
 
@@ -259,7 +265,24 @@ const Course = () => {
                 </Box>
               </Box>
 
-              <Box></Box>
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <Typography variant="h4" className="font-gradient">
+                  Učitelia
+                </Typography>
+                {restData.teachers &&
+                Array.isArray(restData.teachers) &&
+                restData.teachers.length > 0 ? (
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 5 }}
+                  >
+                    {restData.teachers.map((teacher, index) => (
+                      <TeacherCard key={index} teacher={teacher} />
+                    ))}
+                  </Box>
+                ) : (
+                  <Typography>Žiadne učitelia</Typography>
+                )}
+              </Box>
 
               <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <Typography variant="h4" className="font-gradient">

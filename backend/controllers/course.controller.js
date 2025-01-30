@@ -16,7 +16,13 @@ const getCourses = async (req, res) => {
           model: CourseComments,
           include: {
             model: User, // Use the actual model reference here
-            attributes: ["id", "firstName", "secondName", "role"], // Specify the fields you want to include from User
+            attributes: [
+              "id",
+              "firstName",
+              "secondName",
+              "role",
+              "profile_img_url",
+            ], // Specify the fields you want to include from User
           },
         },
         {
@@ -27,7 +33,12 @@ const getCourses = async (req, res) => {
           include: [
             {
               model: User,
-              attributes: ["firstName", "secondName", "email"],
+              attributes: [
+                "firstName",
+                "secondName",
+                "email",
+                "profile_img_url",
+              ],
               as: "user",
               required: false,
             },
@@ -56,7 +67,13 @@ const getCourseBy = async (req, res) => {
           model: CourseComments,
           include: {
             model: User, // Use the actual model reference here
-            attributes: ["id", "firstName", "secondName", "role"], // Specify the fields you want to include from User
+            attributes: [
+              "id",
+              "firstName",
+              "secondName",
+              "role",
+              "profile_img_url",
+            ], // Specify the fields you want to include from User
           },
         },
         {
@@ -67,7 +84,12 @@ const getCourseBy = async (req, res) => {
           include: [
             {
               model: User,
-              attributes: ["firstName", "secondName", "email"],
+              attributes: [
+                "firstName",
+                "secondName",
+                "email",
+                "profile_img_url",
+              ],
               as: "user",
               required: false,
             },
