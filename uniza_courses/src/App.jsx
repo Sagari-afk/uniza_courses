@@ -7,10 +7,40 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { useEffect } from "react";
 import Course from "./pages/Course";
+import { GlobalStyles } from "@mui/material";
+import CreateNewCourseBtn from "./components/CreateNewCourseBtn";
+import CreateNewCourse from "./pages/CreateNewCourse";
 
 function App() {
   const [authToken, setAuthToken] = useState(null);
   const navigate = useNavigate();
+
+  const globalStyles = (
+    <GlobalStyles
+      styles={{
+        /* Webkit (Chrome, Edge, Safari) */
+        "*::-webkit-scrollbar": {
+          padding: "0.5rem", // doesnt work
+        },
+        "*::-webkit-scrollbar-track": {
+          background: "#f1f1f1",
+        },
+        "*::-webkit-scrollbar-thumb": {
+          backgroundColor: "#888",
+          borderRadius: "16px",
+          border: "2px solid #f1f1f1",
+        },
+        "*::-webkit-scrollbar-thumb:hover": {
+          backgroundColor: "#555",
+        },
+        /* Firefox */
+        "*": {
+          scrollbarWidth: "thin",
+          scrollbarColor: "#888 #f1f1f1",
+        },
+      }}
+    />
+  );
 
   useEffect(() => {
     const token =
@@ -76,6 +106,7 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
+      {globalStyles}
       <Routes>
         {!authToken && <Route path="/" element={<HomePage />} />}
         {!authToken && <Route path="signIn" element={<SignIn />} />}
@@ -85,7 +116,14 @@ function App() {
           element={<Courses handleLogout={handleLogout} />}
         />
         {authToken && <Route path="/Course/:courseName" element={<Course />} />}
+        {authToken && (
+          <Route path="/createNewCourse" element={<CreateNewCourse />} />
+        )}
       </Routes>
+
+      {window.location.pathname !== "/createNewCourse" && (
+        <CreateNewCourseBtn />
+      )}
     </ThemeProvider>
   );
 }

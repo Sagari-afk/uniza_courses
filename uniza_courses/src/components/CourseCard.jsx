@@ -1,11 +1,9 @@
 import cardClasses from "../styles/CourseCard.module.css";
 import { useNavigate } from "react-router-dom";
-import testImg from "../assets/testImg.png";
 import Badge from "@mui/material/Badge";
 import { Icon } from "@iconify/react";
 import { Box, Typography } from "@mui/material";
 import SecundaryBtn from "./SecundaryBtn";
-import { Link } from "react-router-dom";
 
 const CourseCard = ({
   name,
@@ -14,6 +12,7 @@ const CourseCard = ({
   updatedAt,
   linkTo,
   courseId,
+  teachers,
 }) => {
   const date = new Date(updatedAt);
   const navigate = useNavigate();
@@ -76,12 +75,12 @@ const CourseCard = ({
             className={cardClasses.courseInstructor}
             sx={{ width: "50%" }}
           >
-            Meno a prizvisko ucitela
+            {teachers
+              .map((teacher, index) => teacher.user.secondName)
+              .join(", ")}
           </Typography>
           <SecundaryBtn
             sxChildren={{
-              color: "black.main",
-              backgroundColor: "transperent",
               width: "auto",
             }}
             onClick={() => navigate(linkTo, { state: { courseId } })}

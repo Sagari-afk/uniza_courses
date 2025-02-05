@@ -1,47 +1,14 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Pagination, Typography } from "@mui/material";
 import Header from "../components/Header";
-import CourseCard from "../components/CourseCard";
-import FormControl from "@mui/material/FormControl";
 import React, { useState, useEffect } from "react";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import TextField from "@mui/material/TextField";
-import SecundaryBtn from "../components/SecundaryBtn";
-import { Icon } from "@iconify/react";
+import SideMenu from "../components/SideMenu";
+import SearchBar from "../components/SearchBar";
+import CoursesPagination from "../components/CoursePagination";
 
 const Courses = ({ handleLogout }) => {
-  const [studOdbor, setStudOdbor] = React.useState("");
-  const [rocnik, setRocnik] = React.useState("");
-  const [isHovered, setIsHovered] = React.useState(false);
   const [restData, setRestData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [error, setError] = useState(null);
-
-  const filterCourses = (course) => {
-    return (
-      (studOdbor === "all" || studOdbor === "" // If "all" or no filter is selected for study field
-        ? true // Show all courses
-        : course.disciplines.some((d) => d.name === studOdbor)) && // Otherwise, filter by selected discipline
-      (rocnik === "all" || rocnik === "" // If "all" or no filter is selected for year
-        ? true // Show all courses
-        : course.year === parseInt(rocnik)) // Otherwise, filter by selected year
-    );
-  };
-
-  useEffect(() => {
-    console.log(studOdbor);
-    const filteredCourses = restData.filter(filterCourses);
-    setFilteredData(filteredCourses);
-  }, [studOdbor, rocnik]);
-
-  const handleMouseEnter = () => {
-    setIsHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovered(false);
-  };
 
   useEffect(() => {
     const load = async () => {
@@ -64,159 +31,11 @@ const Courses = ({ handleLogout }) => {
 
     load();
   }, []);
+
   return (
-    // <Container>
     <>
       <Header />
-      <Box sx={{ display: "flex" }}>
-        <Box
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            margin: "4rem 1rem 0 3rem",
-            minHeight: "550px",
-          }}
-          onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeave}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              color: "primary.dark",
-              gap: "2rem",
-            }}
-          >
-            <Icon
-              icon="material-symbols:menu-rounded"
-              style={{
-                fontSize: "2rem",
-                opacity: isHovered ? 0.3 : 1, // Hide icon when hovered
-              }}
-            />
-
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                color: "primary.dark",
-                gap: "2rem", // Ensure that content doesn't overflow when shrinking
-                transition: "all 0.3s ease", // Smooth transition for size and padding
-                width: isHovered ? "250px" : "60px", // Box width changes smoothly on hover
-              }}
-            >
-              {/* First box with icon and text */}
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "1rem",
-                  alignItems: "center",
-                  opacity: isHovered ? 1 : 0, // Fade-in text when hovered
-                  transition: "opacity 0.3s ease", // Smooth opacity transition
-                }}
-              >
-                <Icon
-                  icon="hugeicons:course"
-                  style={{
-                    fontSize: "2rem",
-                    transition: "transform 0.3s ease", // Smooth scaling transition for the icon
-                  }}
-                />
-                {isHovered && (
-                  <Typography
-                    sx={{ color: "white.dark", whiteSpace: "nowrap" }}
-                  >
-                    Robim teraz
-                  </Typography>
-                )}
-              </Box>
-
-              {/* Second box with icon and text */}
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "1rem",
-                  alignItems: "center",
-                  opacity: isHovered ? 1 : 0, // Fade-in text when hovered
-                  transition: "opacity 0.3s ease", // Smooth opacity transition
-                }}
-              >
-                <Icon
-                  icon="tabler:clock"
-                  style={{
-                    fontSize: "2rem",
-                    transition: "transform 0.3s ease", // Smooth scaling transition for the icon
-                  }}
-                />
-                {isHovered && (
-                  <Typography
-                    sx={{ color: "white.dark", whiteSpace: "nowrap" }}
-                  >
-                    Chcem robiť
-                  </Typography>
-                )}
-              </Box>
-
-              {/* Third box with icon and text */}
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "1rem",
-                  alignItems: "center",
-                  opacity: isHovered ? 1 : 0, // Fade-in text when hovered
-                  transition: "opacity 0.3s ease", // Smooth opacity transition
-                }}
-              >
-                <Icon
-                  icon="tabler:heart"
-                  style={{
-                    fontSize: "2rem",
-                    transition: "transform 0.3s ease", // Smooth scaling transition for the icon
-                  }}
-                />
-                {isHovered && (
-                  <Typography sx={{ color: "white.dark" }}>Obľubene</Typography>
-                )}
-              </Box>
-
-              {/* Fourth box with icon and text */}
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: "1rem",
-                  alignItems: "center",
-                  opacity: isHovered ? 1 : 0, // Fade-in text when hovered
-                  transition: "opacity 0.3s ease", // Smooth opacity transition
-                }}
-              >
-                <Icon
-                  icon="mage:archive"
-                  style={{
-                    fontSize: "2rem",
-                    transition: "transform 0.3s ease", // Smooth scaling transition for the icon
-                  }}
-                />
-                {isHovered && (
-                  <Typography sx={{ color: "white.dark" }}>Archiv</Typography>
-                )}
-              </Box>
-            </Box>
-          </Box>
-          {isHovered && (
-            <Typography
-              sx={{
-                color: "white.dark",
-                whiteSpace: "nowrap",
-                opacity: 0.3,
-                cursor: "pointer",
-              }}
-              onClick={handleLogout}
-            >
-              Odhlasiť sa
-            </Typography>
-          )}
-        </Box>
+      <SideMenu handleLogout={handleLogout}>
         <Box
           sx={{
             borderRadius: "42px 0px 0px 0px",
@@ -233,123 +52,17 @@ const Courses = ({ handleLogout }) => {
             <Typography variant="h3" sx={{ my: "1rem" }}>
               Kurzy podľa predmetov
             </Typography>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexDirection: { md: "row", xs: "column" },
-              }}
-            >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: { xs: "space-between" },
-                }}
-              >
-                <FormControl sx={{ m: 1, minWidth: 180 }}>
-                  <InputLabel id="stud-odbor-label">Studijny odbor</InputLabel>
-                  <Select
-                    value={studOdbor}
-                    onChange={(e) => setStudOdbor(e.target.value)}
-                    displayEmpty
-                    labelId="stud-odbor-label"
-                    autoWidth
-                    id="stud-odbor-select-autowidth"
-                    label="Studijny odbor"
-                  >
-                    <MenuItem value=""></MenuItem>
-                    <MenuItem value="all">Vsetky</MenuItem>
-                    <MenuItem value="Multimediálne technológie">
-                      Multimediálne technológie
-                    </MenuItem>
-                    <MenuItem value="Komunikačné a informačné technológie">
-                      Komunikačné a informačné technológie
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                <FormControl sx={{ m: 1, minWidth: 180 }}>
-                  <InputLabel id="rocnik-label">Rocnik</InputLabel>
-                  <Select
-                    value={rocnik}
-                    onChange={(e) => setRocnik(e.target.value)}
-                    displayEmpty
-                    labelId="rocnik-label"
-                    autoWidth
-                    id="rocnik-select-autowidth"
-                    label="Rocnik"
-                  >
-                    <MenuItem value=""></MenuItem>
-                    <MenuItem value="all">Vsetky</MenuItem>
-                    <MenuItem value="1">1</MenuItem>
-                    <MenuItem value="2">2</MenuItem>
-                    <MenuItem value="3">3</MenuItem>
-                  </Select>
-                </FormControl>
-              </Box>
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: { xs: "space-between" },
-                }}
-              >
-                <FormControl sx={{ m: 1 }}>
-                  <TextField
-                    id="outlined-search"
-                    label="Nazov kurzu, predmetu alebo temy..."
-                    type="search"
-                    variant="standard"
-                    sx={{ width: { xs: "100%" } }}
-                  />
-                </FormControl>
-                <FormControl sx={{ m: 1 }}>
-                  <SecundaryBtn
-                    sxChildren={{
-                      color: "black.main",
-                      backgroundColor: "white.main",
-                    }}
-                  >
-                    Hladat
-                  </SecundaryBtn>
-                </FormControl>
-              </Box>
-            </Box>
+            <SearchBar restData={restData} setFilteredData={setFilteredData} />
           </Box>
 
-          <section>
-            {error ? (
-              <Typography>Error: {error}</Typography>
-            ) : (
-              <Box
-                sx={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-                  gap: "20px",
-                  padding: "20px",
-                }}
-              >
-                {filteredData.length > 0 ? (
-                  filteredData.map((course, index) => (
-                    <CourseCard
-                      key={index} // Уникальный ключ для каждого элемента
-                      name={course.name} // Передаем параметры
-                      img_url={course.img_url}
-                      teacher={course.teacher}
-                      updatedAt={course.updatedAt}
-                      description={course.description}
-                      linkTo={`/Course/${course.name}`}
-                      courseId={course.id}
-                    />
-                  ))
-                ) : (
-                  <Typography>Nenasiel sa ziaden kurz</Typography> // Показываем, пока данные не загружены
-                )}
-              </Box>
-            )}
-          </section>
+          {error ? (
+            <Typography>Error: {error}</Typography>
+          ) : (
+            <CoursesPagination courses={filteredData} />
+          )}
         </Box>
-      </Box>
+      </SideMenu>
     </>
-    // </Container>
   );
 };
 

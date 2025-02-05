@@ -181,7 +181,9 @@ const SignIn = () => {
             )}
             <PrimaryBtn type="submit">Prihlasiť sa</PrimaryBtn>
             <Link to="/SignUp">
-              <SecundaryBtn>Vytvoriť nový učet</SecundaryBtn>
+              <SecundaryBtn style={{ color: "#DF6690" }}>
+                Vytvoriť nový učet
+              </SecundaryBtn>
             </Link>
 
             <Snackbar

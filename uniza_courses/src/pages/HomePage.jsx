@@ -36,7 +36,7 @@ const HomePage = () => {
               <PrimaryBtn>Prihlásiť</PrimaryBtn>
             </Link>
             <Link to="/Courses">
-              <SecundaryBtn>Kurzy</SecundaryBtn>
+              <SecundaryBtn style={{ color: "#DF6690" }}>Kurzy</SecundaryBtn>
             </Link>
           </Box>
         </Box>

@@ -81,11 +81,11 @@ const Course = () => {
 
       if (!response.ok) {
         console.log(data);
-        // setError(data || "Failed");
+        setError(data || "Failed");
       }
     } catch (err) {
       console.log(err);
-      // setError(err.message || "Failed");
+      setError(err.message || "Failed");
     }
   };
 
@@ -355,7 +355,6 @@ const Course = () => {
                     type="submit"
                     sxChildren={{
                       width: "20%",
-                      backgroundColor: "transperent",
                       alignSelf: "end",
                     }}
                   >
@@ -390,8 +389,6 @@ const Course = () => {
 
                   <SecundaryBtn
                     style={{
-                      color: "#DF6690",
-                      backgroundColor: "rgba(255, 255, 255, 0.74)",
                       border: "2px solid #E8E8E8",
                       display: "flex",
                       gap: 3,
@@ -407,8 +404,6 @@ const Course = () => {
 
                   <SecundaryBtn
                     style={{
-                      color: "#DF6690",
-                      backgroundColor: "rgba(255, 255, 255, 0.74)",
                       border: "2px solid #E8E8E8",
                       display: "flex",
                       gap: 3,
