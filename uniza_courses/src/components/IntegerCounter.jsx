@@ -6,18 +6,22 @@ import RemoveIcon from "@mui/icons-material/Remove";
 const IntegerCounter = ({ labelName, value, setValue }) => {
   const handleIncrement = () => {
     if (value < 3) {
-      setValue((prev) => prev + 1);
+      if (value) {
+        setValue((prev) => parseInt(prev) + 1);
+      } else {
+        setValue(1);
+      }
     }
   };
 
   const handleDecrement = () => {
     if (value > 1) {
-      setValue((prev) => prev - 1);
+      setValue((prev) => parseInt(prev) - 1);
     }
   };
 
   const handleChange = (event) => {
-    const newValue = parseInt(event.target.value, 10);
+    const newValue = parseInt(event.target.value, 1);
     if (!isNaN(newValue)) {
       const clampedValue = Math.min(Math.max(newValue, 1), 3);
       setValue(clampedValue);

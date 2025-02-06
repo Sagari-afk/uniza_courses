@@ -58,12 +58,10 @@ const SearchBar = ({ restData, setFilteredData }) => {
           <Select
             value={studOdbor}
             onChange={(e) => setStudOdbor(e.target.value)}
-            displayEmpty
             autoWidth
             id="stud-odbor-select-autowidth"
             label="Studijny odbor"
           >
-            <MenuItem value=""></MenuItem>
             <MenuItem value="all">Vsetky</MenuItem>
             <MenuItem value="Multimediálne technológie">
               Multimediálne technológie
@@ -78,13 +76,11 @@ const SearchBar = ({ restData, setFilteredData }) => {
           <Select
             value={rocnik}
             onChange={(e) => setRocnik(e.target.value)}
-            displayEmpty
             labelId="rocnik-label"
             autoWidth
             id="rocnik-select-autowidth"
             label="Rocnik"
           >
-            <MenuItem value=""></MenuItem>
             <MenuItem value="all">Vsetky</MenuItem>
             <MenuItem value="1">1</MenuItem>
             <MenuItem value="2">2</MenuItem>
@@ -95,17 +91,18 @@ const SearchBar = ({ restData, setFilteredData }) => {
       <Box
         sx={{
           display: "flex",
-          width: { xs: "50%" },
+          width: "100%",
           justifyContent: { xs: "space-between" },
         }}
       >
         <FormControl
           sx={{
             m: 1,
-            width: { xs: "100%" },
+            width: "100%",
             display: "flex",
             flexDirection: { xs: "column", md: "row" },
             gap: "1rem",
+            justifyContent: "end",
           }}
         >
           <TextField
@@ -113,7 +110,7 @@ const SearchBar = ({ restData, setFilteredData }) => {
             label="Vyhľadaj podľa nazovu kurzu..."
             type="search"
             variant="standard"
-            sx={{ width: { xs: "100%" } }}
+            sx={{ width: { xs: "100%", md: "70%" } }}
             value={searchBy}
             onChange={(e) => setSearchBy(e.target.value)}
           />

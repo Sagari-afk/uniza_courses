@@ -15,14 +15,14 @@ const getCourses = async (req, res) => {
         {
           model: CourseComments,
           include: {
-            model: User, // Use the actual model reference here
+            model: User,
             attributes: [
               "id",
               "firstName",
               "secondName",
               "role",
               "profile_img_url",
-            ], // Specify the fields you want to include from User
+            ],
           },
         },
         {
@@ -52,28 +52,40 @@ const getCourses = async (req, res) => {
         },
       ],
     });
-    return res.status(200).json({ records });
+
+    const courses = records.map((record) => {
+      const course = record.toJSON();
+
+      if (course.img_url) {
+        course.img_url = `${req.protocol}://${req.get("host")}/${
+          course.img_url
+        }`;
+      }
+      return course;
+    });
+
+    return res.status(200).json({ records: courses });
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error.message);
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 };
 
 const getCourseBy = async (req, res) => {
   try {
-    const records = await Course.findByPk(req.params.id, {
+    const record = await Course.findByPk(req.params.id, {
       include: [
         {
           model: CourseComments,
           include: {
-            model: User, // Use the actual model reference here
+            model: User,
             attributes: [
               "id",
               "firstName",
               "secondName",
               "role",
               "profile_img_url",
-            ], // Specify the fields you want to include from User
+            ],
           },
         },
         {
@@ -104,19 +116,35 @@ const getCourseBy = async (req, res) => {
       ],
     });
 
-    return res.status(200).json(records);
+    if (!record) {
+      return res.status(404).json({ message: "Course not found" });
+    }
+
+    const course = record.toJSON();
+    if (course.img_url) {
+      course.img_url = `${req.protocol}://${req.get("host")}/${course.img_url}`;
+    }
+
+    return res.status(200).json(course);
   } catch (error) {
-    console.log(error);
-    res.status(500).json(error.message);
+    console.error(error);
+    res.status(500).json({ error: error.message });
   }
 };
 
+module.exports = { getCourses, getCourseBy };
+
 const newCourse = [
   body("name").not().isEmpty(),
-  body("img_url").not().isEmpty().isURL(),
   body("description").not().isEmpty(),
 
   async (req, res) => {
+    const { name, description, disciplines, year, teachers } = req.body;
+    const disciplines1 = JSON.parse(disciplines);
+    const teachers1 = JSON.parse(teachers);
+
+    const img_url = req.file ? req.file.path : null;
+
     const errors = validationResult(req);
 
     if (!errors.isEmpty()) {
@@ -127,9 +155,6 @@ const newCourse = [
       res.status(400).json(errMessage);
     }
 
-    const { name, img_url, description, year, disciplines, teachers } =
-      req.body;
-
     try {
       const course = await Course.create({
         name,
@@ -138,20 +163,27 @@ const newCourse = [
         year,
       });
 
-      for (const i of teachers) {
-        if (Teacher.findByPk(i)) {
+      for (const i of teachers1) {
+        if (await Teacher.findByPk(i)) {
           await course.addTeacher(i);
         } else {
-          res.status(400).json(`The teacher with id ${i} doesnt exist`);
+          console.log("npt mlem");
+          return res.status(400).json(`The teacher with id ${i} doesnt exist`);
         }
       }
 
-      for (const i of disciplines) {
-        if (Discipline.findByPk(i)) {
-          console.log(i);
-          await course.addDiscipline(i);
+      for (const i of disciplines1) {
+        const id = await Discipline.findOne({
+          where: { name: i },
+        });
+        console.log("id", id);
+
+        if (id) {
+          await course.addDiscipline(id);
         } else {
-          res.status(400).json(`The discipline with id ${i} doesnt exist`);
+          return res
+            .status(400)
+            .json(`The discipline with id ${id} doesnt exist`);
         }
       }
 

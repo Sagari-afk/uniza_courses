@@ -33,7 +33,7 @@ const CheckboxSelect = ({
   };
 
   return (
-    <FormControl sx={{ m: 1, width: 300 }}>
+    <FormControl fullWidth>
       <InputLabel id="demo-simple-select-label">{labelName}</InputLabel>
       <Select
         labelId="checkbox-select-label"

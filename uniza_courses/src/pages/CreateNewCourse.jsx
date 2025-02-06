@@ -1,14 +1,13 @@
 import {
   Box,
   Container,
-  Grid,
   Grid2,
   Paper,
   TextField,
   Typography,
 } from "@mui/material";
 import Header from "../components/Header";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import CheckboxSelect from "../components/CheckboxSelect";
 import IntegerCounter from "../components/IntegerCounter";
 import SecundaryBtn from "../components/SecundaryBtn";
@@ -18,6 +17,12 @@ import ReactQuill from "react-quill"; // ES6
 import "react-quill/dist/quill.snow.css"; // ES6, for the "snow" theme
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import SpeedDial from "@mui/material/SpeedDial";
+import SpeedDialIcon from "@mui/material/SpeedDialIcon";
+import SpeedDialAction from "@mui/material/SpeedDialAction";
+import TeacherSelect from "../components/TeacherSelect";
+
 const CreateNewCourse = () => {
   const [courseName, setCourseName] = useState("");
   const [selectedOdbor, setSelectedOdbor] = useState([]);
@@ -25,13 +30,82 @@ const CreateNewCourse = () => {
   const [foto, setFoto] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [editorContent, setEditorContent] = useState("");
+  const [selectedTeachers, setSelectedTeachers] = useState([]);
+  const [teacherOptions, setTeacherOptions] = useState([]);
+  const [courseDescription, setCourseDescription] = useState("");
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/api/user/getTeachers",
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "x-access-token":
+                localStorage.getItem("authToken") ||
+                sessionStorage.getItem("authToken"),
+            },
+          }
+        );
+        const data = await response.json();
+        setTeacherOptions(data.records);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    load();
+  }, []);
+
+  const handleSubmitCreateCourse = async (e) => {
+    e.preventDefault();
+
+    try {
+      const formData = new FormData();
+      const teachers = selectedTeachers.map((teacher) => teacher.id);
+
+      formData.append("image", foto);
+
+      formData.append("name", courseName);
+      formData.append("img_url", "nejake mlem mlem"); // if this is a file, replace with selectedFile
+      formData.append("description", courseDescription);
+      formData.append("disciplines", JSON.stringify(selectedOdbor)); // if it's an array or object, stringify it
+      formData.append("year", selectedRocnik);
+      formData.append("teachers", JSON.stringify(teachers)); // similarly stringify if needed
+
+      const response = await fetch(
+        "http://localhost:3000/api/course/newCourse",
+        {
+          method: "POST",
+          headers: {
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+          body: formData,
+        }
+      );
+      if (response.ok) {
+        alert("Kurz bol úspešne vytvorený");
+      } else {
+        alert("Nastala chyba pri vytváraní kurzu");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleEditorChange = (content, delta, source, editor) => {
     setEditorContent(content);
   };
 
+  const actions = [
+    { icon: <MenuBookIcon />, name: "Nový kurz", link: "/createNewCourse" },
+  ];
+
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
+    setFoto(file);
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -54,21 +128,54 @@ const CreateNewCourse = () => {
         }}
       >
         <Container maxWidth="lg">
-          <Paper sx={{ padding: 3, marginTop: 3, borderRadius: "1rem" }}>
-            <Box sx={{ display: "flex", gap: "1rem" }}>
-              <Typography variant="h3" gutterBottom className="font-gradient">
+          <Paper sx={{ padding: 3, borderRadius: "1rem" }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginBottom: "2rem",
+              }}
+            >
+              <Typography variant="h3" className="font-gradient">
                 Vytvoriť nový kurz
               </Typography>
 
-              <AddCircleOutlineIcon
-                sx={{ fontSize: "3rem", color: "primary.dark" }}
-              />
+              <Box sx={{ display: "flex", gap: "2rem" }}>
+                <SpeedDial
+                  ariaLabel="SpeedDial openIcon example"
+                  icon={<SpeedDialIcon openIcon={<AddCircleOutlineIcon />} />}
+                  direction="left"
+                  sx={{
+                    zIndex: "unset",
+                    "& .MuiSpeedDial-fab": {
+                      zIndex: "unset",
+                    },
+                  }}
+                >
+                  {actions.map((action) => (
+                    <SpeedDialAction
+                      key={action.name}
+                      icon={action.icon}
+                      component="a"
+                      href={action.link}
+                      tooltipTitle={action.name}
+                      sx={{ zIndex: "unset" }}
+                    />
+                  ))}
+                </SpeedDial>
+                <PrimaryBtn
+                  style={{ width: "auto", color: "white" }}
+                  onClick={handleSubmitCreateCourse}
+                >
+                  Uložiť kurz
+                </PrimaryBtn>
+              </Box>
             </Box>
 
             <Grid2 container spacing={4}>
               {/* Názov kurzu */}
               <Grid2
-                size={{ xs: 12, md: 5 }}
+                size={{ xs: 12, md: 6 }}
                 sx={{
                   display: "flex",
                   alignItems: "center",
@@ -90,8 +197,9 @@ const CreateNewCourse = () => {
                 <CheckboxSelect
                   options={[
                     "Multimedialne technologie",
-                    "Komunikacne technologie",
+                    "Komunikačné a informačné technológie",
                   ]}
+                  sx={{ width: "100%" }}
                   labelName="Odbor"
                   selectedItems={selectedOdbor}
                   setSelectedItems={setSelectedOdbor}
@@ -119,6 +227,8 @@ const CreateNewCourse = () => {
                 <TextField
                   label="Kratky popis kurzu"
                   multiline
+                  value={courseDescription}
+                  onChange={(e) => setCourseDescription(e.target.value)}
                   minRows={3}
                   fullWidth
                   placeholder="Kurz je zamerany na..."
@@ -160,6 +270,15 @@ const CreateNewCourse = () => {
                   />
                 )}
               </Grid2>
+              {/* Vyber ucitelov */}
+              <Grid2 size={{ xs: 12, md: 12 }}>
+                <TeacherSelect
+                  teacherOptions={teacherOptions}
+                  selectedTeachers={selectedTeachers}
+                  setSelectedTeachers={setSelectedTeachers}
+                />{" "}
+              </Grid2>
+              {/* Editor */}
               <Grid2
                 size={{ xs: 12, md: 12 }}
                 sx={{
@@ -187,13 +306,10 @@ const CreateNewCourse = () => {
                 <ReactQuill
                   theme="snow"
                   value={editorContent}
-                  onChange={setEditorContent}
+                  onChange={handleEditorChange}
                   placeholder="Stručná osnova predmetu, odporúčaná literatúra atd..."
                 />
               </Grid2>
-              <PrimaryBtn style={{ width: "auto", color: "white" }}>
-                Uložiť kurz
-              </PrimaryBtn>
             </Grid2>
           </Paper>
         </Container>

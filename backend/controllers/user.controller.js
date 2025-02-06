@@ -25,6 +25,30 @@ const getUserBy = async (req, res) => {
   }
 };
 
+const getTeachers = async (req, res) => {
+  try {
+    const records = await Teacher.findAll({
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: [
+            "id",
+            "firstName",
+            "secondName",
+            "email",
+            "profile_img_url",
+          ],
+        },
+      ],
+    });
+    return res.status(200).json({ records });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error.message);
+  }
+};
+
 const newUser = [
   body("firstName").not().isEmpty(),
   body("secondName").not().isEmpty(),
@@ -189,4 +213,5 @@ module.exports = {
   updateUser,
   deleteUser,
   loginUser,
+  getTeachers,
 };

@@ -5,6 +5,7 @@ const authMiddleware = async (req, res, next) => {
   if (req.url.startsWith("/api/user/signUp")) return next();
   if (req.url.startsWith("/api/course/getAllCourses")) return next();
   if (req.url.startsWith("/api/course/getCourse")) return next();
+  if (req.url.startsWith("/uploads")) return next();
 
   const token = req.headers["x-access-token"];
   if (!token)
