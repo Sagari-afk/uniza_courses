@@ -298,7 +298,7 @@ const Course = () => {
                       <Comment
                         key={index}
                         rate={comment.commentRate}
-                        user={comment.User}
+                        user={comment.user}
                         commentText={comment.commentText}
                         updatedAt={comment.updatedAt}
                       />

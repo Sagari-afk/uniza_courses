@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       CourseComments.belongsTo(models.User, {
         foreignKey: "userId",
         onDelete: "CASCADE",
+        as: "user",
       });
     }
   }

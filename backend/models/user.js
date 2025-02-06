@@ -6,8 +6,9 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate = function (models) {
       User.hasMany(models.CourseComments, {
-        foreignKey: "id",
+        foreignKey: "userId",
         onDelete: "CASCADE",
+        as: "comments",
       });
 
       User.hasOne(models.Teacher, {

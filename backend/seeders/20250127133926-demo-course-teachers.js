@@ -25,6 +25,12 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date(),
       },
+      {
+        courseId: courses[2].id,
+        teacherId: teachers[1].id,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
     ]);
   },
 

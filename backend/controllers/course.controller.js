@@ -16,13 +16,9 @@ const getCourses = async (req, res) => {
           model: CourseComments,
           include: {
             model: User,
-            attributes: [
-              "id",
-              "firstName",
-              "secondName",
-              "role",
-              "profile_img_url",
-            ],
+            as: "user",
+            attributes: ["firstName", "secondName", "email", "profile_img_url"],
+            required: false,
           },
         },
         {
@@ -79,13 +75,9 @@ const getCourseBy = async (req, res) => {
           model: CourseComments,
           include: {
             model: User,
-            attributes: [
-              "id",
-              "firstName",
-              "secondName",
-              "role",
-              "profile_img_url",
-            ],
+            as: "user",
+            attributes: ["firstName", "secondName", "email", "profile_img_url"],
+            required: false,
           },
         },
         {

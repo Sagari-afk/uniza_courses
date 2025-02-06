@@ -65,9 +65,7 @@ const CreateNewCourse = () => {
       const teachers = selectedTeachers.map((teacher) => teacher.id);
 
       formData.append("image", foto);
-
       formData.append("name", courseName);
-      formData.append("img_url", "nejake mlem mlem"); // if this is a file, replace with selectedFile
       formData.append("description", courseDescription);
       formData.append("disciplines", JSON.stringify(selectedOdbor)); // if it's an array or object, stringify it
       formData.append("year", selectedRocnik);
