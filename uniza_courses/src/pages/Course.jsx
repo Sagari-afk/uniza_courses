@@ -212,57 +212,32 @@ const Course = () => {
                 <Typography variant="h4" className="font-gradient">
                   O kurze
                 </Typography>
-                <Typography sx={{ lineHeight: "200%" }}>
-                  Pellentesque habitant morbi tristique senectus et netus et
-                  malesuada fames ac turpis egestas. Vestibulum tortor quam,
-                  feugiat vitae, ultricies eget, tempor sit amet, ante.
-                  <br />
-                  <br />
-                  Donec eu libero sit amet quam egestas semper. Aenean ultricies
-                  mi vitae est. Mauris placerat eleifend leo. Quisque sit amet
-                  est et sapien ullamcorper pharetra. Vestibulum erat wisi,
-                  condimentum sed, commodo vitae, ornare sit amet, wisi.
-                  <br />
-                  <br />
-                  Aenean fermentum, elit eget tincidunt condimentum, eros ipsum
-                  rutrum orci, sagittis tempus lacus enim ac dui. Donec non enim
-                  in turpis pulvinar facilisis. Ut felis. Praesent dapibus,
-                  neque id cursus faucibus, tortor neque egestas augue, eu
-                  vulputate magna eros eu erat. Aliquam erat volutpat. Nam dui
-                  mi, tincidunt quis, accumsan porttitor, facilisis luctus,
-                  metus Pellentesque habitant morbi tristique senectus et netus
-                  et malesuada fames ac turpis egestas. Vestibulum tortor quam,
-                  feugiat vitae, ultricies eget, tempor sit amet, ante.
-                </Typography>
+                <Typography
+                  sx={{ lineHeight: "200%" }}
+                  dangerouslySetInnerHTML={{
+                    __html: restData.long_description,
+                  }}
+                />
               </Box>
 
-              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-                <Box>
-                  <Typography variant="h4" className="font-gradient">
-                    Pre koho je tento kurz
-                  </Typography>
-                  <Typography sx={{ lineHeight: "200%" }}>
-                    Študenti{" "}
-                    {restData.disciplines && restData.disciplines[0].name}
-                    {restData.disciplines &&
-                      restData.disciplines.length > 1 &&
-                      " a " + restData.disciplines[1].name}
-                    {" " + restData.year} ročníku
-                  </Typography>
-                </Box>
-
-                <Box>
-                  <Typography variant="h4" className="font-gradient">
-                    Zakladné požiadavky
-                  </Typography>
-                  <Typography sx={{ lineHeight: "200%" }}>
-                    požiadavka 1
-                    <br />
-                    požiadavka 2
-                    <br />
-                    požiadavka 3
-                  </Typography>
-                </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 4,
+                }}
+              >
+                <Typography variant="h4" className="font-gradient">
+                  Pre koho je tento kurz
+                </Typography>
+                <Typography sx={{ lineHeight: "200%" }}>
+                  Študenti{" "}
+                  {restData.disciplines && restData.disciplines[0].name}
+                  {restData.disciplines &&
+                    restData.disciplines.length > 1 &&
+                    " a " + restData.disciplines[1].name}
+                  {" " + restData.year} ročníku
+                </Typography>
               </Box>
 
               <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>

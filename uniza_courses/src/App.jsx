@@ -10,6 +10,9 @@ import Course from "./pages/Course";
 import { GlobalStyles } from "@mui/material";
 import CreateNewCourseBtn from "./components/CreateNewCourseBtn";
 import CreateNewCourse from "./pages/CreateNewCourse";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+
+import EditIcon from "@mui/icons-material/Edit";
 
 function App() {
   const [authToken, setAuthToken] = useState(null);
@@ -122,7 +125,17 @@ function App() {
       </Routes>
 
       {window.location.pathname !== "/createNewCourse" && (
-        <CreateNewCourseBtn />
+        <CreateNewCourseBtn
+          actions={[
+            {
+              icon: <MenuBookIcon />,
+              name: "Nový kurz",
+              link: "/createNewCourse",
+            },
+          ]}
+          icon={<EditIcon />}
+          sx={{ position: "fixed", bottom: "2rem", right: "1rem" }}
+        />
       )}
     </ThemeProvider>
   );

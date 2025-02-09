@@ -7,7 +7,7 @@ import {
   Typography,
 } from "@mui/material";
 import Header from "../components/Header";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import CheckboxSelect from "../components/CheckboxSelect";
 import IntegerCounter from "../components/IntegerCounter";
 import SecundaryBtn from "../components/SecundaryBtn";
@@ -18,10 +18,8 @@ import "react-quill/dist/quill.snow.css"; // ES6, for the "snow" theme
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 
 import MenuBookIcon from "@mui/icons-material/MenuBook";
-import SpeedDial from "@mui/material/SpeedDial";
-import SpeedDialIcon from "@mui/material/SpeedDialIcon";
-import SpeedDialAction from "@mui/material/SpeedDialAction";
 import TeacherSelect from "../components/TeacherSelect";
+import CreateNewCourseBtn from "../components/CreateNewCourseBtn";
 
 const CreateNewCourse = () => {
   const [courseName, setCourseName] = useState("");
@@ -29,10 +27,16 @@ const CreateNewCourse = () => {
   const [selectedRocnik, setSelectedRocnik] = useState("");
   const [foto, setFoto] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
-  const [editorContent, setEditorContent] = useState("");
   const [selectedTeachers, setSelectedTeachers] = useState([]);
   const [teacherOptions, setTeacherOptions] = useState([]);
   const [courseDescription, setCourseDescription] = useState("");
+  const [longDescription, setLongDescription] = useState("");
+
+  const quillRef = useRef(null);
+
+  const actions = [
+    { icon: <MenuBookIcon />, name: "Nový kurz", link: "/createNewCourse" },
+  ];
 
   useEffect(() => {
     const load = async () => {
@@ -71,6 +75,10 @@ const CreateNewCourse = () => {
       formData.append("year", selectedRocnik);
       formData.append("teachers", JSON.stringify(teachers)); // similarly stringify if needed
 
+      const editor = quillRef.current.getEditor();
+      const currentHtml = editor.root.innerHTML;
+      formData.append("long_description", currentHtml);
+
       const response = await fetch(
         "http://localhost:3000/api/course/newCourse",
         {
@@ -92,14 +100,6 @@ const CreateNewCourse = () => {
       console.log(error);
     }
   };
-
-  const handleEditorChange = (content, delta, source, editor) => {
-    setEditorContent(content);
-  };
-
-  const actions = [
-    { icon: <MenuBookIcon />, name: "Nový kurz", link: "/createNewCourse" },
-  ];
 
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
@@ -139,9 +139,9 @@ const CreateNewCourse = () => {
               </Typography>
 
               <Box sx={{ display: "flex", gap: "2rem" }}>
-                <SpeedDial
-                  ariaLabel="SpeedDial openIcon example"
-                  icon={<SpeedDialIcon openIcon={<AddCircleOutlineIcon />} />}
+                <CreateNewCourseBtn
+                  actions={actions}
+                  icon={<AddCircleOutlineIcon />}
                   direction="left"
                   sx={{
                     zIndex: "unset",
@@ -149,18 +149,8 @@ const CreateNewCourse = () => {
                       zIndex: "unset",
                     },
                   }}
-                >
-                  {actions.map((action) => (
-                    <SpeedDialAction
-                      key={action.name}
-                      icon={action.icon}
-                      component="a"
-                      href={action.link}
-                      tooltipTitle={action.name}
-                      sx={{ zIndex: "unset" }}
-                    />
-                  ))}
-                </SpeedDial>
+                  sx_actions={{ zIndex: "unset" }}
+                />
                 <PrimaryBtn
                   style={{ width: "auto", color: "white" }}
                   onClick={handleSubmitCreateCourse}
@@ -214,7 +204,7 @@ const CreateNewCourse = () => {
                 }}
               >
                 <IntegerCounter
-                  labelName="Rocnik"
+                  labelName="Ročnik"
                   value={selectedRocnik}
                   setValue={setSelectedRocnik}
                 />
@@ -223,7 +213,7 @@ const CreateNewCourse = () => {
               {/* Kratky popis */}
               <Grid2 size={{ xs: 12, md: 7 }}>
                 <TextField
-                  label="Kratky popis kurzu"
+                  label="Kratký popis kurzu"
                   multiline
                   value={courseDescription}
                   onChange={(e) => setCourseDescription(e.target.value)}
@@ -302,9 +292,12 @@ const CreateNewCourse = () => {
                 }}
               >
                 <ReactQuill
+                  ref={quillRef}
                   theme="snow"
-                  value={editorContent}
-                  onChange={handleEditorChange}
+                  value={longDescription}
+                  onChange={(content, delta, source, editor) =>
+                    setLongDescription(content)
+                  }
                   placeholder="Stručná osnova predmetu, odporúčaná literatúra atd..."
                 />
               </Grid2>

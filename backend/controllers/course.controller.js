@@ -131,7 +131,8 @@ const newCourse = [
   body("description").not().isEmpty(),
 
   async (req, res) => {
-    const { name, description, disciplines, year, teachers } = req.body;
+    const { name, description, disciplines, year, teachers, long_description } =
+      req.body;
     const disciplines1 = JSON.parse(disciplines);
     const teachers1 = JSON.parse(teachers);
 
@@ -153,6 +154,7 @@ const newCourse = [
         img_url,
         description,
         year,
+        long_description,
       });
 
       for (const i of teachers1) {

@@ -25,6 +25,9 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
+      long_description: {
+        type: Sequelize.TEXT("long"),
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,

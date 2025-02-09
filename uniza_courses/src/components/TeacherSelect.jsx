@@ -26,7 +26,7 @@ function TeacherSelect({
           <TextField
             {...params}
             variant="outlined"
-            label="Zoznam ucitelov"
+            label="Zoznam učiteľov"
             placeholder="Vyhladat ucitela"
           />
         )}
