@@ -16,10 +16,14 @@ import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
 import ReactQuill from "react-quill"; // ES6
 import "react-quill/dist/quill.snow.css"; // ES6, for the "snow" theme
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
+import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
+import StairsIcon from "@mui/icons-material/Stairs";
 
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 import TeacherSelect from "../components/TeacherSelect";
 import CreateNewCourseBtn from "../components/CreateNewCourseBtn";
+import { useNavigate } from "react-router-dom";
 
 const CreateNewCourse = () => {
   const [courseName, setCourseName] = useState("");
@@ -32,11 +36,23 @@ const CreateNewCourse = () => {
   const [courseDescription, setCourseDescription] = useState("");
   const [longDescription, setLongDescription] = useState("");
 
+  const navigate = useNavigate();
+
   const quillRef = useRef(null);
 
-  const actions = [
-    { icon: <MenuBookIcon />, name: "Nový kurz", link: "/createNewCourse" },
-  ];
+  // const actions = [
+  //   {
+  //     icon: <CollectionsBookmarkIcon />,
+  //     name: "Nová tema",
+  //     link: "/createNewCourse",
+  //   },
+  //   {
+  //     icon: <DynamicFeedIcon />,
+  //     name: "Nová podtema",
+  //     link: "/createNewCourse",
+  //   },
+  //   { icon: <StairsIcon />, name: "Nový krok", link: "/createNewCourse" },
+  // ];
 
   useEffect(() => {
     const load = async () => {
@@ -93,6 +109,10 @@ const CreateNewCourse = () => {
       );
       if (response.ok) {
         alert("Kurz bol úspešne vytvorený");
+        const responseData = await response.json();
+        navigate(`/NewCourse/${responseData.name}/content`, {
+          state: { responseData },
+        });
       } else {
         alert("Nastala chyba pri vytváraní kurzu");
       }
@@ -124,6 +144,7 @@ const CreateNewCourse = () => {
           py: "2rem",
           color: "black.main",
         }}
+        className="light_gradient-background-animation"
       >
         <Container maxWidth="lg">
           <Paper sx={{ padding: 3, borderRadius: "1rem" }}>
@@ -139,7 +160,7 @@ const CreateNewCourse = () => {
               </Typography>
 
               <Box sx={{ display: "flex", gap: "2rem" }}>
-                <CreateNewCourseBtn
+                {/* <CreateNewCourseBtn
                   actions={actions}
                   icon={<AddCircleOutlineIcon />}
                   direction="left"
@@ -150,7 +171,7 @@ const CreateNewCourse = () => {
                     },
                   }}
                   sx_actions={{ zIndex: "unset" }}
-                />
+                /> */}
                 <PrimaryBtn
                   style={{ width: "auto", color: "white" }}
                   onClick={handleSubmitCreateCourse}

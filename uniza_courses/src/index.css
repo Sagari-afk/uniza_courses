@@ -48,7 +48,7 @@ input[type="number"] {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
-@keyframes hero-gradient-animation {
+@keyframes hero-gradient-animation_dark {
   0% {
     --c-0: hsla(339.0000000000001, 65%, 63%, 0.78);
     --x-0: 83%;
@@ -296,7 +296,7 @@ input[type="number"] {
   initial-value: 27.674570704992366%;
 }
 
-.gradient-background-animation {
+.dark-gradient-background-animation {
   --c-0: hsla(339.0000000000001, 65%, 63%, 0.78);
   --x-0: 83%;
   --y-0: 4%;
@@ -346,6 +346,118 @@ input[type="number"] {
       var(--c-5) var(--s-start-5),
       transparent var(--s-end-5)
     );
-  animation: hero-gradient-animation 10s linear infinite alternate;
+  animation: hero-gradient-animation_dark 10s linear infinite alternate;
   background-blend-mode: normal, normal, normal, normal, normal, normal;
+}
+
+/* Light gradient */
+
+@keyframes hero-gradient-animation_light {
+  0% {
+    --c-0: hsla(339.1735537190083, 65%, 63%, 0.05);
+    --x-0: 36%;
+    --y-0: 2%;
+    --s-start-0: 6%;
+    --s-end-0: 80%;
+    --c-1: hsla(39.28571428571425, 100%, 67%, 0.05);
+    --x-1: 96%;
+    --y-1: 106%;
+    --s-start-1: 6%;
+    --s-end-1: 80%;
+  }
+
+  100% {
+    --c-0: hsla(39.272727272727224, 100%, 67%, 0.05);
+    --x-0: 99%;
+    --y-0: 17%;
+    --s-start-0: 6%;
+    --s-end-0: 80%;
+    --c-1: hsla(339.0243902439024, 65%, 62%, 0.05);
+    --x-1: 0%;
+    --y-1: 34%;
+    --s-start-1: 6%;
+    --s-end-1: 80%;
+  }
+}
+
+@property --c-0 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: hsla(339.1735537190083, 65%, 63%, 0.05);
+}
+
+@property --x-0 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 36%;
+}
+
+@property --y-0 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 2%;
+}
+
+@property --s-start-0 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 6%;
+}
+
+@property --s-end-0 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 80%;
+}
+
+@property --c-1 {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: hsla(39.28571428571425, 100%, 67%, 0.05);
+}
+
+@property --x-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 96%;
+}
+
+@property --y-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 106%;
+}
+
+@property --s-start-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 6%;
+}
+
+@property --s-end-1 {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 80%;
+}
+
+.light_gradient-background-animation {
+  --c-0: hsla(339.1735537190083, 65%, 63%, 0.05);
+  --x-0: 36%;
+  --y-0: 2%;
+  --c-1: hsla(39.28571428571425, 100%, 67%, 0.05);
+  --x-1: 96%;
+  --y-1: 106%;
+  background-color: hsla(279.99999999999994, 0%, 100%, 0);
+  background-image: radial-gradient(
+      circle at var(--x-0) var(--y-0),
+      var(--c-0) var(--s-start-0),
+      transparent var(--s-end-0)
+    ),
+    radial-gradient(
+      circle at var(--x-1) var(--y-1),
+      var(--c-1) var(--s-start-1),
+      transparent var(--s-end-1)
+    );
+  animation: hero-gradient-animation 10s linear infinite alternate;
+  background-blend-mode: normal, normal;
 }

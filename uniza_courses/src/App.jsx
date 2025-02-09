@@ -13,6 +13,8 @@ import CreateNewCourse from "./pages/CreateNewCourse";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 
 import EditIcon from "@mui/icons-material/Edit";
+import AppsIcon from "@mui/icons-material/Apps";
+import CreateCourseContent from "./pages/CreateCourseContent";
 
 function App() {
   const [authToken, setAuthToken] = useState(null);
@@ -122,15 +124,26 @@ function App() {
         {authToken && (
           <Route path="/createNewCourse" element={<CreateNewCourse />} />
         )}
+        {authToken && (
+          <Route
+            path="/NewCourse/:courseName/content"
+            element={<CreateCourseContent />}
+          />
+        )}
       </Routes>
 
-      {window.location.pathname !== "/createNewCourse" && (
+      {authToken && (
         <CreateNewCourseBtn
           actions={[
             {
               icon: <MenuBookIcon />,
               name: "Nový kurz",
               link: "/createNewCourse",
+            },
+            {
+              icon: <AppsIcon />,
+              name: "Moje kurzy",
+              link: "",
             },
           ]}
           icon={<EditIcon />}

@@ -47,6 +47,7 @@ const Courses = ({ handleLogout }) => {
             color: "black.main",
             width: "100%",
           }}
+          className="light_gradient-background-animation"
         >
           <Box>
             <Typography variant="h3" sx={{ my: "1rem" }}>

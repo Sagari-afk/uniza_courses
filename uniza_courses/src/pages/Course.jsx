@@ -100,7 +100,7 @@ const Course = () => {
         <Typography>Error: {error}</Typography>
       ) : (
         <Box sx={{ backgroundColor: "white.main", minHeight: "800px" }}>
-          <Box sx={{ py: 14 }} className="gradient-background-animation">
+          <Box sx={{ py: 14 }} className="dark-gradient-background-animation">
             <Container>
               <Box
                 sx={{
