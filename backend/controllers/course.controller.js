@@ -5,6 +5,9 @@ const {
   User,
   Discipline,
   Teacher,
+  Step,
+  Topic,
+  SubTopic,
 } = require("../models");
 const { body, validationResult } = require("express-validator");
 
@@ -83,7 +86,6 @@ const getCourseBy = async (req, res) => {
         {
           model: Teacher,
           attributes: ["id", "institute", "office", "phone"],
-          through: { attributes: [] },
           as: "teachers",
           include: [
             {
@@ -104,6 +106,25 @@ const getCourseBy = async (req, res) => {
           attributes: ["name"],
           through: { attributes: [] },
           as: "disciplines",
+        },
+        {
+          model: Topic,
+          attributes: ["title", "order"],
+          as: "topics",
+          include: [
+            {
+              model: SubTopic,
+              attributes: ["title", "order"],
+              as: "subtopics",
+              include: [
+                {
+                  model: Step,
+                  attributes: ["title", "order"],
+                  as: "steps",
+                },
+              ],
+            },
+          ],
         },
       ],
     });
