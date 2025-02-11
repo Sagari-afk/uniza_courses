@@ -1,6 +1,15 @@
 import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { Card, CardContent, Typography, Box } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+} from "@mui/material";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const DragAndDropCourse = ({ initialData }) => {
   const [data, setData] = useState(initialData);
@@ -169,98 +178,98 @@ const DragAndDropCourse = ({ initialData }) => {
                 index={themeIndex}
               >
                 {(provided) => (
-                  <Card
+                  <Accordion
                     ref={provided.innerRef}
                     {...provided.draggableProps}
-                    sx={{ marginBottom: 2, padding: 1 }}
                   >
-                    <CardContent {...provided.dragHandleProps}>
-                      <Typography variant="h6">{theme.title}</Typography>
-                    </CardContent>
-                    {/* Droppable для Подтем в каждой Теме */}
-                    <Droppable
-                      droppableId={`subthemes::${theme.id}`}
-                      type="subtheme"
+                    <AccordionSummary
+                      expandIcon={<ExpandMoreIcon />}
+                      {...provided.dragHandleProps}
                     >
-                      {(provided) => (
-                        <Box
-                          ref={provided.innerRef}
-                          {...provided.droppableProps}
-                          sx={{ pl: 2, pb: 2 }}
-                        >
-                          {theme.subthemes.map((subtheme, subIndex) => (
-                            <Draggable
-                              key={subtheme.id}
-                              draggableId={subtheme.id}
-                              index={subIndex}
-                            >
-                              {(provided) => (
-                                <Card
-                                  ref={provided.innerRef}
-                                  {...provided.draggableProps}
-                                  sx={{
-                                    marginBottom: 1,
-                                    padding: 1,
-                                    backgroundColor: "#f9f9f9",
-                                  }}
-                                >
-                                  <CardContent {...provided.dragHandleProps}>
-                                    <Typography variant="subtitle1">
-                                      {subtheme.title}
-                                    </Typography>
-                                  </CardContent>
-                                  {/* Droppable для Шагов в каждом Подтеме */}
-                                  <Droppable
-                                    droppableId={`steps::${theme.id}::${subtheme.id}`}
-                                    type="step"
+                      <Typography variant="h5">{theme.title}</Typography>
+                    </AccordionSummary>
+
+                    <AccordionDetails>
+                      <Droppable
+                        droppableId={`subthemes::${theme.id}`}
+                        type="subtheme"
+                      >
+                        {(provided) => (
+                          <Box
+                            ref={provided.innerRef}
+                            {...provided.droppableProps}
+                          >
+                            {theme.subthemes.map((subtheme, subIndex) => (
+                              <Draggable
+                                key={subtheme.id}
+                                draggableId={subtheme.id}
+                                index={subIndex}
+                              >
+                                {(provided) => (
+                                  <Accordion
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
                                   >
-                                    {(provided) => (
-                                      <Box
-                                        ref={provided.innerRef}
-                                        {...provided.droppableProps}
-                                        sx={{ pl: 2 }}
+                                    <AccordionSummary
+                                      expandIcon={<ExpandMoreIcon />}
+                                      {...provided.dragHandleProps}
+                                    >
+                                      <Typography>{subtheme.title}</Typography>
+                                    </AccordionSummary>
+                                    {/* Droppable для Шагов в каждом Подтеме */}
+                                    <AccordionDetails>
+                                      <Droppable
+                                        droppableId={`steps::${theme.id}::${subtheme.id}`}
+                                        type="step"
                                       >
-                                        {subtheme.steps.map(
-                                          (step, stepIndex) => (
-                                            <Draggable
-                                              key={step.id}
-                                              draggableId={step.id}
-                                              index={stepIndex}
-                                            >
-                                              {(provided) => (
-                                                <Card
-                                                  ref={provided.innerRef}
-                                                  {...provided.draggableProps}
-                                                  {...provided.dragHandleProps}
-                                                  sx={{
-                                                    marginBottom: 1,
-                                                    padding: 1,
-                                                    backgroundColor: "#e0e0e0",
-                                                  }}
+                                        {(provided) => (
+                                          <Box
+                                            ref={provided.innerRef}
+                                            {...provided.droppableProps}
+                                          >
+                                            {subtheme.steps.map(
+                                              (step, stepIndex) => (
+                                                <Draggable
+                                                  key={step.id}
+                                                  draggableId={step.id}
+                                                  index={stepIndex}
                                                 >
-                                                  <CardContent>
-                                                    <Typography variant="body2">
-                                                      {step.text}
-                                                    </Typography>
-                                                  </CardContent>
-                                                </Card>
-                                              )}
-                                            </Draggable>
-                                          )
+                                                  {(provided) => (
+                                                    <Box
+                                                      ref={provided.innerRef}
+                                                      {...provided.draggableProps}
+                                                      {...provided.dragHandleProps}
+                                                    >
+                                                      <CardContent>
+                                                        <Typography
+                                                          sx={{
+                                                            borderBottom:
+                                                              "1px solid ",
+                                                          }}
+                                                        >
+                                                          {step.text}
+                                                        </Typography>
+                                                      </CardContent>
+                                                    </Box>
+                                                  )}
+                                                </Draggable>
+                                              )
+                                            )}
+                                            {provided.placeholder}
+                                          </Box>
                                         )}
-                                        {provided.placeholder}
-                                      </Box>
-                                    )}
-                                  </Droppable>
-                                </Card>
-                              )}
-                            </Draggable>
-                          ))}
-                          {provided.placeholder}
-                        </Box>
-                      )}
-                    </Droppable>
-                  </Card>
+                                      </Droppable>
+                                    </AccordionDetails>
+                                  </Accordion>
+                                )}
+                              </Draggable>
+                            ))}
+                            {provided.placeholder}
+                          </Box>
+                        )}
+                      </Droppable>
+                    </AccordionDetails>
+                  </Accordion>
                 )}
               </Draggable>
             ))}

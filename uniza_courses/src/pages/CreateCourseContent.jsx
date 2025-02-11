@@ -1,4 +1,4 @@
-import { Box, Container, Paper } from "@mui/material";
+import { Box, Container, Paper, Typography } from "@mui/material";
 import Header from "../components/Header";
 import DragAndDrop from "../components/DragAndDrop";
 
@@ -44,17 +44,19 @@ const CreateCourseContent = () => {
 
       <Box
         sx={{
-          backgroundColor: "white.main",
           minHeight: "100vh",
           py: "2rem",
           color: "black.main",
+
+          backgroundColor: "white.main",
         }}
         className="light_gradient-background-animation"
       >
         <Container maxWidth="lg">
-          <Paper sx={{ padding: 3, borderRadius: "1rem" }}>
-            <DragAndDrop initialData={initialData} />
-          </Paper>
+          <Typography variant="h3" className="font-gradient" sx={{ mb: 4 }}>
+            Kontent kurzu
+          </Typography>
+          <DragAndDrop initialData={initialData} />
         </Container>
       </Box>
     </>

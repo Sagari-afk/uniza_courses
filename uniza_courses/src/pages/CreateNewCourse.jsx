@@ -118,6 +118,7 @@ const CreateNewCourse = () => {
       }
     } catch (error) {
       console.log(error);
+      alert("Nastala chyba pri vytváraní kurzu");
     }
   };
 
