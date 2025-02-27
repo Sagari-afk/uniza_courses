@@ -1,9 +1,9 @@
-import Header from "../components/Header";
+import Header from "../components/core.components/Header";
 import Container from "@mui/material/Container";
 import { Link } from "react-router-dom";
 import { Box, Typography } from "@mui/material";
-import PrimaryBtn from "../components/PrimaryBtn";
-import SecundaryBtn from "../components/SecundaryBtn";
+import PrimaryBtn from "../components/core.components/PrimaryBtn";
+import SecundaryBtn from "../components/core.components/SecundaryBtn";
 
 const HomePage = () => {
   return (

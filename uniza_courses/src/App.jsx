@@ -1,23 +1,26 @@
-import HomePage from "./pages/HomePage";
-import SignIn from "./pages/SignIn";
-import SignUp from "./pages/SignUp";
-import Courses from "./pages/Courses";
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
 import { useEffect } from "react";
 import Course from "./pages/Course";
 import { GlobalStyles } from "@mui/material";
-import CreateNewCourseBtn from "./components/CreateNewCourseBtn";
-import CreateNewCourse from "./pages/CreateNewCourse";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
 
+import HomePage from "./pages/HomePage";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import Courses from "./pages/Courses";
+import CreateNewCourse from "./pages/CreateNewCourse";
 import EditIcon from "@mui/icons-material/Edit";
 import AppsIcon from "@mui/icons-material/Apps";
 import CreateCourseContent from "./pages/CreateCourseContent";
 
+import CreateNewCourseBtn from "./components/core.components/CreateNewCourseBtn";
+
 function App() {
-  const [authToken, setAuthToken] = useState(null);
+  const [authToken, setAuthToken] = useState(() =>
+    localStorage.getItem("api-token")
+  );
   const navigate = useNavigate();
 
   const globalStyles = (
@@ -85,13 +88,16 @@ function App() {
         fontWeight: 500, // Regular bold for h3
       },
       h4: {
-        fontWeight: 400, // Normal weight for h4
+        fontWeight: 500, // Normal weight for h4
       },
       h5: {
         fontWeight: 400, // Lighter for h5
       },
       h6: {
-        fontWeight: 200, // Even lighter for h6
+        fontWeight: 400, // Even lighter for h6
+      },
+      h7: {
+        fontWeight: 400, // Even lighter for h6
       },
       body1: {
         fontWeight: 400, // Normal weight for body text (equivalent to <p>)
@@ -105,6 +111,7 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem("authToken");
     sessionStorage.removeItem("authToken");
+    setAuthToken(null);
     navigate("/");
     console.log("Logged out successfully");
   };
@@ -114,8 +121,18 @@ function App() {
       {globalStyles}
       <Routes>
         {!authToken && <Route path="/" element={<HomePage />} />}
-        {!authToken && <Route path="signIn" element={<SignIn />} />}
-        {!authToken && <Route path="signUp" element={<SignUp />} />}
+        {!authToken && (
+          <Route
+            path="signIn"
+            element={<SignIn setAuthToken={setAuthToken} />}
+          />
+        )}
+        {!authToken && (
+          <Route
+            path="signUp"
+            element={<SignUp setAuthToken={setAuthToken} />}
+          />
+        )}
         <Route
           path="courses"
           element={<Courses handleLogout={handleLogout} />}

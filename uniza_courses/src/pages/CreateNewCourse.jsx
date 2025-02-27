@@ -6,24 +6,18 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import Header from "../components/Header";
 import { useEffect, useRef, useState } from "react";
-import CheckboxSelect from "../components/CheckboxSelect";
-import IntegerCounter from "../components/IntegerCounter";
-import SecundaryBtn from "../components/SecundaryBtn";
-import PrimaryBtn from "../components/PrimaryBtn";
-import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
-import ReactQuill from "react-quill"; // ES6
-import "react-quill/dist/quill.snow.css"; // ES6, for the "snow" theme
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import CollectionsBookmarkIcon from "@mui/icons-material/CollectionsBookmark";
-import DynamicFeedIcon from "@mui/icons-material/DynamicFeed";
-import StairsIcon from "@mui/icons-material/Stairs";
-
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import TeacherSelect from "../components/TeacherSelect";
-import CreateNewCourseBtn from "../components/CreateNewCourseBtn";
 import { useNavigate } from "react-router-dom";
+import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
+
+import Header from "../components/core.components/Header";
+import CheckboxSelect from "../components/createNewCourse.components/CheckboxSelect";
+import IntegerCounter from "../components/createNewCourse.components/IntegerCounter";
+import SecundaryBtn from "../components/core.components/SecundaryBtn";
+import PrimaryBtn from "../components/core.components/PrimaryBtn";
+import TeacherSelect from "../components/createNewCourse.components/TeacherSelect";
 
 const CreateNewCourse = () => {
   const [courseName, setCourseName] = useState("");
@@ -37,22 +31,7 @@ const CreateNewCourse = () => {
   const [longDescription, setLongDescription] = useState("");
 
   const navigate = useNavigate();
-
   const quillRef = useRef(null);
-
-  // const actions = [
-  //   {
-  //     icon: <CollectionsBookmarkIcon />,
-  //     name: "Nová tema",
-  //     link: "/createNewCourse",
-  //   },
-  //   {
-  //     icon: <DynamicFeedIcon />,
-  //     name: "Nová podtema",
-  //     link: "/createNewCourse",
-  //   },
-  //   { icon: <StairsIcon />, name: "Nový krok", link: "/createNewCourse" },
-  // ];
 
   useEffect(() => {
     const load = async () => {
@@ -161,18 +140,6 @@ const CreateNewCourse = () => {
               </Typography>
 
               <Box sx={{ display: "flex", gap: "2rem" }}>
-                {/* <CreateNewCourseBtn
-                  actions={actions}
-                  icon={<AddCircleOutlineIcon />}
-                  direction="left"
-                  sx={{
-                    zIndex: "unset",
-                    "& .MuiSpeedDial-fab": {
-                      zIndex: "unset",
-                    },
-                  }}
-                  sx_actions={{ zIndex: "unset" }}
-                /> */}
                 <PrimaryBtn
                   style={{ width: "auto", color: "white" }}
                   onClick={handleSubmitCreateCourse}

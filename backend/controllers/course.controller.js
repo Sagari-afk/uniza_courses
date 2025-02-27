@@ -109,17 +109,17 @@ const getCourseBy = async (req, res) => {
         },
         {
           model: Topic,
-          attributes: ["title", "order"],
+          attributes: ["title", "order", "id"],
           as: "topics",
           include: [
             {
               model: SubTopic,
-              attributes: ["title", "order"],
+              attributes: ["title", "order", "id"],
               as: "subtopics",
               include: [
                 {
                   model: Step,
-                  attributes: ["title", "order"],
+                  attributes: ["title", "order", "id"],
                   as: "steps",
                 },
               ],

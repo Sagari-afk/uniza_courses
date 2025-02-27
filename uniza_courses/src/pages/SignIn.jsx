@@ -1,4 +1,4 @@
-import Header from "../components/Header";
+import Header from "../components/core.components/Header";
 import Container from "@mui/material/Container";
 import * as React from "react";
 import Checkbox from "@mui/material/Checkbox";
@@ -7,12 +7,12 @@ import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import { Box, Typography, Alert, Snackbar } from "@mui/material";
-import PrimaryBtn from "../components/PrimaryBtn";
+import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import SecundaryBtn from "../components/SecundaryBtn";
+import SecundaryBtn from "../components/core.components/SecundaryBtn";
 
-const SignIn = () => {
+const SignIn = ({ setAuthToken }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -52,6 +52,7 @@ const SignIn = () => {
       if (response.ok) {
         console.log("Login successful", data);
         const token = data.token;
+        setAuthToken(token);
 
         if (rememberMe) {
           localStorage.setItem("authToken", token);

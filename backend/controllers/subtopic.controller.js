@@ -18,11 +18,13 @@ const newSubTopic = [
     }
 
     const { title, topicId } = req.body;
+    const order = (await SubTopic.count({ where: { topicId } })) + 1;
 
     try {
       const subtopic = await SubTopic.create({
         title,
         topicId,
+        order,
       });
 
       return res.json(subtopic);

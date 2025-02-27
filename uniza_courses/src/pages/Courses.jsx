@@ -1,9 +1,9 @@
-import { Box, Pagination, Typography } from "@mui/material";
-import Header from "../components/Header";
+import { Box, Typography } from "@mui/material";
+import Header from "../components/core.components/Header";
 import React, { useState, useEffect } from "react";
-import SideMenu from "../components/SideMenu";
-import SearchBar from "../components/SearchBar";
-import CoursesPagination from "../components/CoursePagination";
+import SideMenu from "../components/core.components//SideMenu";
+import SearchBar from "../components/courses.components/SearchBar";
+import CoursesPagination from "../components/courses.components/CoursePagination";
 
 const Courses = ({ handleLogout }) => {
   const [restData, setRestData] = useState([]);

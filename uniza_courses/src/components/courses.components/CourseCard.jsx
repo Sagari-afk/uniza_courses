@@ -1,9 +1,9 @@
-import cardClasses from "../styles/CourseCard.module.css";
+import cardClasses from "../../styles/CourseCard.module.css";
 import { useNavigate } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import { Icon } from "@iconify/react";
 import { Box, Typography } from "@mui/material";
-import SecundaryBtn from "./SecundaryBtn";
+import SecundaryBtn from "../core.components/SecundaryBtn";
 
 const CourseCard = ({
   name,

@@ -1,6 +1,6 @@
 import SelectLanguage from "./SelectLanguage";
-import logo from "../assets/logo_text.png";
-import profile_pic from "../assets/profile_pic.jpg";
+import logo from "../../assets/logo_text.png";
+import profile_pic from "../../assets/profile_pic.jpg";
 import { Link } from "react-router-dom";
 import { Box } from "@mui/material";
 import { useEffect, useState } from "react";

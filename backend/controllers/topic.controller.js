@@ -19,11 +19,13 @@ const newTopic = [
     }
 
     const { title, courseId } = req.body;
+    const order = (await Topic.count({ where: { courseId } })) + 1;
 
     try {
       const topic = await Topic.create({
         title,
         courseId,
+        order,
       });
 
       return res.json(topic);

@@ -72,7 +72,6 @@ module.exports = (sequelize, DataTypes) => {
           if (user.isNewRecord) {
             // Check if it's a new record
             const salt = crypto.randomBytes(16).toString("hex");
-            console.log(salt, user.password);
             user.salt = salt;
             user.password = crypto
               .pbkdf2Sync(user.password, salt, 100, 64, "sha512")

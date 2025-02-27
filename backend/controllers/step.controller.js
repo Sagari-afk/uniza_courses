@@ -18,11 +18,13 @@ const newStep = [
     }
 
     const { title, subtopicId } = req.body;
+    const order = (await Step.count({ where: { subtopicId } })) + 1;
 
     try {
       const topic = await Step.create({
         title,
         subtopicId,
+        order,
       });
 
       return res.json(topic);

@@ -7,7 +7,7 @@ import {
   TextField,
   Box,
 } from "@mui/material";
-import SecundaryBtn from "./SecundaryBtn";
+import SecundaryBtn from "../core.components/SecundaryBtn";
 
 const SearchBar = ({ restData, setFilteredData }) => {
   const [studOdbor, setStudOdbor] = useState("");

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import Header from "../components/Header";
 import {
   Box,
   Container,
@@ -10,12 +9,14 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Icon } from "@iconify/react";
-import PrimaryBtn from "../components/PrimaryBtn";
-import SecundaryBtn from "../components/SecundaryBtn";
 import { useLocation } from "react-router-dom";
-import Comment from "../components/Comment";
-import TeacherCard from "../components/teacherCard";
+import { Icon } from "@iconify/react";
+
+import Header from "../components/core.components/Header";
+import PrimaryBtn from "../components/core.components/PrimaryBtn";
+import SecundaryBtn from "../components/core.components/SecundaryBtn";
+import Comment from "../components/course.components/Comment";
+import TeacherCard from "../components/course.components/TeacherCard";
 
 const Course = () => {
   const location = useLocation();
