@@ -18,6 +18,7 @@ import IntegerCounter from "../components/createNewCourse.components/IntegerCoun
 import SecundaryBtn from "../components/core.components/SecundaryBtn";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import TeacherSelect from "../components/createNewCourse.components/TeacherSelect";
+import CustomSnackbar from "../components/core.components/CustomSnackbar";
 
 const CreateNewCourse = () => {
   const [courseName, setCourseName] = useState("");
@@ -32,6 +33,9 @@ const CreateNewCourse = () => {
 
   const navigate = useNavigate();
   const quillRef = useRef(null);
+
+  const [openError, setOpenError] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const load = async () => {
@@ -58,6 +62,42 @@ const CreateNewCourse = () => {
 
   const handleSubmitCreateCourse = async (e) => {
     e.preventDefault();
+
+    if (!courseName) {
+      setOpenError(true);
+      setError("Vyplňte názov kurzu!");
+      return;
+    }
+    if (!selectedOdbor || selectedOdbor.length === 0) {
+      setOpenError(true);
+      setError("Vyberte odbor!");
+      return;
+    }
+    if (!selectedRocnik) {
+      setOpenError(true);
+      setError("Vyberte ročník!");
+      return;
+    }
+    if (!courseDescription) {
+      setOpenError(true);
+      setError("Vyplňte krátky popis kurzu!");
+      return;
+    }
+    if (!foto) {
+      setOpenError(true);
+      setError("Vyberte foto!");
+      return;
+    }
+    if (!selectedTeachers) {
+      setOpenError(true);
+      setError("Vyberte učiteľov!");
+      return;
+    }
+    if (!longDescription) {
+      setOpenError(true);
+      setError("Vyplňte dlhý popis kurzu!");
+      return;
+    }
 
     try {
       const formData = new FormData();
@@ -87,17 +127,19 @@ const CreateNewCourse = () => {
         }
       );
       if (response.ok) {
-        alert("Kurz bol úspešne vytvorený");
         const responseData = await response.json();
+
         navigate(`/NewCourse/${responseData.name}/content`, {
           state: { responseData },
         });
       } else {
-        alert("Nastala chyba pri vytváraní kurzu");
+        setOpenError(true);
+        setError(response.statusText);
       }
     } catch (error) {
+      setError(error);
       console.log(error);
-      alert("Nastala chyba pri vytváraní kurzu");
+      setOpenError(true);
     }
   };
 
@@ -148,6 +190,13 @@ const CreateNewCourse = () => {
                 </PrimaryBtn>
               </Box>
             </Box>
+
+            <Typography
+              variant="h5"
+              sx={{ marginBottom: "2rem", color: "red" }}
+            >
+              {error}
+            </Typography>
 
             <Grid2 container spacing={4}>
               {/* Názov kurzu */}
@@ -292,6 +341,12 @@ const CreateNewCourse = () => {
               </Grid2>
             </Grid2>
           </Paper>
+          <CustomSnackbar
+            open={openError}
+            setOpen={setOpenError}
+            message={"Nastala chyba pri vytvoreni kurzu!"}
+            severity={"error"}
+          />
         </Container>
       </Box>
     </>

@@ -3,10 +3,10 @@ import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import Header from "../components/core.components/Header";
-import CourseStructure from "../components/createCourseContent.components/CourseStructure";
 import ModalCreate from "../components/createCourseContent.components/ModalCreate";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import SecundaryBtn from "../components/core.components/SecundaryBtn";
+import CourseStructureDND from "../components/createCourseContent.components/CourseStructureDND";
 
 const CreateCourseContent = () => {
   const location = useLocation();
@@ -14,7 +14,6 @@ const CreateCourseContent = () => {
   const [course, setCourse] = useState(restData || []);
 
   const [topicName, setTopicName] = useState("");
-  console.log(course.topics);
 
   const handleSubmitCreateTopic = async (e) => {
     e.preventDefault();
@@ -43,6 +42,7 @@ const CreateCourseContent = () => {
       } else {
         alert("Nastala chyba pri vytváraní kurzu");
       }
+      load();
     } catch (error) {
       console.log(error);
       alert("Nastala chyba pri vytváraní kurzu");
@@ -76,32 +76,34 @@ const CreateCourseContent = () => {
       } else {
         alert("Nastala chyba pri vytváraní kurzu");
       }
+      load();
     } catch (error) {
       console.log(error);
       alert("Nastala chyba pri vytváraní kurzu");
     }
   };
 
+  const load = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/course/getCourse/" + course.id,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      const data = await response.json();
+      setCourse(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const load = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/course/getCourse/" + course.id,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "x-access-token":
-                localStorage.getItem("authToken") ||
-                sessionStorage.getItem("authToken"),
-            },
-          }
-        );
-        const data = await response.json();
-        setCourse(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
     load();
   }, []);
 
@@ -154,11 +156,10 @@ const CreateCourseContent = () => {
             </ModalCreate>
           </Box>
           {course?.topics?.length > 0 ? (
-            <CourseStructure
-              data={course}
-              handleSubmitCreateSubTopic={handleSubmitCreateSubTopic}
-            />
-          ) : null}
+            <CourseStructureDND data={course} />
+          ) : (
+            <Typography variant="h4">Žiadne témy</Typography>
+          )}
         </Container>
       </Box>
     </>
