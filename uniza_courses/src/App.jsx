@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useEffect } from "react";
 import Course from "./pages/Course";
 import { GlobalStyles } from "@mui/material";
@@ -10,16 +10,21 @@ import HomePage from "./pages/HomePage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Courses from "./pages/Courses";
-import CreateNewCourse from "./pages/CreateNewCourse";
+import EditCourse from "./pages/EditCourse";
 import EditIcon from "@mui/icons-material/Edit";
 import AppsIcon from "@mui/icons-material/Apps";
 import CreateCourseContent from "./pages/CreateCourseContent";
 
 import CreateNewCourseBtn from "./components/core.components/CreateNewCourseBtn";
+import CreateTextStep from "./pages/steps_creating.pages/CreateTextStep";
+import AllTeachersCourses from "./pages/AllTeacherCourses";
 
 function App() {
   const [authToken, setAuthToken] = useState(() =>
     localStorage.getItem("api-token")
+  );
+  const [userData, setUserData] = useState(() =>
+    sessionStorage.getItem("userData")
   );
   const navigate = useNavigate();
 
@@ -50,13 +55,43 @@ function App() {
     />
   );
 
-  useEffect(() => {
-    const token =
-      localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
-    if (token) {
-      setAuthToken(token);
+  const getUserData = useCallback(async (token) => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/user/getUserData",
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        }
+      );
+      if (response.ok) {
+        const responseData = await response.json();
+        sessionStorage.setItem("userData", JSON.stringify(responseData.user));
+        return responseData.user;
+      } else {
+        console.log(response);
+        throw new Error("Failed to fetch user data");
+      }
+    } catch (error) {
+      alert("Error loading user data: " + error.message);
     }
   }, []);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      const token =
+        localStorage.getItem("authToken") ||
+        sessionStorage.getItem("authToken");
+      if (token) {
+        setAuthToken(token);
+        const data = await getUserData(token);
+        setUserData(data);
+      }
+    }
+    fetchUserData();
+  }, [getUserData]);
 
   const theme = createTheme({
     palette: {
@@ -138,29 +173,38 @@ function App() {
           element={<Courses handleLogout={handleLogout} />}
         />
         {authToken && <Route path="/Course/:courseName" element={<Course />} />}
-        {authToken && (
-          <Route path="/createNewCourse" element={<CreateNewCourse />} />
+        {authToken && userData.userRole === "teacher" && (
+          <Route path="/editCourse" element={<EditCourse />} />
         )}
-        {authToken && (
+        {authToken && userData.userRole === "teacher" && (
           <Route
             path="/NewCourse/:courseName/content"
             element={<CreateCourseContent />}
           />
         )}
+        {authToken && userData.userRole === "teacher" && (
+          <Route
+            path="/CourseContent/createStep/text"
+            element={<CreateTextStep />}
+          />
+        )}
+        {authToken && userData.userRole === "teacher" && (
+          <Route path="/allCourses/teacher" element={<AllTeachersCourses />} />
+        )}
       </Routes>
 
-      {authToken && (
+      {authToken && userData.userRole === "teacher" && (
         <CreateNewCourseBtn
           actions={[
             {
               icon: <MenuBookIcon />,
               name: "Nový kurz",
-              link: "/createNewCourse",
+              link: "/editCourse",
             },
             {
               icon: <AppsIcon />,
               name: "Moje kurzy",
-              link: "",
+              link: "/allCourses/teacher",
             },
           ]}
           icon={<EditIcon />}

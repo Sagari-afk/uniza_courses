@@ -1,5 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Box,
   Container,
   FormControl,
@@ -11,6 +14,7 @@ import {
 } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import { Icon } from "@iconify/react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 import Header from "../components/core.components/Header";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
@@ -239,6 +243,50 @@ const Course = () => {
                     " a " + restData.disciplines[1].name}
                   {" " + restData.year} ročníku
                 </Typography>
+              </Box>
+
+              <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <Typography variant="h4" className="font-gradient">
+                  Štruktura kurzu
+                </Typography>
+                {restData.topics &&
+                Array.isArray(restData.topics) &&
+                restData.topics.length > 0 ? (
+                  <Box>
+                    {restData.topics.map((topic, topicIndex) => (
+                      <Accordion key={topicIndex}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                          <Typography variant="h5">{topic.title}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          {topic.subtopics &&
+                          Array.isArray(topic.subtopics) &&
+                          topic.subtopics.length > 0 ? (
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 1,
+                              }}
+                            >
+                              {topic.subtopics.map((subtopic, subIndex) => (
+                                <Typography key={subIndex}>
+                                  {subtopic.title}
+                                </Typography>
+                              ))}
+                            </Box>
+                          ) : (
+                            <Typography variant="body2">
+                              Žiadne podtémy
+                            </Typography>
+                          )}
+                        </AccordionDetails>
+                      </Accordion>
+                    ))}
+                  </Box>
+                ) : (
+                  <Typography>Žiadne temy</Typography>
+                )}
               </Box>
 
               <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>

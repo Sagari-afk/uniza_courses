@@ -5,6 +5,7 @@ const {
   getCourseBy,
   updateCourse,
   deleteCourse,
+  getAllTeachersCourses,
 } = require("../controllers/course.controller");
 const multer = require("multer");
 
@@ -22,9 +23,10 @@ const upload = multer({ storage: storage });
 
 router.get("/getAllCourses", getCourses);
 router.get("/getCourse/:id", getCourseBy);
+router.get("/getAllTeachersCourses/:userId", getAllTeachersCourses);
 
 router.post("/newCourse", upload.single("image"), newCourse);
-router.put("/editCourse/:id", updateCourse);
+router.post("/editCourse/:id", upload.single("image"), updateCourse);
 router.delete("/deleteCourse/:id", deleteCourse);
 
 module.exports = router;

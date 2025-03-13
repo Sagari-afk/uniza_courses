@@ -24,7 +24,14 @@ export default function ModalCreate({ btn, children }) {
 
   return (
     <Box>
-      <Box onClick={handleOpen}>{btn}</Box>
+      <Box
+        onClick={(e) => {
+          e.stopPropagation();
+          handleOpen();
+        }}
+      >
+        {btn}
+      </Box>
 
       <Modal
         open={open}

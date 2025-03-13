@@ -38,48 +38,14 @@ const CreateCourseContent = () => {
         }
       );
       if (response.ok) {
+        load();
         alert("Tema bola úspešne vytvorena");
       } else {
-        alert("Nastala chyba pri vytváraní kurzu");
+        alert("Nastala chyba pri vytváraní temy");
       }
-      load();
     } catch (error) {
       console.log(error);
-      alert("Nastala chyba pri vytváraní kurzu");
-    }
-  };
-
-  const handleSubmitCreateSubTopic = async (e) => {
-    e.preventDefault();
-
-    try {
-      const payload = {
-        title: topicName,
-        courseId: restData.id,
-      };
-      console.log(payload);
-      const response = await fetch(
-        "http://localhost:3000/api/courseStructure/newTopic",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-          body: JSON.stringify(payload),
-        }
-      );
-      if (response.ok) {
-        alert("Tema bola úspešne vytvorena");
-      } else {
-        alert("Nastala chyba pri vytváraní kurzu");
-      }
-      load();
-    } catch (error) {
-      console.log(error);
-      alert("Nastala chyba pri vytváraní kurzu");
+      alert("Nastala chyba pri vytváraní temy");
     }
   };
 
@@ -98,6 +64,7 @@ const CreateCourseContent = () => {
       );
       const data = await response.json();
       setCourse(data);
+      console.log("Loading data", data);
     } catch (error) {
       console.error(error);
     }
@@ -124,7 +91,7 @@ const CreateCourseContent = () => {
         <Container maxWidth="lg">
           <Box sx={{ display: "flex", alignItems: "center", mb: 3, gap: 2 }}>
             <Typography variant="h3" className="font-gradient">
-              Kontent kurzu {course.name}
+              {course.name}
             </Typography>
             <ModalCreate btn=<SecundaryBtn>Nova tema</SecundaryBtn>>
               <Typography variant="h4">Nova tema</Typography>
@@ -155,8 +122,11 @@ const CreateCourseContent = () => {
               </PrimaryBtn>
             </ModalCreate>
           </Box>
+          <Typography variant="h5" padding={2}>
+            Temy kurzu
+          </Typography>
           {course?.topics?.length > 0 ? (
-            <CourseStructureDND data={course} />
+            <CourseStructureDND data={course} load={load} />
           ) : (
             <Typography variant="h4">Žiadne témy</Typography>
           )}

@@ -127,6 +127,22 @@ const getCourseBy = async (req, res) => {
           ],
         },
       ],
+      order: [
+        [{ model: Topic, as: "topics" }, "order", "ASC"],
+        [
+          { model: Topic, as: "topics" },
+          { model: SubTopic, as: "subtopics" },
+          "order",
+          "ASC",
+        ],
+        [
+          { model: Topic, as: "topics" },
+          { model: SubTopic, as: "subtopics" },
+          { model: Step, as: "steps" },
+          "order",
+          "ASC",
+        ],
+      ],
     });
 
     if (!record) {
@@ -166,7 +182,7 @@ const newCourse = [
         .array()
         .map((item) => `${item.path} - ${item.msg}`)
         .join(",");
-      res.status(400).json(errMessage);
+      return res.status(400).json(errMessage);
     }
 
     try {
@@ -205,31 +221,56 @@ const newCourse = [
       return res.json(course);
     } catch (error) {
       console.log(error);
-      res.status(500).json(error.message);
+      return res.status(500).json(error.message);
     }
   },
 ];
 
 const updateCourse = async (req, res) => {
   try {
-    let data = req.body;
+    const data = { ...req.body };
     const existingCourse = await Course.findByPk(req.params.id);
     if (!existingCourse)
       return res.status(400).json("Course s takym id neexistuje!");
-    for (const [key, value] of Object.entries(data)) {
-      await Course.update(
-        { [key]: value },
-        {
-          where: {
-            id: req.params.id,
-          },
-        }
-      );
+
+    if (data.teachers) {
+      let teacherIds = data.teachers;
+      if (typeof teacherIds === "string") {
+        teacherIds = JSON.parse(teacherIds);
+      }
+      await existingCourse.setTeachers(teacherIds);
+      delete data.teachers;
     }
+
+    if (data.disciplines) {
+      let disciplineInput = data.disciplines;
+      if (typeof disciplineInput === "string") {
+        disciplineInput = JSON.parse(disciplineInput);
+      }
+      const disciplineIds = await Promise.all(
+        disciplineInput.map(async (disc) => {
+          if (Number.isInteger(disc)) return disc;
+          const disciplineRecord = await Discipline.findOne({
+            where: { name: disc },
+          });
+          return disciplineRecord ? disciplineRecord.id : null;
+        })
+      );
+      const filteredDisciplineIds = disciplineIds.filter((id) => id !== null);
+      await existingCourse.setDisciplines(filteredDisciplineIds);
+      delete data.disciplines;
+    }
+    await existingCourse.update(data);
+    if (req.file) {
+      await existingCourse.update({ img_url: req.file.path });
+      console.log("UPDATING IMAGE TO ", req.file.path);
+    }
+
+    console.log("success");
     return res.status(200).json("Success");
   } catch (error) {
     console.log(error);
-    res.status(500).json(error.message);
+    return res.status(500).json(error.message);
   }
 };
 
@@ -250,10 +291,76 @@ const deleteCourse = async (req, res) => {
   }
 };
 
+const getAllTeachersCourses = async (req, res) => {
+  try {
+    const teacher = await Teacher.findOne({
+      where: {
+        id: req.params.userId,
+      },
+    });
+    const records = await Course.findAll({
+      include: [
+        {
+          model: CourseComments,
+          include: {
+            model: User,
+            as: "user",
+            attributes: ["firstName", "secondName", "email", "profile_img_url"],
+            required: false,
+          },
+        },
+        {
+          model: Teacher,
+          attributes: ["id", "institute", "office", "phone"],
+          through: { attributes: [] },
+          as: "teachers",
+          where: { id: teacher.id },
+          include: [
+            {
+              model: User,
+              attributes: [
+                "firstName",
+                "secondName",
+                "email",
+                "profile_img_url",
+              ],
+              as: "user",
+              required: false,
+            },
+          ],
+        },
+        {
+          model: Discipline,
+          attributes: ["name"],
+          through: { attributes: [] },
+          as: "disciplines",
+        },
+      ],
+    });
+
+    const courses = records.map((record) => {
+      const course = record.toJSON();
+
+      if (course.img_url) {
+        course.img_url = `${req.protocol}://${req.get("host")}/${
+          course.img_url
+        }`;
+      }
+      return course;
+    });
+
+    return res.status(200).json({ records: courses });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getCourses,
   newCourse,
   updateCourse,
   deleteCourse,
   getCourseBy,
+  getAllTeachersCourses,
 };

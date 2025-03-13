@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Pagination, Box, Stack, Typography } from "@mui/material";
 import CourseCard from "./CourseCard";
 
-const CoursesPagination = ({ courses }) => {
+const CoursesPagination = ({ courses, teacher }) => {
   const coursesPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastCourse = currentPage * coursesPerPage;
@@ -16,7 +16,7 @@ const CoursesPagination = ({ courses }) => {
       <Box
         sx={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+          gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
           gap: "20px",
           padding: "20px",
         }}
@@ -25,6 +25,7 @@ const CoursesPagination = ({ courses }) => {
           currentCourses.map((course, index) => (
             <CourseCard
               key={index}
+              id={course.id}
               name={course.name}
               img_url={course.img_url}
               teachers={course.teachers}
@@ -32,6 +33,10 @@ const CoursesPagination = ({ courses }) => {
               description={course.description}
               linkTo={`/Course/${course.name}`}
               courseId={course.id}
+              disciplines={course.disciplines}
+              year={course.year}
+              teacher={teacher}
+              courseLongDescription={course.long_description}
             />
           ))
         ) : (

@@ -28,17 +28,14 @@ const getUserBy = async (req, res) => {
 const getTeachers = async (req, res) => {
   try {
     const records = await Teacher.findAll({
+      attributes: ["id", "institute", "office", "phone"],
+      through: { attributes: [] },
       include: [
         {
           model: User,
+          attributes: ["firstName", "secondName", "email", "profile_img_url"],
           as: "user",
-          attributes: [
-            "id",
-            "firstName",
-            "secondName",
-            "email",
-            "profile_img_url",
-          ],
+          required: false,
         },
       ],
     });
@@ -206,6 +203,24 @@ const deleteUser = async (req, res) => {
   }
 };
 
+const getUserData = async (req, res) => {
+  const token = req.headers["x-access-token"];
+  if (!token) {
+    return res.status(401).json({ message: "Access token missing" });
+  }
+  try {
+    jwt.verify(token, process.env.API_KEY, (err, userData) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid or expired token" });
+      }
+      return res.status(299).json({ user: userData });
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   getUsers,
   getUserBy,
@@ -214,4 +229,5 @@ module.exports = {
   deleteUser,
   loginUser,
   getTeachers,
+  getUserData,
 };

@@ -4,13 +4,21 @@ require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 const { sequelize } = require("./models");
 const authMiddleware = require("./middlewares/auth.middleware");
 const cors = require("cors");
+const multer = require("multer");
+multer({ dest: "uploads/" });
+const fs = require("fs");
 
 if (!process.env.API_KEY) {
   console.log("Missing API KEY");
   process.exit(1);
 }
-
-// Или настраиваем CORS для конкретного домена
+const ensureDir = (dir) => {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir);
+  }
+};
+ensureDir(path.join(__dirname, "uploads"));
+ensureDir(path.join(__dirname, "saved"));
 
 const app = express();
 app.use(cors());
@@ -21,13 +29,7 @@ app.use("/api/user/", require("./routes/user.router"));
 app.use("/api/course/", require("./routes/course.router"));
 app.use("/api/courseStructure/", require("./routes/courseStructure.router"));
 app.use("/api/comment/", require("./routes/course_comment.router"));
-app.use("/uploads", express.static("uploads"));
-
-// app.use((req, res, next) => {
-//   res.setHeader("Access-Control-Allow-Origin", "*");
-//   res.setHeader("Access-Control-Allow-Methods", "GET, PUT, UPDATE, DELETE");
-//   res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-// });
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.listen(3000, async () => {
   console.log("Server is running on port 3000");

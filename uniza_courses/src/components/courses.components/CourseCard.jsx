@@ -2,10 +2,13 @@ import cardClasses from "../../styles/CourseCard.module.css";
 import { useNavigate } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import { Icon } from "@iconify/react";
-import { Box, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import SecundaryBtn from "../core.components/SecundaryBtn";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 const CourseCard = ({
+  id,
   name,
   img_url,
   description,
@@ -13,6 +16,10 @@ const CourseCard = ({
   linkTo,
   courseId,
   teachers,
+  disciplines,
+  year,
+  teacher,
+  courseLongDescription,
 }) => {
   const date = new Date(updatedAt);
   const navigate = useNavigate();
@@ -71,14 +78,70 @@ const CourseCard = ({
           }}
           className={`${cardClasses.courseFooter}`}
         >
-          <Typography
-            className={cardClasses.courseInstructor}
-            sx={{ width: "50%" }}
-          >
-            {teachers
-              .map((teacher, index) => teacher.user.secondName)
-              .join(", ")}
-          </Typography>
+          {teacher ? (
+            <Stack gap={1}>
+              <Typography
+                sx={{ cursor: "pointer" }}
+                onClick={() =>
+                  navigate("/editCourse", {
+                    state: {
+                      id,
+                      name,
+                      img_url,
+                      description,
+                      updatedAt,
+                      linkTo,
+                      courseId,
+                      teachers,
+                      disciplines,
+                      teacher,
+                      year,
+                      courseLongDescription,
+                    },
+                  })
+                }
+              >
+                <EditIcon
+                  sx={{
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    px: "4px",
+                  }}
+                />
+                Upravovať zaklad...
+              </Typography>
+              <Typography sx={{ cursor: "pointer" }}>
+                <EditIcon
+                  sx={{
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    px: "4px",
+                  }}
+                />
+                Upravovať štrukturu...
+              </Typography>
+              <Typography sx={{ cursor: "pointer" }}>
+                <DeleteForeverIcon
+                  sx={{
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    px: "4px",
+                  }}
+                />
+                Vymazať navždy...
+              </Typography>
+            </Stack>
+          ) : (
+            <Typography
+              className={cardClasses.courseInstructor}
+              sx={{ width: "50%" }}
+            >
+              {teachers
+                .map((teacher, index) => teacher.user.secondName)
+                .join(", ")}
+            </Typography>
+          )}
+
           <SecundaryBtn
             sxChildren={{
               width: "auto",

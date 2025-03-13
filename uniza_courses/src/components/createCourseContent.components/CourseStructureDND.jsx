@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Column from "./Column";
 import { arrayMove } from "@dnd-kit/sortable";
 
-const CourseStructureDND = ({ data }) => {
+const CourseStructureDND = ({ data, load }) => {
   const [topicOrderEdditing, setTopicOrderEdditing] = useState(false);
   const [courseStructure, setCourseStructure] = useState(
     data.topics
@@ -22,6 +22,19 @@ const CourseStructureDND = ({ data }) => {
       setTopicOrderEdditing(false);
     }
   }, [courseStructure]);
+
+  useEffect(() => {
+    setCourseStructure(
+      data.topics
+        .map((topic) => ({
+          id: topic.order,
+          topicId: topic.id,
+          title: topic.title,
+          subtopics: topic.subtopics,
+        }))
+        .sort((a, b) => a.id - b.id)
+    );
+  }, [data]);
 
   const handleEditTopicPos = async () => {
     try {
@@ -56,7 +69,7 @@ const CourseStructureDND = ({ data }) => {
     courseStructure.findIndex((topic) => topic.id === id);
 
   const handleDragEnd = ({ active, over }) => {
-    if (active.id === over.id) {
+    if (!over || !active || active.id === over.id) {
       return;
     }
     setCourseStructure((courseStructure) => {
@@ -70,7 +83,7 @@ const CourseStructureDND = ({ data }) => {
 
   return (
     <DndContext onDragEnd={handleDragEnd} collisionDetection={closestCorners}>
-      <Column topics={courseStructure} />
+      <Column topics={courseStructure} load={load} />
     </DndContext>
   );
 };
