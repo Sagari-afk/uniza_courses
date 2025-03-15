@@ -188,8 +188,6 @@ const EditCourse = () => {
     }
   };
 
-  // Images edditing doesnt work!!!!!!!!!
-
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setFoto(file);
@@ -231,8 +229,8 @@ const EditCourse = () => {
               <Box sx={{ display: "flex", gap: "2rem" }}>
                 <SecundaryBtn
                   onClick={() =>
-                    navigate(`/NewCourse/${responseData.name}/content`, {
-                      state: { responseData },
+                    navigate(`/EditCourse/${responseData.name}/content`, {
+                      state: { id },
                     })
                   }
                 >

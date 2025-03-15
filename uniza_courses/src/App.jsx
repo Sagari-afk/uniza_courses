@@ -10,7 +10,7 @@ import HomePage from "./pages/HomePage";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Courses from "./pages/Courses";
-import EditCourse from "./pages/EditCourse";
+import EditCourse from "./pages/EditCourse/";
 import EditIcon from "@mui/icons-material/Edit";
 import AppsIcon from "@mui/icons-material/Apps";
 import CreateCourseContent from "./pages/CreateCourseContent";
@@ -178,7 +178,7 @@ function App() {
         )}
         {authToken && userData.userRole === "teacher" && (
           <Route
-            path="/NewCourse/:courseName/content"
+            path="/EditCourse/:courseName/content"
             element={<CreateCourseContent />}
           />
         )}

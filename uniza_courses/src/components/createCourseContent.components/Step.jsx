@@ -11,13 +11,40 @@ import ModalCreate from "./ModalCreate";
 import PrimaryBtn from "../core.components/PrimaryBtn";
 import { useSortable } from "@dnd-kit/sortable";
 
-const Step = ({ subtopic, step, id }) => {
+const Step = ({ subtopic, step, id, load }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
   const [stepTitle, setStepTitle] = React.useState(step.title);
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
+  };
+  console.log("Step: ", step);
+
+  const handleSubmitDeleteStep = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/courseStructure/deleteStep/" + id,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      if (response.ok) {
+        alert("Krok bol vymazan");
+        load();
+      } else {
+        alert("Nastala chyba");
+      }
+    } catch (error) {
+      console.log(error);
+      alert("Nastala chyba");
+    }
   };
 
   // Steps DND doesn't work!!!!!!!!!!!!
@@ -40,7 +67,7 @@ const Step = ({ subtopic, step, id }) => {
             const data = {
               subtopicId: subtopic.subtopicId,
               subtopicTitle: subtopic.title,
-              stepId: step.stepId,
+              stepId: step.id,
             };
             const queryParams = new URLSearchParams(data).toString();
             window.open(
@@ -59,7 +86,7 @@ const Step = ({ subtopic, step, id }) => {
           <Typography variant="h6">
             Ste si isti že chcete vymazať krok {step.title}?
           </Typography>
-          <PrimaryBtn onClick={(e) => handleSubmitDeleteTopic(e)}>
+          <PrimaryBtn onClick={(e) => handleSubmitDeleteStep(e)}>
             Vymazať krok
           </PrimaryBtn>
         </ModalCreate>

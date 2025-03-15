@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Pagination, Box, Stack, Typography } from "@mui/material";
 import CourseCard from "./CourseCard";
 
-const CoursesPagination = ({ courses, teacher }) => {
+const CoursesPagination = ({ courses, teacher, load }) => {
   const coursesPerPage = 9;
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastCourse = currentPage * coursesPerPage;
@@ -37,6 +37,7 @@ const CoursesPagination = ({ courses, teacher }) => {
               year={course.year}
               teacher={teacher}
               courseLongDescription={course.long_description}
+              load={load}
             />
           ))
         ) : (

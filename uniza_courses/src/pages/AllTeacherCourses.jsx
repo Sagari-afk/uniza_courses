@@ -11,34 +11,33 @@ const AllTeachersCourses = () => {
     ? JSON.parse(sessionStorage.getItem("userData"))
     : null;
 
-  useEffect(() => {
-    const load = async () => {
-      console.log("teacherData", typeof teacherData);
-      try {
-        const response = await fetch(
-          "http://localhost:3000/api/course/getAllTeachersCourses/" +
-            teacherData.userId,
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "x-access-token":
-                localStorage.getItem("authToken") ||
-                sessionStorage.getItem("authToken"),
-            },
-          }
-        );
-        if (response.ok) {
-          const responseData = await response.json();
-          setRestData(responseData.records);
-        } else {
-          throw new Error("Failed to fetch courses");
+  const load = async () => {
+    console.log("teacherData", typeof teacherData);
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/course/getAllTeachersCourses/" +
+          teacherData.userId,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
         }
-      } catch (error) {
-        setError(error.message);
-        alert("Error loading courses: " + error.message);
+      );
+      if (response.ok) {
+        const responseData = await response.json();
+        setRestData(responseData.records);
+      } else {
+        throw new Error("Failed to fetch courses");
       }
-    };
-
+    } catch (error) {
+      setError(error.message);
+      alert("Error loading courses: " + error.message);
+    }
+  };
+  useEffect(() => {
     load();
   }, []);
 
@@ -72,7 +71,11 @@ const AllTeachersCourses = () => {
           {error ? (
             <Typography>Error: {error}</Typography>
           ) : (
-            <CoursesPagination courses={restData} teacher={teacherData} />
+            <CoursesPagination
+              courses={restData}
+              teacher={teacherData}
+              load={load}
+            />
           )}
         </Box>
       </Box>

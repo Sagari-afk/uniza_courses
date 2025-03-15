@@ -27,6 +27,6 @@ router.get("/getAllTeachersCourses/:userId", getAllTeachersCourses);
 
 router.post("/newCourse", upload.single("image"), newCourse);
 router.post("/editCourse/:id", upload.single("image"), updateCourse);
-router.delete("/deleteCourse/:id", deleteCourse);
+router.post("/deleteCourse/:id", deleteCourse);
 
 module.exports = router;

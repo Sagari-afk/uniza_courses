@@ -17,10 +17,13 @@ const {
 } = require("../controllers/subtopic.controller");
 const {
   newStep,
+  getStep,
+  deleteStep,
   uploadImage,
   uploadVideo,
   upladFile,
   saveContent,
+  updateContent,
 } = require("../controllers/step.controller");
 
 const router = express.Router();
@@ -55,6 +58,7 @@ router.post("/upload-image", upload.single("file"), uploadImage);
 router.post("/upload-video", upload.single("file"), uploadVideo);
 router.post("/upload-file", upload.single("file"), upladFile);
 router.post("/save-content", saveContent);
+router.post("/update-content", updateContent);
 
 router.post("/newTopic", newTopic);
 router.post("/editTopicOrder", editTopicOrder);
@@ -67,5 +71,24 @@ router.post("/editSubtopic", editSubtopic);
 router.post("/deleteSubtopic/:subtopicId", deleteSubtopic);
 
 router.post("/newStep", newStep);
+router.get("/getStep/:stepId", getStep);
+router.post("/deleteStep/:stepId", deleteStep);
+
+router.get("/getHtmlContent/:fileUrl", (req, res) => {
+  const fileUrl = req.params.fileUrl;
+  if (!fileUrl) {
+    return res.status(400).json({ error: "File URL is required" });
+  }
+
+  const filePath = path.join(__dirname, "..", "/saved/", fileUrl);
+
+  fs.readFile(filePath, "utf8", (err, content) => {
+    if (err) {
+      console.error("Error reading file:", err);
+      return res.status(500).json({ error: "Error reading file" });
+    }
+    return res.status(200).json({ content });
+  });
+});
 
 module.exports = router;

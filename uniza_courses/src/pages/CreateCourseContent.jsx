@@ -10,8 +10,8 @@ import CourseStructureDND from "../components/createCourseContent.components/Cou
 
 const CreateCourseContent = () => {
   const location = useLocation();
-  const restData = location.state.responseData || {};
-  const [course, setCourse] = useState(restData || []);
+  const id = location.state.id || {};
+  const [course, setCourse] = useState([]);
 
   const [topicName, setTopicName] = useState("");
 
@@ -21,7 +21,7 @@ const CreateCourseContent = () => {
     try {
       const payload = {
         title: topicName,
-        courseId: restData.id,
+        courseId: course.id,
       };
       console.log(payload);
       const response = await fetch(
@@ -52,7 +52,7 @@ const CreateCourseContent = () => {
   const load = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/course/getCourse/" + course.id,
+        "http://localhost:3000/api/course/getCourse/" + id,
         {
           headers: {
             "Content-Type": "application/json",

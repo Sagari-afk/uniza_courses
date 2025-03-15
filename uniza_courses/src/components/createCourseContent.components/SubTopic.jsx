@@ -192,7 +192,7 @@ const SubTopic = ({ id, subtopic, load }) => {
                         control={<Radio />}
                         label="Text"
                       />
-                      <FormControlLabel
+                      {/* <FormControlLabel
                         value="video"
                         control={<Radio />}
                         label="Video"
@@ -208,7 +208,7 @@ const SubTopic = ({ id, subtopic, load }) => {
                         value="pptx"
                         control={<Radio />}
                         label="Prezentacia pptx"
-                      />
+                      /> */}
                       <FormControlLabel
                         value="test"
                         control={<Radio />}
@@ -354,13 +354,14 @@ const SubTopic = ({ id, subtopic, load }) => {
           collisionDetection={closestCorners}
         >
           <SortableContext items={steps} strategy={verticalListSortingStrategy}>
-            {steps?.length ? (
-              steps.map((step) => (
+            {subtopic.steps?.length ? (
+              subtopic.steps.map((step) => (
                 <Step
                   subtopic={subtopic}
                   step={step}
                   key={step.id}
                   id={step.id}
+                  load={load}
                 />
               ))
             ) : (

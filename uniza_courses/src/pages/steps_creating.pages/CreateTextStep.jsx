@@ -14,24 +14,27 @@ import Header from "../../components/core.components/Header";
 import SecundaryBtn from "../../components/core.components/SecundaryBtn";
 import { useSearchParams } from "react-router-dom";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import "froala-editor/css/froala_style.min.css";
-import "froala-editor/css/froala_editor.pkgd.min.css";
-import FroalaEditorComponent from "react-froala-wysiwyg";
 import "froala-editor/js/plugins.pkgd.min.js";
+import "froala-editor/css/froala_editor.pkgd.min.css";
+
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import FroalaEditorComponent from "react-froala-wysiwyg";
 
 const CreateTextStep = () => {
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
   const subtopicTitle = searchParams.get("subtopicTitle");
-  const [stepTitle, setStepTitle] = useState();
-  const [isPreview, setIsPreview] = useState(false);
-  const [content, setContent] = useState(
-    localStorage.getItem("editorContent") || ""
-  );
+  const stepId = searchParams.get("stepId") || null;
+  console.log(stepId);
 
-  // нужно брать с юэкэнда по айдишнику инфо о шаге
+  const [stepTitle, setStepTitle] = useState("");
+  const [isPreview, setIsPreview] = useState(false);
+  const [content, setContent] = useState("");
+  const editorRef = useRef(null);
+  const [isMounted, setIsMounted] = useState(false);
 
   const config = {
     imageUploadURL: "http://localhost:3000/api/courseStructure/upload-image",
@@ -45,10 +48,55 @@ const CreateTextStep = () => {
   };
 
   useEffect(() => {
-    localStorage.setItem("editorContent", content); //нужно что бы дописывало айдишник шага и по нему потом доставать
-  }, [content]);
+    if (stepId) getStep();
+    setIsMounted(true);
+  }, []);
+
+  const getStep = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/courseStructure/getStep/" + stepId,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      const data = await res.json();
+      if (data.error || !res.ok) {
+        alert(data.error);
+        return;
+      }
+      setStepTitle(data.title);
+      const resFile = await fetch(
+        "http://localhost:3000/api/courseStructure/getHtmlContent/" +
+          data.fileName,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      const file = await resFile.json();
+      if (file.error || !resFile.ok) {
+        alert(file.error);
+        return;
+      }
+      console.log(file.content);
+      setContent(file.content);
+    } catch (error) {
+      console.error("Error getting content:", error);
+    }
+  };
 
   useEffect(() => {
+    sessionStorage.setItem("editorContent" + subtopicId, content);
     const handleBeforeUnload = (event) => {
       if (content) {
         event.preventDefault();
@@ -65,7 +113,9 @@ const CreateTextStep = () => {
   const saveContent = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/courseStructure/save-content",
+        stepId
+          ? "http://localhost:3000/api/courseStructure/update-content"
+          : "http://localhost:3000/api/courseStructure/save-content",
         {
           method: "POST",
           headers: {
@@ -74,7 +124,7 @@ const CreateTextStep = () => {
               localStorage.getItem("authToken") ||
               sessionStorage.getItem("authToken"),
           },
-          body: JSON.stringify({ subtopicId, content, stepTitle }),
+          body: JSON.stringify({ subtopicId, content, stepTitle, stepId }),
         }
       );
       const data = await res.json();
@@ -87,6 +137,14 @@ const CreateTextStep = () => {
       console.error("Error saving content:", error);
     }
   };
+
+  useEffect(() => {
+    if (editorRef.current) {
+      console.log(editorRef.current);
+    } else {
+      console.warn("Editor not yet initialized.");
+    }
+  }, [editorRef.current]);
 
   return (
     <>
@@ -155,12 +213,17 @@ const CreateTextStep = () => {
               />
             ) : (
               <Box>
-                <FroalaEditorComponent
-                  tag="textarea"
-                  model={content}
-                  config={config}
-                  onModelChange={(newContent) => setContent(newContent)}
-                />
+                {isMounted && (
+                  <FroalaEditorComponent
+                    tag="textarea"
+                    model={content}
+                    config={config}
+                    onModelChange={(newContent) => setContent(newContent)}
+                    onInitialized={(editorInstance) => {
+                      editorRef.current = editorInstance;
+                    }}
+                  />
+                )}
               </Box>
             )}
           </Paper>

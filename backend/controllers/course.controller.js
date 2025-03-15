@@ -161,8 +161,6 @@ const getCourseBy = async (req, res) => {
   }
 };
 
-module.exports = { getCourses, getCourseBy };
-
 const newCourse = [
   body("name").not().isEmpty(),
   body("description").not().isEmpty(),

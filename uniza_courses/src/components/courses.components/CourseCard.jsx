@@ -6,6 +6,8 @@ import { Box, Stack, Typography } from "@mui/material";
 import SecundaryBtn from "../core.components/SecundaryBtn";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ModalCreate from "../createCourseContent.components/ModalCreate";
+import PrimaryBtn from "../core.components/PrimaryBtn";
 
 const CourseCard = ({
   id,
@@ -20,9 +22,36 @@ const CourseCard = ({
   year,
   teacher,
   courseLongDescription,
+  load,
 }) => {
   const date = new Date(updatedAt);
   const navigate = useNavigate();
+
+  const handleSubmitDeleteCourse = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/course/deleteCourse/" + id,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      if (response.ok) {
+        alert("Kurz bol vymazan");
+      } else {
+        alert("Nastala chyba");
+      }
+      load();
+    } catch (error) {
+      console.log(error);
+      alert("Nastala chyba");
+    }
+  };
 
   return (
     <Box
@@ -110,7 +139,16 @@ const CourseCard = ({
                 />
                 Upravovať zaklad...
               </Typography>
-              <Typography sx={{ cursor: "pointer" }}>
+              <Typography
+                sx={{ cursor: "pointer" }}
+                onClick={() =>
+                  navigate(`/EditCourse/${name}/content`, {
+                    state: {
+                      id,
+                    },
+                  })
+                }
+              >
                 <EditIcon
                   sx={{
                     fontSize: "1rem",
@@ -120,16 +158,28 @@ const CourseCard = ({
                 />
                 Upravovať štrukturu...
               </Typography>
-              <Typography sx={{ cursor: "pointer" }}>
-                <DeleteForeverIcon
-                  sx={{
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                    px: "4px",
-                  }}
-                />
-                Vymazať navždy...
-              </Typography>
+              <ModalCreate
+                btn={
+                  <Typography sx={{ cursor: "pointer" }}>
+                    <DeleteForeverIcon
+                      sx={{
+                        fontSize: "1.2rem",
+                        cursor: "pointer",
+                        px: "4px",
+                      }}
+                    />
+                    Vymazať navždy?
+                  </Typography>
+                }
+              >
+                <Typography variant="h4">Vymazať kurz</Typography>
+                <Typography variant="h6">
+                  Ste si isti že chcete vymazať kurz {name}
+                </Typography>
+                <PrimaryBtn onClick={(e) => handleSubmitDeleteCourse(e)}>
+                  Vymazať krok
+                </PrimaryBtn>
+              </ModalCreate>
             </Stack>
           ) : (
             <Typography
