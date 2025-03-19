@@ -82,14 +82,13 @@ const Step = ({ subtopic, step, id, load }) => {
           btn={
             <DeleteForeverIcon sx={{ color: "#ff7c7c", fontSize: "1.5rem" }} />
           }
+          handleSubmitModal={handleSubmitDeleteStep}
+          submitBtnText="Vymazať krok"
         >
           <Typography variant="h4">Vymazat krok</Typography>
           <Typography variant="h6">
             Ste si isti že chcete vymazať krok {step.title}?
           </Typography>
-          <PrimaryBtn onClick={(e) => handleSubmitDeleteStep(e)}>
-            Vymazať krok
-          </PrimaryBtn>
         </ModalCreate>
       </Box>
     </Box>

@@ -1,7 +1,9 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
-import { Grid2 } from "@mui/material";
+import { Grid2, Stack } from "@mui/material";
+import PrimaryBtn from "../core.components/PrimaryBtn";
+import SecundaryBtn from "../core.components/SecundaryBtn";
 
 const style = {
   position: "absolute",
@@ -17,7 +19,13 @@ const style = {
   p: 4,
 };
 
-export default function ModalCreate({ btn, children }) {
+export default function ModalCreate({
+  btn,
+  children,
+  handleSubmitModal,
+  submitBtnText,
+  submitModalFuncParams,
+}) {
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -41,6 +49,27 @@ export default function ModalCreate({ btn, children }) {
       >
         <Grid2 container spacing={4} sx={style}>
           {children}
+          <Box
+            display={"flex"}
+            direction={"row"}
+            justifyContent={"space-between"}
+            width={"100%"}
+            gap={1}
+          >
+            <PrimaryBtn
+              onClick={(e) => {
+                if (submitModalFuncParams)
+                  handleSubmitModal(e, ...submitModalFuncParams);
+                else handleSubmitModal(e);
+                handleClose();
+              }}
+            >
+              {submitBtnText}
+            </PrimaryBtn>
+            <SecundaryBtn style={{ width: "50%" }} onClick={handleClose}>
+              Zatvoriť
+            </SecundaryBtn>
+          </Box>
         </Grid2>
       </Modal>
     </Box>

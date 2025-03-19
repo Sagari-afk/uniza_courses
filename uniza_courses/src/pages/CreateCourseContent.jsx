@@ -95,7 +95,11 @@ const CreateCourseContent = () => {
             <Typography variant="h3" className="font-gradient">
               {course.name}
             </Typography>
-            <ModalCreate btn=<SecundaryBtn>Nova tema</SecundaryBtn>>
+            <ModalCreate
+              btn=<SecundaryBtn>Nova tema</SecundaryBtn>
+              handleSubmitModal={handleSubmitCreateTopic}
+              submitBtnText="Vytvoriť"
+            >
               <Typography variant="h4">Nova tema</Typography>
 
               <Grid2
@@ -115,13 +119,6 @@ const CreateCourseContent = () => {
                   onChange={(e) => setTopicName(e.target.value)}
                 />
               </Grid2>
-              <PrimaryBtn
-                onClick={(e) => {
-                  handleSubmitCreateTopic(e);
-                }}
-              >
-                Vytvoriť
-              </PrimaryBtn>
             </ModalCreate>
           </Box>
           <Typography variant="h5" padding={2}>

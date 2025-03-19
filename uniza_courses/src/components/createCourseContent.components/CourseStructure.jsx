@@ -35,6 +35,8 @@ const CourseStructure = ({ data, handleSubmitCreateSubTopic }) => {
                     btn=<CreateNewFolderIcon
                       sx={{ color: "#9cdb93", fontSize: "2rem" }}
                     />
+                    handleSubmitModal={handleSubmitCreateSubTopic}
+                    submitBtnText="Vytvoriť"
                   >
                     <Typography variant="h4">Nova podtema</Typography>
                     <Typography variant="h6">Pre temu {topic.title}</Typography>
@@ -54,13 +56,6 @@ const CourseStructure = ({ data, handleSubmitCreateSubTopic }) => {
                         label="Nazov"
                       />
                     </Grid2>
-                    <PrimaryBtn
-                      onClick={(e) => {
-                        handleSubmitCreateSubTopic(e);
-                      }}
-                    >
-                      Vytvoriť
-                    </PrimaryBtn>
                   </ModalCreate>
 
                   <EditIcon

@@ -172,14 +172,13 @@ const CourseCard = ({
                     Vymazať navždy?
                   </Typography>
                 }
+                handleSubmitModal={handleSubmitDeleteCourse}
+                submitBtnText="Vymazať"
               >
                 <Typography variant="h4">Vymazať kurz</Typography>
                 <Typography variant="h6">
                   Ste si isti že chcete vymazať kurz {name}
                 </Typography>
-                <PrimaryBtn onClick={(e) => handleSubmitDeleteCourse(e)}>
-                  Vymazať krok
-                </PrimaryBtn>
               </ModalCreate>
             </Stack>
           ) : (

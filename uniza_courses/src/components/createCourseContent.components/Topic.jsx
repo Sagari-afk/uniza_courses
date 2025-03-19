@@ -225,6 +225,9 @@ const Topic = ({ id, topic, load }) => {
                   sx={{ color: "#9cdb93", fontSize: "2rem" }}
                 />
               }
+              handleSubmitModal={handleSubmitCreateSubTopic}
+              submitBtnText="Vytvoriť"
+              submitModalFuncParams={[subtopicTitle, topic.topicId]}
             >
               <Typography variant="h4">Nová podtema</Typography>
               <Typography variant="h6">Pre temu {topic.title}</Typography>
@@ -245,19 +248,15 @@ const Topic = ({ id, topic, load }) => {
                   onChange={(e) => setSubtopicTitle(e.target.value)}
                 />
               </Grid2>
-              <PrimaryBtn
-                onClick={(e) => {
-                  handleSubmitCreateSubTopic(e, subtopicTitle, topic.topicId);
-                }}
-              >
-                Vytvoriť
-              </PrimaryBtn>
             </ModalCreate>
 
             <ModalCreate
               btn={
                 <EditIcon sx={{ color: "secondary.main", fontSize: "2rem" }} />
               }
+              handleSubmitModal={handleSubmitEditTopic}
+              submitBtnText="Upraviť"
+              submitModalFuncParams={[topicTitle, topic.topicId]}
             >
               <Typography variant="h4">Upravit temu</Typography>
               <Typography variant="h6">Pre temu {topic.title}</Typography>
@@ -268,13 +267,6 @@ const Topic = ({ id, topic, load }) => {
                 value={topicTitle}
                 onChange={(e) => setTopicTitle(e.target.value)}
               />
-              <PrimaryBtn
-                onClick={(e) => {
-                  handleSubmitEditTopic(e, topicTitle, topic.topicId);
-                }}
-              >
-                Upraviť
-              </PrimaryBtn>
             </ModalCreate>
 
             <ModalCreate
@@ -283,14 +275,13 @@ const Topic = ({ id, topic, load }) => {
                   sx={{ color: "#ff7c7c", fontSize: "2rem" }}
                 />
               }
+              handleSubmitModal={handleSubmitDeleteTopic}
+              submitBtnText="Vymazať"
             >
               <Typography variant="h4">Vymazat temu</Typography>
               <Typography variant="h6">
                 Ste si isti že chcete vymazať temu {topic.title}?
               </Typography>
-              <PrimaryBtn onClick={(e) => handleSubmitDeleteTopic(e)}>
-                Vymazať temu
-              </PrimaryBtn>
             </ModalCreate>
           </Box>
         </Box>

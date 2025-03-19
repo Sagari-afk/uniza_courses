@@ -165,6 +165,20 @@ const SubTopic = ({ id, subtopic, load }) => {
                   sx={{ color: "#9cdb93", fontSize: "2rem" }}
                 />
               }
+              handleSubmitModal={() => {
+                if (stepType === "text") {
+                  const data = {
+                    subtopicId: subtopic.subtopicId,
+                    subtopicTitle: subtopic.title,
+                  };
+                  const queryParams = new URLSearchParams(data).toString();
+                  window.open(
+                    `/CourseContent/createStep/text?${queryParams}`,
+                    "_blank"
+                  );
+                }
+              }}
+              submitBtnText="Vytvoriť"
             >
               <Typography variant="h4">Nový krok</Typography>
               <Typography variant="h6">Pre podtemu {subtopic.title}</Typography>
@@ -228,23 +242,7 @@ const SubTopic = ({ id, subtopic, load }) => {
                 />
               </Grid2>
               {/* For text */}
-              {stepType === "text" && (
-                <PrimaryBtn
-                  onClick={(e) => {
-                    const data = {
-                      subtopicId: subtopic.subtopicId,
-                      subtopicTitle: subtopic.title,
-                    };
-                    const queryParams = new URLSearchParams(data).toString();
-                    window.open(
-                      `/CourseContent/createStep/text?${queryParams}`,
-                      "_blank"
-                    );
-                  }}
-                >
-                  Presmerovať na vytvorenie textu
-                </PrimaryBtn>
-              )}
+
               {/* For video*/}
               {stepType === "video" && (
                 <PrimaryBtn>
@@ -308,6 +306,9 @@ const SubTopic = ({ id, subtopic, load }) => {
               btn={
                 <EditIcon sx={{ color: "secondary.main", fontSize: "2rem" }} />
               }
+              handleSubmitModal={handleSubmitEditSubtopic}
+              submitBtnText="Upraviť"
+              submitModalFuncParams={[subtopicTitle, subtopic.subtopicId]}
             >
               <Typography variant="h4">Upravit podtemu</Typography>
               <Typography variant="h6">Pre podtemu {subtopic.title}</Typography>
@@ -318,17 +319,6 @@ const SubTopic = ({ id, subtopic, load }) => {
                 value={subtopicTitle}
                 onChange={(e) => setSubtopicTitle(e.target.value)}
               />
-              <PrimaryBtn
-                onClick={(e) => {
-                  handleSubmitEditSubtopic(
-                    e,
-                    subtopicTitle,
-                    subtopic.subtopicId
-                  );
-                }}
-              >
-                Upraviť
-              </PrimaryBtn>
             </ModalCreate>
 
             <ModalCreate
@@ -337,14 +327,13 @@ const SubTopic = ({ id, subtopic, load }) => {
                   sx={{ color: "#ff7c7c", fontSize: "2rem" }}
                 />
               }
+              handleSubmitModal={handleSubmitDeleteSubtopic}
+              submitBtnText="Vymazať"
             >
-              <Typography variant="h4">Vymazat temu</Typography>
+              <Typography variant="h4">Vymazať podtemu</Typography>
               <Typography variant="h6">
                 Ste si isti že chcete vymazať podtemu {subtopic.title}?
               </Typography>
-              <PrimaryBtn onClick={(e) => handleSubmitDeleteSubtopic(e)}>
-                Vymazať temu
-              </PrimaryBtn>
             </ModalCreate>
           </Box>
         </Box>
