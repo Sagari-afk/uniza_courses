@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import SideMenu from "../components/core.components//SideMenu";
 import SearchBar from "../components/courses.components/SearchBar";
 import CoursesPagination from "../components/courses.components/CoursePagination";
+import { toast } from "react-toastify";
 
 const Courses = ({ handleLogout }) => {
   const [restData, setRestData] = useState([]);
@@ -25,7 +26,7 @@ const Courses = ({ handleLogout }) => {
         }
       } catch (error) {
         setError(error.message);
-        alert("Error loading courses: " + error.message);
+        toast.error("Error loading courses: " + error.message);
       }
     };
 
