@@ -32,7 +32,7 @@ const CreateTextStep = () => {
 
   const [stepTitle, setStepTitle] = useState("");
   const [isPreview, setIsPreview] = useState(false);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(" ");
   const editorRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -213,7 +213,7 @@ const CreateTextStep = () => {
               />
             ) : (
               <Box>
-                {isMounted && (
+                {isMounted && content !== "" && content && (
                   <FroalaEditorComponent
                     tag="textarea"
                     model={content}

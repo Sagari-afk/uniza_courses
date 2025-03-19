@@ -51,6 +51,7 @@ const CreateCourseContent = () => {
 
   const load = async () => {
     try {
+      console.log("IDECKO: ", id);
       const response = await fetch(
         "http://localhost:3000/api/course/getCourse/" + id,
         {

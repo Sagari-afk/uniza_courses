@@ -12,7 +12,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Icon } from "@iconify/react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
@@ -24,6 +24,7 @@ import TeacherCard from "../components/course.components/TeacherCard";
 
 const Course = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { courseId } = location.state || {};
   const [restData, setRestData] = useState([]);
   const [error, setError] = useState(null);
@@ -92,6 +93,13 @@ const Course = () => {
       console.log(err);
       setError(err.message || "Failed");
     }
+  };
+
+  const startCourse = async () => {
+    // priradit kurz studentovi
+    // pridat k tlacidlu "pokracovat" ak kurz uz bol zacat
+    // zistit taktiez aj na akom kroke sa zastavil a posielat aj nazov a id kroku tiez
+    navigate(`/${restData.name}`, { state: { courseId } });
   };
 
   useEffect(() => {
@@ -407,7 +415,7 @@ const Course = () => {
                 }}
               >
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                  <PrimaryBtn style={{ color: "white" }}>
+                  <PrimaryBtn style={{ color: "white" }} onClick={startCourse}>
                     ZAčAť TERAZ
                   </PrimaryBtn>
 

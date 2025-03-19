@@ -230,7 +230,7 @@ const EditCourse = () => {
                 <SecundaryBtn
                   onClick={() =>
                     navigate(`/EditCourse/${responseData.name}/content`, {
-                      state: { id },
+                      state: { id: id ? id : responseData.id },
                     })
                   }
                 >

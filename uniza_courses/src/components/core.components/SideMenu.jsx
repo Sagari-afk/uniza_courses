@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography } from "@mui/material";
 import { Icon } from "@iconify/react";
 
-const SideMenu = ({ handleLogout, children }) => {
-  const [isHovered, setIsHovered] = React.useState(false);
+const SideMenu = ({ children, sideElements, handleLogout }) => {
+  const [isHovered, setIsHovered] = useState(false);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -47,9 +47,9 @@ const SideMenu = ({ handleLogout, children }) => {
               display: "flex",
               flexDirection: "column",
               color: "primary.dark",
-              gap: "2rem", // Ensure that content doesn't overflow when shrinking
-              transition: "all 0.3s ease", // Smooth transition for size and padding
-              width: isHovered ? "250px" : "60px", // Box width changes smoothly on hover
+              gap: "2rem",
+              transition: "all 0.3s ease",
+              width: isHovered ? "250px" : "60px",
             }}
           >
             {/* First box with icon and text */}
@@ -58,15 +58,15 @@ const SideMenu = ({ handleLogout, children }) => {
                 display: "flex",
                 gap: "1rem",
                 alignItems: "center",
-                opacity: isHovered ? 1 : 0, // Fade-in text when hovered
-                transition: "opacity 0.3s ease", // Smooth opacity transition
+                opacity: isHovered ? 1 : 0,
+                transition: "opacity 0.3s ease",
               }}
             >
               <Icon
                 icon="hugeicons:course"
                 style={{
                   fontSize: "2rem",
-                  transition: "transform 0.3s ease", // Smooth scaling transition for the icon
+                  transition: "transform 0.3s ease",
                 }}
               />
               {isHovered && (
@@ -82,15 +82,15 @@ const SideMenu = ({ handleLogout, children }) => {
                 display: "flex",
                 gap: "1rem",
                 alignItems: "center",
-                opacity: isHovered ? 1 : 0, // Fade-in text when hovered
-                transition: "opacity 0.3s ease", // Smooth opacity transition
+                opacity: isHovered ? 1 : 0,
+                transition: "opacity 0.3s ease",
               }}
             >
               <Icon
                 icon="tabler:clock"
                 style={{
                   fontSize: "2rem",
-                  transition: "transform 0.3s ease", // Smooth scaling transition for the icon
+                  transition: "transform 0.3s ease",
                 }}
               />
               {isHovered && (
@@ -106,15 +106,15 @@ const SideMenu = ({ handleLogout, children }) => {
                 display: "flex",
                 gap: "1rem",
                 alignItems: "center",
-                opacity: isHovered ? 1 : 0, // Fade-in text when hovered
-                transition: "opacity 0.3s ease", // Smooth opacity transition
+                opacity: isHovered ? 1 : 0,
+                transition: "opacity 0.3s ease",
               }}
             >
               <Icon
                 icon="tabler:heart"
                 style={{
                   fontSize: "2rem",
-                  transition: "transform 0.3s ease", // Smooth scaling transition for the icon
+                  transition: "transform 0.3s ease",
                 }}
               />
               {isHovered && (
@@ -128,15 +128,15 @@ const SideMenu = ({ handleLogout, children }) => {
                 display: "flex",
                 gap: "1rem",
                 alignItems: "center",
-                opacity: isHovered ? 1 : 0, // Fade-in text when hovered
-                transition: "opacity 0.3s ease", // Smooth opacity transition
+                opacity: isHovered ? 1 : 0,
+                transition: "opacity 0.3s ease",
               }}
             >
               <Icon
                 icon="mage:archive"
                 style={{
                   fontSize: "2rem",
-                  transition: "transform 0.3s ease", // Smooth scaling transition for the icon
+                  transition: "transform 0.3s ease",
                 }}
               />
               {isHovered && (

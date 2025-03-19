@@ -18,6 +18,7 @@ import CreateCourseContent from "./pages/CreateCourseContent";
 import CreateNewCourseBtn from "./components/core.components/CreateNewCourseBtn";
 import CreateTextStep from "./pages/steps_creating.pages/CreateTextStep";
 import AllTeachersCourses from "./pages/AllTeacherCourses";
+import StudentCourseContent from "./pages/StudentCourseContent";
 
 function App() {
   const [authToken, setAuthToken] = useState(() =>
@@ -190,6 +191,10 @@ function App() {
         )}
         {authToken && userData.userRole === "teacher" && (
           <Route path="/allCourses/teacher" element={<AllTeachersCourses />} />
+        )}
+
+        {authToken && (
+          <Route path="/:courseName" element={<StudentCourseContent />} />
         )}
       </Routes>
 
