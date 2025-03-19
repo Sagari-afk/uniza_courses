@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ModalCreate from "../createCourseContent.components/ModalCreate";
 import PrimaryBtn from "../core.components/PrimaryBtn";
+import { toast } from "react-toastify";
 
 const CourseCard = ({
   id,
@@ -42,14 +43,14 @@ const CourseCard = ({
         }
       );
       if (response.ok) {
-        alert("Kurz bol vymazan");
+        toast.success("Kurz bol vymazan");
       } else {
-        alert("Nastala chyba");
+        throw new Error("Failed to delete course");
       }
       load();
     } catch (error) {
       console.log(error);
-      alert("Nastala chyba");
+      toast.error("Nastala chyba pri vymazavani kurzu");
     }
   };
 

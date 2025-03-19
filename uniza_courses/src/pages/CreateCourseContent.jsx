@@ -7,6 +7,7 @@ import ModalCreate from "../components/createCourseContent.components/ModalCreat
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import SecundaryBtn from "../components/core.components/SecundaryBtn";
 import CourseStructureDND from "../components/createCourseContent.components/CourseStructureDND";
+import { toast } from "react-toastify";
 
 const CreateCourseContent = () => {
   const location = useLocation();
@@ -39,13 +40,13 @@ const CreateCourseContent = () => {
       );
       if (response.ok) {
         load();
-        alert("Tema bola úspešne vytvorena");
+        toast.success("Tema bola úspešne vytvorena");
       } else {
-        alert("Nastala chyba pri vytváraní temy");
+        throw new Error("Nastala chyba pri vytváraní temy");
       }
     } catch (error) {
       console.log(error);
-      alert("Nastala chyba pri vytváraní temy");
+      toast.error("Nastala chyba pri vytváraní temy");
     }
   };
 

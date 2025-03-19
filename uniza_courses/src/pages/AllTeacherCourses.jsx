@@ -3,6 +3,7 @@ import Header from "../components/core.components/Header";
 import SearchBar from "../components/courses.components/SearchBar";
 import CoursesPagination from "../components/courses.components/CoursePagination";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 const AllTeachersCourses = () => {
   const [restData, setRestData] = useState([]);
@@ -34,7 +35,7 @@ const AllTeachersCourses = () => {
       }
     } catch (error) {
       setError(error.message);
-      alert("Error loading courses: " + error.message);
+      toast.error("Error loading courses: " + error.message);
     }
   };
   useEffect(() => {

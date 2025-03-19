@@ -18,7 +18,7 @@ import IntegerCounter from "../components/editCourse.components/IntegerCounter";
 import SecundaryBtn from "../components/core.components/SecundaryBtn";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import TeacherSelect from "../components/editCourse.components/TeacherSelect";
-import CustomSnackbar from "../components/core.components/CustomSnackbar";
+import { toast } from "react-toastify";
 
 const EditCourse = () => {
   const location = useLocation();
@@ -41,10 +41,7 @@ const EditCourse = () => {
   const navigate = useNavigate();
   const quillRef = useRef(null);
 
-  const [openError, setOpenError] = useState(false);
   const [error, setError] = useState("");
-
-  const [openSuccess, setOpenSuccess] = useState(false);
 
   useEffect(() => {
     const loadTeachers = async () => {
@@ -100,7 +97,7 @@ const EditCourse = () => {
       }
     } catch (error) {
       setError(error.message);
-      alert("Error loading courses: " + error.message);
+      toast.error("Error loading courses: " + error.message);
     }
   };
 
@@ -108,38 +105,31 @@ const EditCourse = () => {
     e.preventDefault();
 
     if (!courseName) {
-      setOpenError(true);
-      setError("Vyplňte názov kurzu!");
+      toast.warning("Vyplňte názov kurzu!");
       return;
     }
     if (!selectedOdbor || selectedOdbor.length === 0) {
-      setOpenError(true);
-      setError("Vyberte odbor!");
+      toast.warning("Vyberte odbor!");
       return;
     }
     if (!selectedRocnik) {
-      setOpenError(true);
-      setError("Vyberte ročník!");
+      toast.warning("Vyberte ročník!");
       return;
     }
     if (!courseDescription) {
-      setOpenError(true);
-      setError("Vyplňte krátky popis kurzu!");
+      toast.warning("Vyplňte krátky popis kurzu!");
       return;
     }
     if (!foto && !id) {
-      setOpenError(true);
-      setError("Vyberte foto!");
+      toast.warning("Vyberte foto!");
       return;
     }
     if (!selectedTeachers) {
-      setOpenError(true);
-      setError("Vyberte učiteľov!");
+      toast.warning("Vyberte učiteľov!");
       return;
     }
     if (!longDescription) {
-      setOpenError(true);
-      setError("Vyplňte dlhý popis kurzu!");
+      toast.warning("Vyplňte dlhý popis kurzu!");
       return;
     }
 
@@ -175,16 +165,14 @@ const EditCourse = () => {
       if (response.ok) {
         const responseData = await response.json();
         setResponseData(responseData);
-        setOpenSuccess(true);
+        toast.success("Kurz bol vytvoren");
         if (id) loadCourseData();
       } else {
-        setOpenError(true);
-        setError(response.statusText);
+        throw new Error("Failed to create course");
       }
     } catch (error) {
-      setError(error);
+      toast.error("Nastala chyba pri vytvarani kurzu");
       console.log(error);
-      setOpenError(true);
     }
   };
 
@@ -404,18 +392,6 @@ const EditCourse = () => {
               </Grid2>
             </Grid2>
           </Paper>
-          <CustomSnackbar
-            open={openError}
-            setOpen={setOpenError}
-            message={"Nastala chyba!"}
-            severity={"error"}
-          />
-          <CustomSnackbar
-            open={openSuccess}
-            setOpen={setOpenSuccess}
-            message={"Success!"}
-            severity={"success"}
-          />
         </Container>
       </Box>
     </>

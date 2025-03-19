@@ -6,11 +6,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import { Box, Typography, Alert, Snackbar } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SecundaryBtn from "../components/core.components/SecundaryBtn";
+import { toast } from "react-toastify";
 
 const SignIn = ({ setAuthToken }) => {
   const [email, setEmail] = useState("");
@@ -19,10 +20,7 @@ const SignIn = ({ setAuthToken }) => {
   const [error, setError] = useState(null);
   const [rememberMe, setRememberMe] = useState(true);
 
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState("");
-
-  const navigate = useNavigate(); // Hook to navigate programmatically
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,8 +57,7 @@ const SignIn = ({ setAuthToken }) => {
         } else {
           sessionStorage.setItem("authToken", token);
         }
-        setSnackbarMessage("Login successful!");
-        setOpenSnackbar(true);
+        toast.success("Prihlasovanie uspesne");
 
         navigate("/Courses"); // Redirect to the Courses page
       } else {
@@ -69,14 +66,10 @@ const SignIn = ({ setAuthToken }) => {
       }
     } catch (err) {
       console.log(err);
-      setError(err || "Login failed");
+      toast.error("Nastala chyba pri prihlasovani");
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
   };
 
   return (
@@ -186,21 +179,6 @@ const SignIn = ({ setAuthToken }) => {
                 Vytvoriť nový učet
               </SecundaryBtn>
             </Link>
-
-            <Snackbar
-              open={openSnackbar}
-              autoHideDuration={3000}
-              onClose={handleCloseSnackbar}
-              anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-            >
-              <Alert
-                onClose={handleCloseSnackbar}
-                severity="success"
-                sx={{ width: "100%" }}
-              >
-                {snackbarMessage}
-              </Alert>
-            </Snackbar>
           </FormControl>
         </Box>
       </Container>

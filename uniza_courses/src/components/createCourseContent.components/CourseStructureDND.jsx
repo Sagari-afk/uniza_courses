@@ -2,6 +2,7 @@ import { closestCorners, DndContext } from "@dnd-kit/core";
 import { useEffect, useState } from "react";
 import Column from "./Column";
 import { arrayMove } from "@dnd-kit/sortable";
+import { toast } from "react-toastify";
 
 const CourseStructureDND = ({ data, load }) => {
   const [topicOrderEdditing, setTopicOrderEdditing] = useState(false);
@@ -55,13 +56,13 @@ const CourseStructureDND = ({ data, load }) => {
         }
       );
       if (response.ok) {
-        alert("Tema bola tosunuta");
+        toast.success("Tema bola tosunuta");
       } else {
-        alert("Nastala chyba");
+        throw new Error("Failed to edit topic possition");
       }
     } catch (error) {
       console.log(error);
-      alert("Nastala chyba");
+      toast.error("Nastala chyba pri posuvani temy");
     }
   };
 

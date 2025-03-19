@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import Course from "./pages/Course";
 import { GlobalStyles } from "@mui/material";
 import MenuBookIcon from "@mui/icons-material/MenuBook";
+import { ToastContainer, toast } from "react-toastify";
 
 import HomePage from "./pages/HomePage";
 import SignIn from "./pages/SignIn";
@@ -19,6 +20,7 @@ import CreateNewCourseBtn from "./components/core.components/CreateNewCourseBtn"
 import CreateTextStep from "./pages/steps_creating.pages/CreateTextStep";
 import AllTeachersCourses from "./pages/AllTeacherCourses";
 import StudentCourseContent from "./pages/StudentCourseContent";
+import PrimaryBtn from "./components/core.components/PrimaryBtn";
 
 function App() {
   const [authToken, setAuthToken] = useState(() =>
@@ -76,7 +78,8 @@ function App() {
         throw new Error("Failed to fetch user data");
       }
     } catch (error) {
-      alert("Error loading user data: " + error.message);
+      console.log(error.message);
+      toast.error("Error loading user data");
     }
   }, []);
 
@@ -216,6 +219,7 @@ function App() {
           sx={{ position: "fixed", bottom: "2rem", right: "1rem" }}
         />
       )}
+      <ToastContainer position="bottom-left" theme="colored" />
     </ThemeProvider>
   );
 }

@@ -31,6 +31,7 @@ import PrimaryBtn from "../core.components/PrimaryBtn";
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import Step from "./Step";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const SubTopic = ({ id, subtopic, load }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -85,14 +86,14 @@ const SubTopic = ({ id, subtopic, load }) => {
         }
       );
       if (response.ok) {
-        alert("Podtema bola upravena");
+        toast.success("Podtema bola upravena");
         load();
       } else {
-        alert("Nastala chyba");
+        throw new Error("Failed to edit subtopic");
       }
     } catch (error) {
       console.log(error);
-      alert("Nastala chyba");
+      toast.error("Nastala chyba pri redagovani podtemy");
     }
   };
 
@@ -112,14 +113,14 @@ const SubTopic = ({ id, subtopic, load }) => {
         }
       );
       if (response.ok) {
-        alert("Podtema bola vymazana");
+        toast.success("Podtema bola vymazana");
         load();
       } else {
-        alert("Nastala chyba");
+        throw new Error("Failed to delete subtopic");
       }
     } catch (error) {
       console.log(error);
-      alert("Nastala chyba");
+      toast.error("Nastala chyba pri vymazavani podtemy");
     }
   };
 

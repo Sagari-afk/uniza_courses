@@ -6,11 +6,11 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import { Box, Typography, Alert, Snackbar, Switch, Stack } from "@mui/material";
+import { Box, Typography, Switch, Stack } from "@mui/material";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import SecundaryBtn from "../components/core.components/SecundaryBtn";
+import { toast } from "react-toastify";
 
 const SignUp = ({ setAuthToken }) => {
   const [email, setEmail] = useState("");
@@ -81,9 +81,7 @@ const SignUp = ({ setAuthToken }) => {
         } else {
           sessionStorage.setItem("authToken", token);
         }
-        setSnackbarMessage("Login successful!");
-        setOpenSnackbar(true);
-
+        toast.success("Login successful!");
         navigate("/Courses"); // Redirect to the Courses page
       } else {
         setError(data || "Registration failed");
@@ -94,10 +92,6 @@ const SignUp = ({ setAuthToken }) => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleCloseSnackbar = () => {
-    setOpenSnackbar(false);
   };
 
   return (

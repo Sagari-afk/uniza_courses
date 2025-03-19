@@ -22,6 +22,7 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import FroalaEditorComponent from "react-froala-wysiwyg";
+import { toast } from "react-toastify";
 
 const CreateTextStep = () => {
   const [searchParams] = useSearchParams();
@@ -67,7 +68,7 @@ const CreateTextStep = () => {
       );
       const data = await res.json();
       if (data.error || !res.ok) {
-        alert(data.error);
+        toast.error(data.error);
         return;
       }
       setStepTitle(data.title);
@@ -85,7 +86,7 @@ const CreateTextStep = () => {
       );
       const file = await resFile.json();
       if (file.error || !resFile.ok) {
-        alert(file.error);
+        toast.error(file.error);
         return;
       }
       console.log(file.content);
@@ -129,12 +130,13 @@ const CreateTextStep = () => {
       );
       const data = await res.json();
       if (data.error || !res.ok) {
-        alert(data.error);
+        toast.error(data.error);
         return;
       }
-      alert("Content saved successfully");
+      toast.success("Content saved successfully");
     } catch (error) {
       console.error("Error saving content:", error);
+      toast.error("Nastala chyba pri ulozeni kontentu");
     }
   };
 

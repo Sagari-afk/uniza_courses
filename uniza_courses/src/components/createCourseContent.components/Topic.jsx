@@ -26,6 +26,7 @@ import ModalCreate from "./ModalCreate";
 import PrimaryBtn from "../core.components/PrimaryBtn";
 import SubTopic from "./SubTopic";
 import { closestCorners, DndContext } from "@dnd-kit/core";
+import { toast } from "react-toastify";
 
 const Topic = ({ id, topic, load }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -73,15 +74,15 @@ const Topic = ({ id, topic, load }) => {
       );
       const data = await response.json();
       if (response.ok) {
-        alert("Podtema bola úspešne vytvorena");
+        toast.success("Podtema bola úspešne vytvorena");
         "Subtopic created", data;
       } else {
-        alert("Nastala chyba pri vytváraní podtemy");
+        throw new Error("Nastala chyba pri vytváraní podtemy");
       }
       load();
     } catch (error) {
       error;
-      alert("Nastala chyba pri vytváraní podtemy");
+      toast.error("Nastala chyba pri vytváraní podtemy");
     }
   };
 
@@ -104,14 +105,14 @@ const Topic = ({ id, topic, load }) => {
         }
       );
       if (response.ok) {
-        alert("Tema bola upravena");
+        toast.success("Tema bola upravena");
         load();
       } else {
-        alert("Nastala chyba");
+        throw new Error("Failed to edit topic");
       }
     } catch (error) {
       error;
-      alert("Nastala chyba");
+      toast.error("Nastala chyba pri upravovani temy");
     }
   };
 
@@ -131,14 +132,14 @@ const Topic = ({ id, topic, load }) => {
         }
       );
       if (response.ok) {
-        alert("Tema bola vymazana");
+        toast.success("Tema bola vymazana");
         load();
       } else {
-        alert("Nastala chyba");
+        throw new Error("Failed to delete topic");
       }
     } catch (error) {
       error;
-      alert("Nastala chyba");
+      toast.error("Nastala chyba pri vymazavani temy");
     }
   };
 
@@ -160,13 +161,13 @@ const Topic = ({ id, topic, load }) => {
         }
       );
       if (response.ok) {
-        alert("Podtema bola tosunuta");
+        toast.success("Podtema bola tosunuta");
       } else {
-        alert("Nastala chyba");
+        throw new Error("Failed to edit subtopic position");
       }
     } catch (error) {
       error;
-      alert("Nastala chyba");
+      toast.error("Nastala chyba pri posuvani podtemy");
     }
   };
 

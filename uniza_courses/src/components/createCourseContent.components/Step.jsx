@@ -10,6 +10,7 @@ import { CSS } from "@dnd-kit/utilities";
 import ModalCreate from "./ModalCreate";
 import PrimaryBtn from "../core.components/PrimaryBtn";
 import { useSortable } from "@dnd-kit/sortable";
+import { toast } from "react-toastify";
 
 const Step = ({ subtopic, step, id, load }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -36,14 +37,14 @@ const Step = ({ subtopic, step, id, load }) => {
         }
       );
       if (response.ok) {
-        alert("Krok bol vymazan");
+        toast.success("Krok bol vymazan");
         load();
       } else {
-        alert("Nastala chyba");
+        throw new Error("Failed to delete step");
       }
     } catch (error) {
       console.log(error);
-      alert("Nastala chyba");
+      toast.error("Nastala chyba pri vymazavani kroku");
     }
   };
 

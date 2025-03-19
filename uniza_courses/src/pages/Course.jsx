@@ -21,6 +21,7 @@ import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import SecundaryBtn from "../components/core.components/SecundaryBtn";
 import Comment from "../components/course.components/Comment";
 import TeacherCard from "../components/course.components/TeacherCard";
+import { toast } from "react-toastify";
 
 const Course = () => {
   const location = useLocation();
@@ -58,7 +59,7 @@ const Course = () => {
       }
     } catch (error) {
       setError(error.message);
-      alert("Error loading courses: " + error.message);
+      toast.error("Error loading courses: " + error.message);
     }
   }, []);
 
