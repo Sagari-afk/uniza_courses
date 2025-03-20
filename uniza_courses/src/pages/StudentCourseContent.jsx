@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import Header from "../components/core.components/Header";
-import SideMenu from "../components/core.components/SideMenu";
+import SideMenu from "../components/studentCourseContent.components/SideMenu";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 

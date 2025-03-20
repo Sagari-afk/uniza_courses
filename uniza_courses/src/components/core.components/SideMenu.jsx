@@ -12,21 +12,9 @@ import { Icon } from "@iconify/react";
 import LinkWithIconBox from "../courses.components/LinkWIthIconBox";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
-const SideMenu = ({
-  handleLogout,
-  sideMenuLinks,
-  type,
-  topics,
-  children,
-  courseTitle,
-}) => {
+const SideMenu = ({ handleLogout, sideMenuLinks, children }) => {
   const [isHovered, setIsHovered] = useState(false);
-  const [openedByClick, setOpenedByClick] = useState(
-    type === "courseStructure" ? true : false
-  );
-  const [lastEndedSubtopic, setLastEndedSubtopic] = useState(5);
-  const [progress, setProgress] = useState(20);
-
+  const [openedByClick, setOpenedByClick] = useState(false);
   const handleMouseEnter = () => {
     setIsHovered(true);
   };
@@ -56,41 +44,14 @@ const SideMenu = ({
             gap: "2rem",
           }}
         >
-          {type !== "courseStructure" && (
-            <Icon
-              icon="material-symbols:menu-rounded"
-              style={{
-                fontSize: "2rem",
-                opacity: isHovered || openedByClick ? 0.3 : 1,
-              }}
-              onClick={() => setOpenedByClick(!openedByClick)}
-            />
-          )}
-          {type === "courseStructure" && (
-            <Box>
-              <Typography variant="h6" color="white">
-                {courseTitle}
-              </Typography>
-              <Typography color="white" fontSize={"0.8rem"}>
-                Progres po kurzu {progress}%
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={progress}
-                sx={{
-                  my: "0.5rem",
-                  height: 5,
-                  borderRadius: 5,
-                  backgroundColor: "#e0e0e0",
-                  "& .MuiLinearProgress-bar": {
-                    borderRadius: 5,
-                    background:
-                      "linear-gradient(90deg, #C04F77 0%, #FFC65A 100%)",
-                  },
-                }}
-              />
-            </Box>
-          )}
+          <Icon
+            icon="material-symbols:menu-rounded"
+            style={{
+              fontSize: "2rem",
+              opacity: isHovered || openedByClick ? 0.3 : 1,
+            }}
+            onClick={() => setOpenedByClick(!openedByClick)}
+          />
 
           <Box
             sx={{
@@ -102,81 +63,16 @@ const SideMenu = ({
               width: isHovered || openedByClick ? "250px" : "60px",
             }}
           >
-            {type === "links" &&
-              sideMenuLinks.map((el) => (
-                <LinkWithIconBox
-                  isHovered={isHovered || openedByClick}
-                  text={el.text}
-                  iconName={el.iconName}
-                  key={el.iconName}
-                />
-              ))}
-
-            <Box>
-              {(isHovered || openedByClick) &&
-                type === "courseStructure" &&
-                topics.map((topic) => (
-                  <Accordion
-                    key={topic.id}
-                    sx={{
-                      backgroundColor: "transparent",
-                      color: "#fff",
-                      boxShadow: "none",
-                      "&:before": {
-                        display: "none",
-                      },
-                    }}
-                    defaultExpanded={
-                      topic.subtopics &&
-                      topic.subtopics.some(
-                        (subtopic) => subtopic.id === lastEndedSubtopic
-                      )
-                    }
-                  >
-                    <AccordionSummary
-                      sx={{ fontSize: "1rem", p: 0 }}
-                      expandIcon={<ExpandMoreIcon sx={{ color: "#fff" }} />}
-                    >
-                      {topic.order}. {topic.title}
-                    </AccordionSummary>
-                    <AccordionDetails
-                      sx={{
-                        ml: "1.2rem",
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "1rem",
-                      }}
-                    >
-                      {topic.subtopics && topic.subtopics.length > 0 ? (
-                        topic.subtopics.map((subtopic) => (
-                          <Typography
-                            key={subtopic.title}
-                            sx={
-                              lastEndedSubtopic === subtopic.id
-                                ? {
-                                    borderRadius: "0.25rem",
-                                    padding: "0.3rem",
-                                    background:
-                                      "linear-gradient(90deg, #C04F77 0%, #FFC65A 100%)",
-                                    color: "#fff",
-                                  }
-                                : { color: "primary.main" }
-                            }
-                          >
-                            {topic.order}.{subtopic.order} {subtopic.title}
-                          </Typography>
-                        ))
-                      ) : (
-                        <Typography color="#ffffff47">
-                          Žiadne podtemy
-                        </Typography>
-                      )}
-                    </AccordionDetails>
-                  </Accordion>
-                ))}
-            </Box>
+            {sideMenuLinks.map((el) => (
+              <LinkWithIconBox
+                isHovered={isHovered || openedByClick}
+                text={el.text}
+                iconName={el.iconName}
+                key={el.iconName}
+              />
+            ))}
           </Box>
-          {(isHovered || openedByClick) && type === "links" && (
+          {(isHovered || openedByClick) && (
             <Typography
               sx={{
                 color: "white.dark",
