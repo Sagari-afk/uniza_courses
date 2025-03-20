@@ -54,17 +54,14 @@ const TextContentViewer = ({ stepId }) => {
   };
 
   return (
-    <Box display={"flex"} flexDirection={"column"} gap={2}>
-      <Typography variant="h5">{stepTitle}</Typography>
-      <Box
-        className="fr-view"
-        border={(theme) => `1px solid ${theme.palette.divider}`}
-        borderRadius={(theme) => theme.shape.borderRadius}
-        padding={2}
-        bgcolor={"#fff"}
-        dangerouslySetInnerHTML={{ __html: content }}
-      />
-    </Box>
+    <Box
+      className="fr-view"
+      border={(theme) => `1px solid ${theme.palette.divider}`}
+      borderRadius={(theme) => theme.shape.borderRadius}
+      padding={2}
+      bgcolor={"#fff"}
+      dangerouslySetInnerHTML={{ __html: content }}
+    />
   );
 };
 
