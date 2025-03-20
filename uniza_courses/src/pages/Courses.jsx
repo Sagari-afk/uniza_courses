@@ -38,173 +38,26 @@ const Courses = ({ handleLogout }) => {
       <Header />
       <SideMenu
         handleLogout={handleLogout}
-        // sideElements={
-        //   <Box
-        //     sx={{
-        //       display: "flex",
-        //       flexDirection: "column",
-        //       color: "primary.dark",
-        //       gap: "2rem",
-        //     }}
-        //   >
-        //     <Icon
-        //       icon="material-symbols:menu-rounded"
-        //       style={{
-        //         fontSize: "2rem",
-        //         opacity: isHovered ? 0.3 : 1, // Hide icon when hovered
-        //       }}
-        //     />
-
-        //     <Box
-        //       sx={{
-        //         display: "flex",
-        //         flexDirection: "column",
-        //         color: "primary.dark",
-        //         gap: "2rem",
-        //         transition: "all 0.3s ease",
-        //         width: isHovered ? "250px" : "60px",
-        //       }}
-        //     >
-        //       {/* First box with icon and text */}
-        //       <Box
-        //         sx={{
-        //           display: "flex",
-        //           gap: "1rem",
-        //           alignItems: "center",
-        //           opacity: isHovered ? 1 : 0,
-        //           transition: "opacity 0.3s ease",
-        //         }}
-        //       >
-        //         <Icon
-        //           icon="hugeicons:course"
-        //           style={{
-        //             fontSize: "2rem",
-        //             transition: "transform 0.3s ease",
-        //           }}
-        //         />
-        //         {isHovered && (
-        //           <Typography
-        //             sx={{ color: "white.dark", whiteSpace: "nowrap" }}
-        //           >
-        //             Robim teraz
-        //           </Typography>
-        //         )}
-        //       </Box>
-
-        //       {/* Second box with icon and text */}
-        //       <Box
-        //         sx={{
-        //           display: "flex",
-        //           gap: "1rem",
-        //           alignItems: "center",
-        //           opacity: isHovered ? 1 : 0,
-        //           transition: "opacity 0.3s ease",
-        //         }}
-        //       >
-        //         <Icon
-        //           icon="tabler:clock"
-        //           style={{
-        //             fontSize: "2rem",
-        //             transition: "transform 0.3s ease",
-        //           }}
-        //         />
-        //         {isHovered && (
-        //           <Typography
-        //             sx={{ color: "white.dark", whiteSpace: "nowrap" }}
-        //           >
-        //             Chcem robiť
-        //           </Typography>
-        //         )}
-        //       </Box>
-
-        //       {/* Third box with icon and text */}
-        //       <Box
-        //         sx={{
-        //           display: "flex",
-        //           gap: "1rem",
-        //           alignItems: "center",
-        //           opacity: isHovered ? 1 : 0,
-        //           transition: "opacity 0.3s ease",
-        //         }}
-        //       >
-        //         <Icon
-        //           icon="tabler:heart"
-        //           style={{
-        //             fontSize: "2rem",
-        //             transition: "transform 0.3s ease",
-        //           }}
-        //         />
-        //         {isHovered && (
-        //           <Typography sx={{ color: "white.dark" }}>Obľubene</Typography>
-        //         )}
-        //       </Box>
-
-        //       {/* Fourth box with icon and text */}
-        //       <Box
-        //         sx={{
-        //           display: "flex",
-        //           gap: "1rem",
-        //           alignItems: "center",
-        //           opacity: isHovered ? 1 : 0,
-        //           transition: "opacity 0.3s ease",
-        //         }}
-        //       >
-        //         <Icon
-        //           icon="mage:archive"
-        //           style={{
-        //             fontSize: "2rem",
-        //             transition: "transform 0.3s ease",
-        //           }}
-        //         />
-        //         {isHovered && (
-        //           <Typography sx={{ color: "white.dark" }}>Archiv</Typography>
-        //         )}
-        //       </Box>
-        //     </Box>
-        //     {isHovered && (
-        //       <Typography
-        //         sx={{
-        //           color: "white.dark",
-        //           whiteSpace: "nowrap",
-        //           opacity: 0.3,
-        //           cursor: "pointer",
-        //           position: "absolute",
-        //           bottom: "1rem",
-        //         }}
-        //         onClick={handleLogout}
-        //       >
-        //         Odhlasiť sa
-        //       </Typography>
-        //     )}
-        //   </Box>
-        // }
+        sideMenuLinks={[
+          { text: "Robim teraz", iconName: "hugeicons:course", link: "" },
+          { text: "Chcem robiť", iconName: "tabler:clock", link: "" },
+          { text: "Obľubene", iconName: "tabler:heart", link: "" },
+          { text: "Archiv", iconName: "mage:archive", link: "" },
+        ]}
+        type="links"
       >
-        <Box
-          sx={{
-            borderRadius: "42px 0px 0px 0px",
-            backgroundColor: "white.main",
-            minHeight: "100vh",
-            py: "2rem",
-            px: "4rem",
-            marginTop: "1rem",
-            color: "black.main",
-            width: "100%",
-          }}
-          className="light_gradient-background-animation"
-        >
-          <Box>
-            <Typography variant="h3" sx={{ my: "1rem" }}>
-              Kurzy podľa predmetov
-            </Typography>
-            <SearchBar restData={restData} setFilteredData={setFilteredData} />
-          </Box>
-
-          {error ? (
-            <Typography>Error: {error}</Typography>
-          ) : (
-            <CoursesPagination courses={filteredData} />
-          )}
+        <Box>
+          <Typography variant="h3" sx={{ my: "1rem" }}>
+            Kurzy podľa predmetov
+          </Typography>
+          <SearchBar restData={restData} setFilteredData={setFilteredData} />
         </Box>
+
+        {error ? (
+          <Typography>Error: {error}</Typography>
+        ) : (
+          <CoursesPagination courses={filteredData} />
+        )}
       </SideMenu>
     </>
   );

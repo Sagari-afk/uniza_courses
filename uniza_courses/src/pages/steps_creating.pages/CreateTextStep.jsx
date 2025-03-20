@@ -215,7 +215,7 @@ const CreateTextStep = () => {
               />
             ) : (
               <Box>
-                {isMounted && content !== "" && content && (
+                {isMounted && content && (
                   <FroalaEditorComponent
                     tag="textarea"
                     model={content}
