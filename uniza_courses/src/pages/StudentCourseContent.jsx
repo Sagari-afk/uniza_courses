@@ -10,6 +10,10 @@ const StudentCourseContent = () => {
   const [topics, setTopics] = useState([]);
   const [course, setCourse] = useState([]);
 
+  const [currentTopic, setCurrentTopic] = useState();
+  const [currentSubtopic, setCurrentSubtopic] = useState();
+  const [currentStep, setCurrentStep] = useState();
+
   const loadCourse = async () => {
     try {
       const response = await fetch(
@@ -19,7 +23,6 @@ const StudentCourseContent = () => {
         const responseData = await response.json();
         setTopics(responseData.topics);
         setCourse(responseData);
-
         console.log(responseData);
       } else {
         throw new Error("Failed to fetch courses");

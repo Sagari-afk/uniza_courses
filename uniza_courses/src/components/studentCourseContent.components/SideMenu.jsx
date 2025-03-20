@@ -10,8 +10,16 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import KeyboardDoubleArrowRightIcon from "@mui/icons-material/KeyboardDoubleArrowRight";
 import KeyboardDoubleArrowLeftIcon from "@mui/icons-material/KeyboardDoubleArrowLeft";
+import StepsContainer from "./StepsContainer";
 
-const SideMenu = ({ topics, children, courseTitle }) => {
+const SideMenu = ({
+  topics,
+  children,
+  courseTitle,
+  currentTopic,
+  currentSubtopic,
+  currentStep,
+}) => {
   const [lastEndedSubtopic, setLastEndedSubtopic] = useState(5);
   const [progress, setProgress] = useState(20);
 
@@ -144,20 +152,31 @@ const SideMenu = ({ topics, children, courseTitle }) => {
           )}
         </Box>
       </Box>
-      <Box
-        sx={{
-          borderRadius: "42px 0px 0px 0px",
-          backgroundColor: "white.main",
-          minHeight: "100vh",
-          py: "2rem",
-          px: "4rem",
-          marginTop: "1rem",
-          color: "black.main",
-          width: "100%",
-        }}
-        className="light_gradient-background-animation"
-      >
-        {children}
+      <Box width={"100%"}>
+        <StepsContainer
+          style={{
+            marginLeft: opened ? "6rem" : "10rem",
+            marginTop: "-3.5rem",
+            marginBottom: "1rem",
+            transition: "all 0.3s ease",
+          }}
+          subtopicId={currentSubtopic}
+          stepIdActive={currentStep}
+        />
+        <Box
+          sx={{
+            borderRadius: "42px 0px 0px 0px",
+            backgroundColor: "white.main",
+            minHeight: "100vh",
+            py: "2rem",
+            px: "4rem",
+            // marginTop: "1rem",
+            color: "black.main",
+          }}
+          className="light_gradient-background-animation"
+        >
+          {children}
+        </Box>
       </Box>
     </Box>
   );
