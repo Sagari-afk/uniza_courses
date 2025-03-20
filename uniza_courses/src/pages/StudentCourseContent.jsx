@@ -3,6 +3,7 @@ import Header from "../components/core.components/Header";
 import SideMenu from "../components/studentCourseContent.components/SideMenu";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
+import TextContentViewer from "../components/studentCourseContent.components/TextContentViewer";
 
 const StudentCourseContent = () => {
   const location = useLocation();
@@ -10,9 +11,9 @@ const StudentCourseContent = () => {
   const [topics, setTopics] = useState([]);
   const [course, setCourse] = useState([]);
 
-  const [currentTopic, setCurrentTopic] = useState();
-  const [currentSubtopic, setCurrentSubtopic] = useState();
-  const [currentStep, setCurrentStep] = useState();
+  const [currentTopic, setCurrentTopic] = useState(6);
+  const [currentSubtopic, setCurrentSubtopic] = useState(5);
+  const [currentStep, setCurrentStep] = useState(10);
 
   const loadCourse = async () => {
     try {
@@ -29,6 +30,7 @@ const StudentCourseContent = () => {
       }
     } catch (error) {
       toast.error("Error loading courses: " + error.message);
+      ``;
     }
   };
 
@@ -45,7 +47,12 @@ const StudentCourseContent = () => {
           type={"courseStructure"}
           topics={topics}
           courseTitle={course.name}
-        ></SideMenu>
+          currentTopic={currentTopic}
+          currentSubtopic={currentSubtopic}
+          currentStep={currentStep}
+        >
+          <TextContentViewer stepId={currentStep} />
+        </SideMenu>
       ) : (
         <Box p={5}>
           <Typography variant="h4">Kurz nemá žiaden kontent...</Typography>

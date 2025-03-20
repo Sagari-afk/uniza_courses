@@ -102,12 +102,7 @@ const SideMenu = ({
                       display: "none",
                     },
                   }}
-                  defaultExpanded={
-                    topic.subtopics &&
-                    topic.subtopics.some(
-                      (subtopic) => subtopic.id === lastEndedSubtopic
-                    )
-                  }
+                  defaultExpanded={topic.subtopics && topic.id === currentTopic}
                 >
                   <AccordionSummary
                     sx={{ fontSize: "1rem", p: 0 }}
@@ -160,7 +155,11 @@ const SideMenu = ({
             marginBottom: "1rem",
             transition: "all 0.3s ease",
           }}
-          subtopicId={currentSubtopic}
+          steps={
+            topics
+              .find((t) => t.id === currentTopic)
+              ?.subtopics.find((s) => s.id === currentSubtopic)?.steps
+          }
           stepIdActive={currentStep}
         />
         <Box
