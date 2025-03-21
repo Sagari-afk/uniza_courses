@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import TextContentViewer from "../components/studentCourseContent.components/TextContentViewer";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CheckIcon from "@mui/icons-material/Check";
+import { toast } from "react-toastify";
 
 const StudentCourseContent = () => {
   const location = useLocation();

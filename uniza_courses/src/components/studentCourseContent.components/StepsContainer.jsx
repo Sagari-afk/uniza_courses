@@ -7,7 +7,7 @@ import QuizIcon from "@mui/icons-material/Quiz";
 const StepsContainer = ({ steps, stepIdActive, style }) => {
   return (
     <Stack direction={"row"} gap={2} style={style}>
-      {steps.map((step) => (
+      {steps?.map((step) => (
         <Tooltip
           title={step.title}
           key={step.title}
