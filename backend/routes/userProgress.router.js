@@ -6,7 +6,7 @@ const {
 
 const router = express.Router();
 
-router.get("/getLastUserProgress", getLastUserProgress);
+router.get("/getLastUserProgress/:courseId/:userId", getLastUserProgress);
 router.post("/addLastUserProgress", addLastUserProgress);
 
 module.exports = router;

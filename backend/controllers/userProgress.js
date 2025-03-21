@@ -7,16 +7,62 @@ const {
   Step,
 } = require("../models");
 
+const startCourse = async (userId, courseId) => {
+  // user validation
+  const user = await User.findByPk(userId);
+  if (!user) {
+    return;
+  }
+  // course validation
+  const course = await Course.findByPk(courseId);
+  if (!course) {
+    return;
+  }
+  const topic = await Topic.findOne({ where: { courseId, order: 1 } });
+  if (!topic) return;
+  const subtopic = await SubTopic.findOne({
+    where: { topicId: topic.id, order: 1 },
+  });
+  if (!subtopic) return;
+  const step = await Step.findOne({
+    where: { subtopicId: subtopic.id, order: 1 },
+  });
+  if (!step) return;
+
+  const record = await StudentProgressHistory.create({
+    userId,
+    courseId,
+    topicId: topic.id,
+    subtopicId: subtopic.id,
+    stepId: step.id,
+  });
+  return record;
+};
+
 const getLastUserProgress = async (req, res) => {
   try {
-    const { userId, courseId } = req.body;
+    const userId = req.params.userId;
+    const courseId = req.params.courseId;
     const records = await StudentProgressHistory.findAll({
       where: { userId, courseId },
     });
-    return res.status(200).json({ records: records[records.length - 1] });
+
+    if (!records || records.length == 0) {
+      const record = await startCourse(userId, courseId);
+      console.log("Record: ", record);
+      if (!record || record.length == 0) return res.status(500).json("Error");
+      return res.status(200).json({ records: { stepCount: 1, ...record } });
+    }
+
+    const stepsCount = await StudentProgressHistory.count({
+      where: { userId, courseId },
+    });
+    return res
+      .status(200)
+      .json({ records: { stepsCount, ...records[records.length - 1] } });
   } catch (error) {
     console.log(error);
-    res.status(500).json(error.message);
+    return res.status(500).json(error.message);
   }
 };
 

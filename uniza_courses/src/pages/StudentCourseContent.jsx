@@ -9,17 +9,19 @@ import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
 
 const StudentCourseContent = () => {
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
   const location = useLocation();
-  const { courseId } = location.state || {};
+  const [courseId, setCourseId] = useState(location.state.courseId || {});
   const [topics, setTopics] = useState([]);
   const [course, setCourse] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [completed, setCompleted] = useState(false);
 
-  const [currentTopic, setCurrentTopic] = useState(6);
-  const [currentSubtopic, setCurrentSubtopic] = useState(5);
-  const [currentStep, setCurrentStep] = useState(10);
+  const [currentTopic, setCurrentTopic] = useState(0);
+  const [currentSubtopic, setCurrentSubtopic] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [stepsCount, setStepsCount] = useState(0);
 
   const loadCourse = async () => {
     try {
@@ -30,13 +32,47 @@ const StudentCourseContent = () => {
         const responseData = await response.json();
         setTopics(responseData.topics);
         setCourse(responseData);
+        setCourseId;
         console.log(responseData);
       } else {
         throw new Error("Failed to fetch courses");
       }
     } catch (error) {
       toast.error("Error loading courses: " + error.message);
-      ``;
+      console.log(error);
+    }
+  };
+
+  const loadUserLastProgress = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/userProgress/getLastUserProgress/" +
+          courseId +
+          "/" +
+          userData.userId,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      if (response.ok) {
+        var responseData = await response.json();
+        responseData = responseData.records;
+        setCurrentTopic(responseData.dataValues.topicId);
+        setCurrentSubtopic(responseData.dataValues.subtopicId);
+        setCurrentStep(responseData.dataValues.stepId);
+        setStepsCount(responseData.stepsCount);
+        console.log(responseData);
+      } else {
+        throw new Error("Failed to fetch courses");
+      }
+    } catch (error) {
+      toast.error("Error loading courses: " + error.message);
+      console.log(error);
     }
   };
 
@@ -51,6 +87,7 @@ const StudentCourseContent = () => {
 
   useEffect(() => {
     loadCourse();
+    loadUserLastProgress();
   }, []);
 
   return (
