@@ -22,18 +22,22 @@ const SideMenu = ({
   stepsCount,
   allStepsCount,
 }) => {
-  // console.log(
-  //   "All steps count: ",
-  //   allStepsCount,
-  //   ". Steps count: ",
-  //   stepsCount
-  // );
+  console.log(
+    "All steps count: ",
+    allStepsCount,
+    ". Steps count: ",
+    stepsCount
+  );
   const [progress, setProgress] = useState(
     Math.round(100 * (stepsCount / allStepsCount) * 100) / 100
   );
   console.log(currentTopic, currentSubtopic, currentStep);
 
   const [opened, setOpened] = useState(true);
+
+  useEffect(() => {
+    setProgress(Math.round(100 * (stepsCount / allStepsCount) * 100) / 100);
+  }, [stepsCount, allStepsCount]);
 
   return (
     <Box sx={{ display: "flex" }}>

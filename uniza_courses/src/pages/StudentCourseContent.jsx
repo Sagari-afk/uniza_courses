@@ -125,7 +125,9 @@ const StudentCourseContent = () => {
       if (response.status !== 204) {
         result = await response.json();
       }
-      console.log("Step marked as completed:", result);
+      console.log("Step marked as completed:", result.message);
+      setStepsCount(result.stepsCount);
+      console.log("Steps count: ", stepsCount);
 
       setCompleted(true);
     } catch (error) {
@@ -166,7 +168,6 @@ const StudentCourseContent = () => {
         setCurrentTopic(responseData.topicId);
         setCurrentSubtopic(responseData.subtopicId);
         setCurrentStep(responseData.stepId);
-        setStepsCount(stepsCount + 1);
         setCompleted(false);
       } else {
         console.log(response);
@@ -180,6 +181,12 @@ const StudentCourseContent = () => {
 
   useEffect(() => {
     console.log("✅ Completed state:", completed);
+    //   const fetchAll = async () => {
+    //     await loadCourse();
+    //     await loadUserLastProgress();
+    //     setReady(true); // ✅ only after both done
+    //   };
+    //   fetchAll();
   }, [completed]);
 
   useEffect(() => {

@@ -133,7 +133,10 @@ const setStepCompleted = async (req, res) => {
     });
     stepFromHistory.completed = true;
     await stepFromHistory.save();
-    return res.status(200).json({ message: true });
+    const stepsCount = await StudentProgressHistory.count({
+      where: { userId: req.params.userId, courseId: stepFromHistory.courseId },
+    });
+    return res.status(200).json({ message: true, stepsCount });
   } catch (error) {
     console.log(error);
     return res.status(500).json(error.message);
