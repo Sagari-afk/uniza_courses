@@ -1,22 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Box } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { motion, AnimatePresence } from "framer-motion";
 
 const AnimatedNextIcon = ({ show, navigateNextStep }) => {
-  const [showNext, setShowNext] = useState(show);
-  console.log("Show: ", showNext);
-
   return (
     <Box
       display="flex"
       alignItems="center"
       gap={2}
-      style={{ cursor: "pointer" }}
+      style={{ cursor: "pointer", transition: "all 0.3s ease" }}
       onClick={navigateNextStep}
     >
       <AnimatePresence>
-        {showNext && (
+        {show && (
           <motion.div
             key="next"
             initial={{ opacity: 0, x: -20 }}
