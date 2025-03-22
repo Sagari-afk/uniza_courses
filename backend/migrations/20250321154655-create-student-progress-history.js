@@ -25,6 +25,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER,
       },
+      completed: {
+        type: Sequelize.DataTypes.BOOLEAN,
+        defaultValue: false,
+      },
       stepId: {
         allowNull: false,
         type: Sequelize.INTEGER,

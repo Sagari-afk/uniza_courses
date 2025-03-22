@@ -28,7 +28,7 @@ const CreateTextStep = () => {
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
   const subtopicTitle = searchParams.get("subtopicTitle");
-  const stepId = searchParams.get("stepId") || null;
+  const [stepId, setStepId] = useState(searchParams.get("stepId") || null);
   console.log(stepId);
 
   const [stepTitle, setStepTitle] = useState("");
@@ -129,6 +129,8 @@ const CreateTextStep = () => {
         }
       );
       const data = await res.json();
+      setStepId(data.id);
+      console.log("data: ", data);
       if (data.error || !res.ok) {
         toast.error(data.error);
         return;

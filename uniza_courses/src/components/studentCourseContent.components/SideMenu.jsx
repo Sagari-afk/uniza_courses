@@ -19,9 +19,19 @@ const SideMenu = ({
   currentTopic,
   currentSubtopic,
   currentStep,
+  stepsCount,
+  allStepsCount,
 }) => {
-  const [lastEndedSubtopic, setLastEndedSubtopic] = useState(5);
-  const [progress, setProgress] = useState(20);
+  // console.log(
+  //   "All steps count: ",
+  //   allStepsCount,
+  //   ". Steps count: ",
+  //   stepsCount
+  // );
+  const [progress, setProgress] = useState(
+    Math.round(100 * (stepsCount / allStepsCount) * 100) / 100
+  );
+  console.log(currentTopic, currentSubtopic, currentStep);
 
   const [opened, setOpened] = useState(true);
 
@@ -102,7 +112,7 @@ const SideMenu = ({
                       display: "none",
                     },
                   }}
-                  defaultExpanded={topic.subtopics && topic.id === currentTopic}
+                  expanded={topic.subtopics && topic.id === currentTopic}
                 >
                   <AccordionSummary
                     sx={{ fontSize: "1rem", p: 0 }}
@@ -123,7 +133,7 @@ const SideMenu = ({
                         <Typography
                           key={subtopic.title}
                           sx={
-                            lastEndedSubtopic === subtopic.id
+                            currentSubtopic === subtopic.id
                               ? {
                                   borderRadius: "0.25rem",
                                   padding: "0.3rem",

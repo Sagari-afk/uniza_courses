@@ -10,7 +10,7 @@ const StepsContainer = ({ steps, stepIdActive, style }) => {
       {steps?.map((step) => (
         <Tooltip
           title={step.title}
-          key={step.title}
+          key={step.title + step.id}
           slots={{
             transition: Zoom,
           }}

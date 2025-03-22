@@ -197,7 +197,10 @@ function App() {
         )}
 
         {authToken && (
-          <Route path="/:courseName" element={<StudentCourseContent />} />
+          <Route
+            path="StudenCourseContent/:courseName"
+            element={<StudentCourseContent />}
+          />
         )}
       </Routes>
 

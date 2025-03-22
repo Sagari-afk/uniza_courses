@@ -13,7 +13,7 @@ const AllTeachersCourses = () => {
     : null;
 
   const load = async () => {
-    console.log("teacherData", typeof teacherData);
+    console.log("teacherData", teacherData);
     try {
       const response = await fetch(
         "http://localhost:3000/api/course/getAllTeachersCourses/" +

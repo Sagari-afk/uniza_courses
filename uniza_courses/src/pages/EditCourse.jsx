@@ -162,13 +162,14 @@ const EditCourse = () => {
           body: formData,
         }
       );
+      console.log("Response: ", response);
       if (response.ok) {
         const responseData = await response.json();
         setResponseData(responseData);
         toast.success("Kurz bol vytvoren");
         if (id) loadCourseData();
       } else {
-        throw new Error("Failed to create course");
+        // throw new Error("Failed to create course");
       }
     } catch (error) {
       toast.error("Nastala chyba pri vytvarani kurzu");

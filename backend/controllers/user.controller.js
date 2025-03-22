@@ -117,7 +117,11 @@ const newUser = [
       const token = jwt.sign(
         {
           userId: user.id,
-          userName: user.name,
+          userFirstName: user.firstName,
+          userSecondName: user.secondName,
+          email: user.email,
+          userRole: user.role,
+          userImg: user.profile_img_url,
         },
         process.env.API_KEY
       );
@@ -213,6 +217,7 @@ const getUserData = async (req, res) => {
       if (err) {
         return res.status(403).json({ message: "Invalid or expired token" });
       }
+      console.log("User Data: ", userData);
       return res.status(299).json({ user: userData });
     });
   } catch (error) {

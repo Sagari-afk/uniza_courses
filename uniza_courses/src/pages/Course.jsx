@@ -100,7 +100,7 @@ const Course = () => {
     // priradit kurz studentovi
     // pridat k tlacidlu "pokracovat" ak kurz uz bol zacat
     // zistit taktiez aj na akom kroke sa zastavil a posielat aj nazov a id kroku tiez
-    navigate(`/${restData.name}`, { state: { courseId } });
+    navigate(`/StudenCourseContent/${restData.name}`, { state: { courseId } });
   };
 
   useEffect(() => {

@@ -292,10 +292,9 @@ const deleteCourse = async (req, res) => {
 const getAllTeachersCourses = async (req, res) => {
   try {
     const teacher = await Teacher.findOne({
-      where: {
-        id: req.params.userId,
-      },
+      where: { userId: req.params.userId },
     });
+
     const records = await Course.findAll({
       include: [
         {
