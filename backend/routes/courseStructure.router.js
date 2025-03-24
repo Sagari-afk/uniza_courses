@@ -75,20 +75,27 @@ router.get("/getStep/:stepId", getStep);
 router.post("/deleteStep/:stepId", deleteStep);
 
 router.get("/getHtmlContent/:fileUrl", (req, res) => {
-  const fileUrl = req.params.fileUrl;
-  if (!fileUrl) {
-    return res.status(400).json({ error: "File URL is required" });
-  }
-
-  const filePath = path.join(__dirname, "..", "/saved/", fileUrl);
-
-  fs.readFile(filePath, "utf8", (err, content) => {
-    if (err) {
-      console.error("Error reading file:", err);
-      return res.status(500).json({ error: "Error reading file" });
+  try {
+    const fileUrl = req.params.fileUrl;
+    if (!fileUrl) {
+      return res.status(400).json({ error: "File URL is required" });
     }
-    return res.status(200).json({ content });
-  });
+
+    const filePath = path.join(__dirname, "..", "/saved/", fileUrl);
+    console.log("File path: ", filePath);
+
+    fs.readFile(filePath, "utf8", (err, content) => {
+      if (err) {
+        console.error("Error reading file:", err);
+        return res.status(500).json({ error: "Error reading file" });
+      }
+      console.log("Content: ", content);
+      return res.status(200).json({ content });
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }
 });
 
 module.exports = router;

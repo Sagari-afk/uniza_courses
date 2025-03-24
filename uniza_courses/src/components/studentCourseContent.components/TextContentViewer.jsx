@@ -43,6 +43,7 @@ const TextContentViewer = ({ stepId }) => {
       );
       const file = await resFile.json();
       if (file.error || !resFile.ok) {
+        console.log("File err: ", file.error);
         toast.error(file.error);
         return;
       }

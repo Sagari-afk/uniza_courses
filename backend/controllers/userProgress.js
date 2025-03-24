@@ -12,23 +12,23 @@ const startCourse = async (userId, courseId) => {
   // user validation
   const user = await User.findByPk(userId);
   if (!user) {
-    return;
+    return "No user with this PK found";
   }
   // course validation
   const course = await Course.findByPk(courseId);
   if (!course) {
-    return;
+    return "No course with this PK found";
   }
   const topic = await Topic.findOne({ where: { courseId, order: 1 } });
-  if (!topic) return;
+  if (!topic) return "No topic found";
   const subtopic = await SubTopic.findOne({
     where: { topicId: topic.id, order: 1 },
   });
-  if (!subtopic) return;
+  if (!subtopic) return "No subtopic found";
   const step = await Step.findOne({
     where: { subtopicId: subtopic.id, order: 1 },
   });
-  if (!step) return;
+  if (!step) return "No step found";
 
   const record = await StudentProgressHistory.create({
     userId,
@@ -37,6 +37,7 @@ const startCourse = async (userId, courseId) => {
     subtopicId: subtopic.id,
     stepId: step.id,
   });
+  console.log("Record in start course: ", record);
   return record;
 };
 
@@ -50,13 +51,16 @@ const getLastUserProgress = async (req, res) => {
 
     if (!records || records.length == 0) {
       const record = await startCourse(userId, courseId);
+      if (typeof record == "string") {
+        res.statusMessage = record;
+        return res.status(400);
+      }
       console.log("Record: ", record);
-      if (!record || record.length == 0) return res.status(500).json("Error");
-      return res.status(200).json({ records: { stepCount: 1, ...record } });
+      return res.status(200).json({ records: { stepsCount: 0, ...record } });
     }
 
     const stepsCount = await StudentProgressHistory.count({
-      where: { userId, courseId },
+      where: { userId, courseId, completed: true },
     });
     return res
       .status(200)
@@ -134,7 +138,11 @@ const setStepCompleted = async (req, res) => {
     stepFromHistory.completed = true;
     await stepFromHistory.save();
     const stepsCount = await StudentProgressHistory.count({
-      where: { userId: req.params.userId, courseId: stepFromHistory.courseId },
+      where: {
+        userId: req.params.userId,
+        courseId: stepFromHistory.courseId,
+        completed: true,
+      },
     });
     return res.status(200).json({ message: true, stepsCount });
   } catch (error) {
@@ -257,9 +265,92 @@ const nextStep = async (req, res) => {
   }
 };
 
+const changeSubtopic = async (req, res) => {
+  try {
+    const { userId, courseId, subtopicId } = req.body;
+    console.log("HEH", userId, courseId, subtopicId);
+    const user = await User.findByPk(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const course = await Course.findByPk(courseId);
+    if (!course) {
+      return res.status(404).json({ error: "Course not found" });
+    }
+
+    const subtopic = await SubTopic.findByPk(subtopicId);
+    if (!subtopic) {
+      return res.status(404).json({ error: "Subtopic not found" });
+    }
+
+    const topic = await Topic.findByPk(subtopic.topicId);
+    if (!topic || topic.courseId !== courseId) {
+      return res.status(404).json({
+        error: "Subtopic does not belong to the specified course",
+      });
+    }
+    const firstStepInSubtopic = await Step.findOne({
+      where: { subtopicId },
+      order: [["order", "ASC"]],
+    });
+    if (!firstStepInSubtopic) {
+      return res.status(404).json({
+        error: "The subtopic does't have any steps",
+      });
+    }
+    const progressRecord = await StudentProgressHistory.findOne({
+      where: {
+        userId,
+        courseId,
+        topicId: topic.id,
+        subtopicId,
+        completed: true,
+        stepId: firstStepInSubtopic.id,
+      },
+    });
+    const stepsCount = await StudentProgressHistory.count({
+      where: {
+        userId: userId,
+        courseId: courseId,
+        completed: true,
+      },
+    });
+
+    if (!progressRecord) {
+      const progressRecord = await StudentProgressHistory.create({
+        userId,
+        courseId,
+        topicId: topic.id,
+        subtopicId,
+        completed: false,
+        stepId: firstStepInSubtopic.id,
+      });
+      console.log(
+        "Progress record (and the step was not complited): ",
+        progressRecord
+      );
+      return res.status(200).json({
+        message: "Subtopic changed successfully",
+        progress: { stepsCount, ...progressRecord },
+      });
+    }
+
+    console.log("Progress record: ", progressRecord);
+    return res.status(200).json({
+      message: "Subtopic changed successfully",
+      progress: { stepsCount, ...progressRecord },
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   getLastUserProgress,
   addLastUserProgress,
   setStepCompleted,
   nextStep,
+  changeSubtopic,
 };

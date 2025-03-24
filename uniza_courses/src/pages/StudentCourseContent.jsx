@@ -25,6 +25,7 @@ const StudentCourseContent = () => {
   const [loading, setLoading] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [ready, setReady] = useState(false);
+  const [error, setError] = useState("");
 
   const [currentTopic, setCurrentTopic] = useState(0);
   const [currentSubtopic, setCurrentSubtopic] = useState(0);
@@ -80,12 +81,15 @@ const StudentCourseContent = () => {
       );
       if (response.ok) {
         var responseData = await response.json();
+        console.log(responseData);
         responseData = responseData.records;
         setCurrentTopic(responseData.dataValues.topicId);
         setCurrentSubtopic(responseData.dataValues.subtopicId);
         setCurrentStep(responseData.dataValues.stepId);
         setStepsCount(responseData.stepsCount);
         setCompleted(responseData.dataValues.completed);
+      } else if (response.message) {
+        setError(response.message);
       } else {
         throw new Error("Failed to fetch courses");
       }
@@ -95,7 +99,6 @@ const StudentCourseContent = () => {
     }
   };
 
-  //  NEKONECNY LOADING BEX REFRESU!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
   const handleClickCompleted = async () => {
     if (loading || completed) return; // avoid double triggers
     setLoading(true);
@@ -179,21 +182,54 @@ const StudentCourseContent = () => {
     }
   };
 
+  const changeSubtopic = async (subtopicId) => {
+    console.log(subtopicId);
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/userProgress/changeSubtopic`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+          body: JSON.stringify({
+            userId: userData.userId,
+            courseId: course.id,
+            subtopicId,
+          }),
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+      if (response.status !== 204) {
+        var responseData = await response.json();
+        console.log(responseData);
+        responseData = responseData.progress;
+        setCurrentTopic(responseData.dataValues.topicId);
+        setCurrentSubtopic(responseData.dataValues.subtopicId);
+        setCurrentStep(responseData.dataValues.stepId);
+        setStepsCount(responseData.stepsCount);
+        setCompleted(responseData.dataValues.completed);
+      }
+    } catch (error) {
+      console.error("Error completing step:", error);
+      toast.error("Error completing step: " + error.message);
+    }
+  };
+
   useEffect(() => {
     console.log("✅ Completed state:", completed);
-    //   const fetchAll = async () => {
-    //     await loadCourse();
-    //     await loadUserLastProgress();
-    //     setReady(true); // ✅ only after both done
-    //   };
-    //   fetchAll();
   }, [completed]);
 
   useEffect(() => {
     const fetchAll = async () => {
       await loadCourse();
       await loadUserLastProgress();
-      setReady(true); // ✅ only after both done
+      setReady(true);
     };
 
     fetchAll();
@@ -203,7 +239,7 @@ const StudentCourseContent = () => {
     <>
       <Header />
 
-      {ready ? (
+      {ready && !error ? (
         <SideMenu
           type={"courseStructure"}
           topics={topics}
@@ -213,6 +249,7 @@ const StudentCourseContent = () => {
           currentStep={currentStep}
           stepsCount={stepsCount}
           allStepsCount={allStepsCount}
+          changeSubtopic={changeSubtopic}
         >
           <Box display={"flex"} flexDirection={"column"} gap={2}>
             <Box

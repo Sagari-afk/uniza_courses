@@ -21,6 +21,7 @@ const SideMenu = ({
   currentStep,
   stepsCount,
   allStepsCount,
+  changeSubtopic,
 }) => {
   console.log(
     "All steps count: ",
@@ -34,9 +35,16 @@ const SideMenu = ({
   console.log(currentTopic, currentSubtopic, currentStep);
 
   const [opened, setOpened] = useState(true);
+  const [expandedTopic, setExpandedTopic] = useState(currentTopic);
+  console.log("Expanded topic: ", expandedTopic);
+
+  const handleAccordionChange = (topicId) => (event, isExpanded) => {
+    setExpandedTopic(isExpanded ? topicId : null);
+  };
 
   useEffect(() => {
     setProgress(Math.round(100 * (stepsCount / allStepsCount) * 100) / 100);
+    if (stepsCount === 0) setProgress(0);
   }, [stepsCount, allStepsCount]);
 
   return (
@@ -116,7 +124,8 @@ const SideMenu = ({
                       display: "none",
                     },
                   }}
-                  expanded={topic.subtopics && topic.id === currentTopic}
+                  expanded={expandedTopic === topic.id}
+                  onChange={handleAccordionChange(topic.id)}
                 >
                   <AccordionSummary
                     sx={{ fontSize: "1rem", p: 0 }}
@@ -136,6 +145,7 @@ const SideMenu = ({
                       topic.subtopics.map((subtopic) => (
                         <Typography
                           key={subtopic.title}
+                          onClick={() => changeSubtopic(subtopic.id)}
                           sx={
                             currentSubtopic === subtopic.id
                               ? {
@@ -144,8 +154,9 @@ const SideMenu = ({
                                   background:
                                     "linear-gradient(90deg, #C04F77 0%, #FFC65A 100%)",
                                   color: "#fff",
+                                  cursor: "pointer",
                                 }
-                              : { color: "primary.main" }
+                              : { color: "primary.main", cursor: "pointer" }
                           }
                         >
                           {topic.order}.{subtopic.order} {subtopic.title}
