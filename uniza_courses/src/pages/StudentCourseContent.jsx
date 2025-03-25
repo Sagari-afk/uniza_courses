@@ -221,9 +221,40 @@ const StudentCourseContent = () => {
     }
   };
 
+  const fetchCompletedStatus = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/userProgress/getCompletedStatus/${currentStep}/${userData.userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new Error(`Server error: ${response.status}`);
+      }
+      if (response.status !== 204) {
+        var responseData = await response.json();
+        console.log(responseData);
+        setCompleted(responseData.completed);
+      }
+    } catch (error) {
+      console.error("Error getting status:", error);
+      toast.error("Error getting status: " + error.message);
+    }
+  };
+
   useEffect(() => {
     console.log("✅ Completed state:", completed);
   }, [completed]);
+
+  useEffect(() => {
+    fetchCompletedStatus();
+  }, [currentStep]);
 
   useEffect(() => {
     const fetchAll = async () => {

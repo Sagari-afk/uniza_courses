@@ -6,9 +6,13 @@ const TextContentViewer = ({ stepId }) => {
   const [content, setContent] = useState();
   const [stepTitle, setStepTitle] = useState();
 
+  console.log("BLIN", stepId, stepTitle);
   useEffect(() => {
-    getStep();
-  }, []);
+    const fetchAll = async () => {
+      getStep();
+    };
+    fetchAll();
+  }, [stepId]);
 
   const getStep = async () => {
     try {

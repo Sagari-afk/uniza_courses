@@ -45,9 +45,14 @@ const getLastUserProgress = async (req, res) => {
   try {
     const userId = req.params.userId;
     const courseId = req.params.courseId;
-    const records = await StudentProgressHistory.findAll({
-      where: { userId, courseId },
+    let records = await StudentProgressHistory.findAll({
+      where: { userId, courseId, completed: true },
     });
+    if (!records || records.length == 0) {
+      records = await StudentProgressHistory.findAll({
+        where: { userId, courseId },
+      });
+    }
 
     if (!records || records.length == 0) {
       const record = await startCourse(userId, courseId);
@@ -347,10 +352,25 @@ const changeSubtopic = async (req, res) => {
   }
 };
 
+const getCompletedStatus = async (req, res) => {
+  try {
+    const stepId = req.params.stepId;
+    const userId = req.params.userId;
+    const completed = StudentProgressHistory.findOne({
+      where: { stepId, userId, completed: true },
+    });
+    return res.status(200).json({ completed });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   getLastUserProgress,
   addLastUserProgress,
   setStepCompleted,
   nextStep,
   changeSubtopic,
+  getCompletedStatus,
 };
