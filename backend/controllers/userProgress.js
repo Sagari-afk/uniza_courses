@@ -140,6 +140,7 @@ const setStepCompleted = async (req, res) => {
     const stepFromHistory = await StudentProgressHistory.findOne({
       where: { stepId: req.params.stepId, userId: req.params.userId },
     });
+    console.log("Step from history: ", stepFromHistory);
     stepFromHistory.completed = true;
     await stepFromHistory.save();
     const stepsCount = await StudentProgressHistory.count({
@@ -370,6 +371,20 @@ const getCompletedStatus = async (req, res) => {
   }
 };
 
+const getIsStarted = async (req, res) => {
+  try {
+    const record = await StudentProgressHistory.findOne({
+      where: { courseId: req.params.courseId, userId: req.params.userId },
+    });
+    if (record) return res.status(200).json({});
+    console.log("Is started: ", record);
+    return res.status(400).json({});
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   getLastUserProgress,
   addLastUserProgress,
@@ -377,4 +392,5 @@ module.exports = {
   nextStep,
   changeSubtopic,
   getCompletedStatus,
+  getIsStarted,
 };

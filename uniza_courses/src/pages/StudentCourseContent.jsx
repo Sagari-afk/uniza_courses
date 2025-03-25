@@ -250,20 +250,30 @@ const StudentCourseContent = () => {
 
   const changeStepSubmit = async (stepId) => {
     try {
-      // const response = await fetch(
-      //   `http://localhost:3000/api/userProgress/changeStep`,
-      //   {
-      //     method: "POST",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       "x-access-token":
-      //         localStorage.getItem("authToken") ||
-      //         sessionStorage.getItem("authToken"),
-      //     },
-      //   }
-      // );
+      const response = await fetch(
+        `http://localhost:3000/api/userProgress/addLastUserProgress`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+          body: JSON.stringify({
+            userId: userData.userId,
+            courseId: courseId,
+            topicId: currentTopic,
+            subtopicId: currentSubtopic,
+            stepId,
+          }),
+        }
+      );
       setCurrentStep(stepId);
-    } catch (error) {}
+    } catch (error) {
+      console.error("Error getting status:", error);
+      toast.error("Error getting status: " + error.message);
+    }
   };
 
   useEffect(() => {

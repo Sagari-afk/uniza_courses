@@ -25,6 +25,7 @@ import { toast } from "react-toastify";
 
 const Course = () => {
   const location = useLocation();
+  const userData = JSON.parse(sessionStorage.getItem("userData"));
   const navigate = useNavigate();
   const { courseId } = location.state || {};
   const [restData, setRestData] = useState([]);
@@ -32,6 +33,7 @@ const Course = () => {
   const [averageRate, setAverageRate] = useState([]);
   const [newComment, setNewComment] = useState("");
   const date = new Date(restData.createdAt);
+  const [courseStarted, setCourseStarted] = useState(false);
 
   const [rate, setRate] = React.useState(2);
 
@@ -97,14 +99,35 @@ const Course = () => {
   };
 
   const startCourse = async () => {
-    // priradit kurz studentovi
-    // pridat k tlacidlu "pokracovat" ak kurz uz bol zacat
-    // zistit taktiez aj na akom kroke sa zastavil a posielat aj nazov a id kroku tiez
     navigate(`/StudenCourseContent/${restData.name}`, { state: { courseId } });
+  };
+
+  const getIfCourseStarted = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/userProgress/getIsStarted/${courseId}/${userData.userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      if (response.ok) {
+        setCourseStarted(true);
+      }
+    } catch (error) {
+      console.log("error: ", error);
+      setError(error.message);
+      toast.error("Error loading courses: " + error.message);
+    }
   };
 
   useEffect(() => {
     load();
+    getIfCourseStarted();
   }, []);
 
   return (
@@ -417,7 +440,7 @@ const Course = () => {
               >
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <PrimaryBtn style={{ color: "white" }} onClick={startCourse}>
-                    ZAčAť TERAZ
+                    {courseStarted ? "POKRAČOVAŤ" : " ZAčAť TERAZ"}
                   </PrimaryBtn>
 
                   <SecundaryBtn
