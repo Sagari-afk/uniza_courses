@@ -356,10 +356,14 @@ const getCompletedStatus = async (req, res) => {
   try {
     const stepId = req.params.stepId;
     const userId = req.params.userId;
-    const completed = StudentProgressHistory.findOne({
+    const completed = await StudentProgressHistory.findOne({
       where: { stepId, userId, completed: true },
     });
-    return res.status(200).json({ completed });
+    console.log("Completed: ", completed);
+    if (!completed || completed.length == 0)
+      return res.status(200).json({ completed: false });
+
+    return res.status(200).json({ completed: true });
   } catch (error) {
     console.log(error);
     return res.status(500).json(error.message);

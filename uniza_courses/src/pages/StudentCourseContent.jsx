@@ -239,7 +239,7 @@ const StudentCourseContent = () => {
       }
       if (response.status !== 204) {
         var responseData = await response.json();
-        console.log(responseData);
+        console.log("Completed from backend:", responseData.completed);
         setCompleted(responseData.completed);
       }
     } catch (error) {
