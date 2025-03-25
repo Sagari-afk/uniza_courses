@@ -4,7 +4,7 @@ import Tooltip, { tooltipClasses } from "@mui/material/Tooltip";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import QuizIcon from "@mui/icons-material/Quiz";
 
-const StepsContainer = ({ steps, stepIdActive, style }) => {
+const StepsContainer = ({ steps, stepIdActive, style, changeStepSubmit }) => {
   return (
     <Stack direction={"row"} gap={2} style={style}>
       {steps?.map((step) => (
@@ -30,6 +30,7 @@ const StepsContainer = ({ steps, stepIdActive, style }) => {
             size="small"
             sx={{ mt: step.id === stepIdActive ? "1rem" : 0 }}
             key={step.title}
+            onClick={() => changeStepSubmit(step.id)}
           >
             <AssignmentIcon sx={{ fontSize: "1.2rem", cursor: "pointer" }} />
           </Fab>

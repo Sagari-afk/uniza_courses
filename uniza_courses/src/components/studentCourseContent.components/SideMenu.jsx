@@ -22,6 +22,7 @@ const SideMenu = ({
   stepsCount,
   allStepsCount,
   changeSubtopic,
+  changeStepSubmit,
 }) => {
   console.log(
     "All steps count: ",
@@ -186,6 +187,7 @@ const SideMenu = ({
               ?.subtopics.find((s) => s.id === currentSubtopic)?.steps
           }
           stepIdActive={currentStep}
+          changeStepSubmit={changeStepSubmit}
         />
         <Box
           sx={{

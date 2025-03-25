@@ -248,6 +248,24 @@ const StudentCourseContent = () => {
     }
   };
 
+  const changeStepSubmit = async (stepId) => {
+    try {
+      // const response = await fetch(
+      //   `http://localhost:3000/api/userProgress/changeStep`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       "x-access-token":
+      //         localStorage.getItem("authToken") ||
+      //         sessionStorage.getItem("authToken"),
+      //     },
+      //   }
+      // );
+      setCurrentStep(stepId);
+    } catch (error) {}
+  };
+
   useEffect(() => {
     console.log("✅ Completed state:", completed);
   }, [completed]);
@@ -281,6 +299,7 @@ const StudentCourseContent = () => {
           stepsCount={stepsCount}
           allStepsCount={allStepsCount}
           changeSubtopic={changeSubtopic}
+          changeStepSubmit={changeStepSubmit}
         >
           <Box display={"flex"} flexDirection={"column"} gap={2}>
             <Box
