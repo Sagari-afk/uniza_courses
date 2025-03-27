@@ -21,6 +21,7 @@ import CreateTextStep from "./pages/steps_creating.pages/CreateTextStep";
 import AllTeachersCourses from "./pages/AllTeacherCourses";
 import StudentCourseContent from "./pages/StudentCourseContent";
 import PrimaryBtn from "./components/core.components/PrimaryBtn";
+import CreateTestStep from "./pages/steps_creating.pages/CreateTestStep";
 
 function App() {
   const [authToken, setAuthToken] = useState(() =>
@@ -187,11 +188,18 @@ function App() {
           />
         )}
         {authToken && userData.userRole === "teacher" && (
-          <Route
-            path="/CourseContent/createStep/text"
-            element={<CreateTextStep />}
-          />
+          <>
+            <Route
+              path="/CourseContent/createStep/text"
+              element={<CreateTextStep />}
+            />
+            <Route
+              path="/CourseContent/createStep/test"
+              element={<CreateTestStep />}
+            />
+          </>
         )}
+
         {authToken && userData.userRole === "teacher" && (
           <Route path="/allCourses/teacher" element={<AllTeachersCourses />} />
         )}

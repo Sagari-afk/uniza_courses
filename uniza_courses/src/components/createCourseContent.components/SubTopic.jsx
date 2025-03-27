@@ -166,17 +166,17 @@ const SubTopic = ({ id, subtopic, load }) => {
                 />
               }
               handleSubmitModal={() => {
-                if (stepType === "text") {
-                  const data = {
-                    subtopicId: subtopic.subtopicId,
-                    subtopicTitle: subtopic.title,
-                  };
-                  const queryParams = new URLSearchParams(data).toString();
-                  window.open(
-                    `/CourseContent/createStep/text?${queryParams}`,
-                    "_blank"
-                  );
-                }
+                const data = {
+                  subtopicId: subtopic.subtopicId,
+                  subtopicTitle: subtopic.title,
+                };
+                const queryParams = new URLSearchParams(data).toString();
+                window.open(
+                  stepType === "text"
+                    ? `/CourseContent/createStep/text?${queryParams}`
+                    : `/CourseContent/createStep/test?${queryParams}`,
+                  "_blank"
+                );
               }}
               submitBtnText="Vytvoriť"
             >
@@ -241,65 +241,6 @@ const SubTopic = ({ id, subtopic, load }) => {
                   accept="image/*,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation"
                 />
               </Grid2>
-              {/* For text */}
-
-              {/* For video*/}
-              {stepType === "video" && (
-                <PrimaryBtn>
-                  Vybrať video súbor
-                  <input
-                    type="file"
-                    hidden
-                    onChange={(e) => {
-                      setSelectedFile(e.target.files[0]);
-                    }}
-                    accept="video/*"
-                  />
-                </PrimaryBtn>
-              )}
-              {/* For pdf */}
-              {stepType === "pdf" && (
-                <PrimaryBtn>
-                  Vybrať pdf súbor
-                  <input
-                    type="file"
-                    hidden
-                    onChange={(e) => {
-                      setSelectedFile(e.target.files[0]);
-                    }}
-                    accept="application/pdf"
-                  />
-                </PrimaryBtn>
-              )}
-              {/* For pptx */}
-              {stepType === "pptx" && (
-                <PrimaryBtn>
-                  Vybrať pptx súbor
-                  <input
-                    type="file"
-                    hidden
-                    onChange={(e) => {
-                      setSelectedFile(e.target.files[0]);
-                    }}
-                    accept="application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                  />
-                </PrimaryBtn>
-              )}
-              {/* For test */}
-              {stepType === "test" && (
-                <PrimaryBtn
-                  onClick={(e) => {
-                    navigate(linkTo, {
-                      state: {
-                        subtopicId: subtopic.subtopicId,
-                        stepType: "test",
-                      },
-                    });
-                  }}
-                >
-                  Presmerovať na vytvorenie testu
-                </PrimaryBtn>
-              )}
             </ModalCreate>
 
             <ModalCreate
