@@ -13,6 +13,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { toast } from "react-toastify";
 import Header from "../../components/core.components/Header";
 import ModalCreate from "../../components/createCourseContent.components/ModalCreate";
 import SecundaryBtn from "../../components/core.components/SecundaryBtn";
@@ -25,14 +26,19 @@ const CreateTestStep = ({}) => {
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
   const subtopicTitle = searchParams.get("subtopicTitle");
+  const [stepId, setStepId] = useState(null);
 
   const [stepTitle, setStepTitle] = useState("");
   const [questionType, setQuestionType] = useState("");
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(1);
   const [disabledBtnCreate, setDisabledBtnCreate] = useState(true);
+  const [error, setError] = useState(false);
+  const [creatingNewQuestion, setCreatingNewQuestion] = useState(true);
 
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  const handleNext = async () => {
+    await saveContent();
+    console.log("Error: ", error);
+    if (!error) setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
@@ -46,6 +52,70 @@ const CreateTestStep = ({}) => {
       setDisabledBtnCreate(true);
     }
   }, [stepTitle]);
+
+  const saveContent = async () => {
+    try {
+      const res = await fetch(
+        stepId
+          ? "http://localhost:3000/api/courseStructure/update-content"
+          : "http://localhost:3000/api/courseStructure/save-content",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+          body: JSON.stringify({
+            subtopicId,
+            stepTitle,
+            stepId,
+            type: "test",
+          }),
+        }
+      );
+      const data = await res.json();
+      setStepId(data.id);
+      console.log("data: ", data);
+      if (data.error || !res.ok) {
+        toast.error(data.error);
+        setError(true);
+        return;
+      }
+      toast.success("Content saved successfully");
+      setError(false);
+    } catch (error) {
+      console.error("Error saving content:", error);
+      setError(true);
+      toast.error("Nastala chyba pri ulozeni kontentu");
+    }
+  };
+
+  const createQuestion = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/courseStructure/create-question",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+          body: JSON.stringify({
+            stepId,
+            opened: questionType === "otvorená" ? true : false,
+            questionFileName,
+          }),
+        }
+      );
+    } catch (error) {
+      console.error("Error creating question:", error);
+      toast.error("Nastala chyba pri vytvoreni otazky");
+    }
+  };
 
   return (
     <>
@@ -109,7 +179,16 @@ const CreateTestStep = ({}) => {
                     Tu môžete pridať otázky pre test: {stepTitle}
                   </Typography>
 
-                  <QuestionsCreator />
+                  <QuestionsCreator
+                    creatingNewQuestion={creatingNewQuestion}
+                    questions={[
+                      { open: true, selected: true, order: 1 },
+                      { open: false, selected: false, order: 2 },
+                      { open: false, selected: false, order: 3 },
+                      { open: false, selected: false, order: 4 },
+                      { open: false, selected: false, order: 5 },
+                    ]}
+                  />
 
                   <Box
                     sx={{
@@ -136,7 +215,7 @@ const CreateTestStep = ({}) => {
                           Pridať otazku
                         </PrimaryBtn>
                       }
-                      handleSubmitModal={() => {}}
+                      handleSubmitModal={setCreatingNewQuestion}
                       submitBtnText="Pridať"
                     >
                       <Typography variant="h4">Pridať otázku</Typography>

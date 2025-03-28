@@ -12,9 +12,9 @@ const PrimaryBtn = ({ type, children, sxChildren, onClick, ...props }) => {
         borderRadius: "0.75rem",
         fontSize: "1rem",
         fontWeight: 800,
-        color: "white.main",
         background: "linear-gradient(94deg, #df6690 11.3%, #ffc65a 101.52%)",
         boxShadow: "none",
+        color: "#fff",
         ...sxChildren,
       }}
       {...props}

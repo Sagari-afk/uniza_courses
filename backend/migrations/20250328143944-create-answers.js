@@ -2,37 +2,29 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("Steps", {
+    await queryInterface.createTable("Answers", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      title: {
-        type: Sequelize.STRING,
-      },
-      subtopicId: {
-        type: Sequelize.INTEGER,
-      },
-      order: {
+      questionId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        references: {
+          model: "Questions",
+          key: "id",
+        },
+        onDelete: "CASCADE",
       },
-      fileName: {
+      contentFileName: {
         type: Sequelize.STRING,
-        allowNull: true,
+        allowNull: false,
       },
-      type: {
-        type: Sequelize.ENUM(
-          "text",
-          "test",
-          "video",
-          "audio",
-          "document",
-          "presentation"
-        ),
-        allowNull: true,
+      correctAnswer: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,
@@ -45,6 +37,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("Steps");
+    await queryInterface.dropTable("Answers");
   },
 };

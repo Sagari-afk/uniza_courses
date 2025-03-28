@@ -57,19 +57,23 @@ const upladFile = (req, res) => {
 };
 
 const saveContent = async (req, res) => {
-  const { subtopicId, content, stepTitle } = req.body;
+  const { subtopicId, content, stepTitle, type } = req.body;
   const saveDir = path.join(__dirname, "..", "saved");
+  console.log("DATA FROM FRONTEND: ", req.body);
 
-  if (!fs.existsSync(saveDir)) {
-    fs.mkdirSync(saveDir, { recursive: true });
-  }
-  const fileName = `textContent${subtopicId}Subtopic${stepTitle}.html`;
-  fs.writeFile(path.join(saveDir, fileName), content, (err) => {
-    if (err) {
-      console.error("Error saving content:", err);
-      return res.status(500).json({ error: "Error saving content" });
+  let fileName;
+  if (type === "text") {
+    if (!fs.existsSync(saveDir)) {
+      fs.mkdirSync(saveDir, { recursive: true });
     }
-  });
+    const fileName = `textContent${subtopicId}Subtopic${stepTitle}.html`;
+    fs.writeFile(path.join(saveDir, fileName), content, (err) => {
+      if (err) {
+        console.error("Error saving content:", err);
+        return res.status(500).json({ error: "Error saving content" });
+      }
+    });
+  }
 
   const order = (await Step.count({ where: { subtopicId } })) + 1;
 
@@ -79,6 +83,7 @@ const saveContent = async (req, res) => {
       subtopicId,
       order,
       fileName,
+      type,
     });
 
     return res.json(step);

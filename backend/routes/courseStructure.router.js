@@ -70,7 +70,7 @@ router.post("/editSubtopicOrder", editSubtopicOrder);
 router.post("/editSubtopic", editSubtopic);
 router.post("/deleteSubtopic/:subtopicId", deleteSubtopic);
 
-router.post("/newStep", newStep);
+// router.post("/newStep", newStep);
 router.get("/getStep/:stepId", getStep);
 router.post("/deleteStep/:stepId", deleteStep);
 

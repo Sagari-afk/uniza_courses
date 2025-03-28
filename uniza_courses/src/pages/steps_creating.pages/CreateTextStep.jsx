@@ -125,7 +125,13 @@ const CreateTextStep = () => {
               localStorage.getItem("authToken") ||
               sessionStorage.getItem("authToken"),
           },
-          body: JSON.stringify({ subtopicId, content, stepTitle, stepId }),
+          body: JSON.stringify({
+            subtopicId,
+            content,
+            stepTitle,
+            stepId,
+            type: "text",
+          }),
         }
       );
       const data = await res.json();

@@ -26,7 +26,18 @@ module.exports = (sequelize, DataTypes) => {
       },
       fileName: {
         type: DataTypes.STRING,
-        allowNull: false,
+        allowNull: true,
+      },
+      type: {
+        type: DataTypes.ENUM(
+          "text",
+          "test",
+          "video",
+          "audio",
+          "document",
+          "presentation"
+        ),
+        allowNull: true,
       },
     },
     {
