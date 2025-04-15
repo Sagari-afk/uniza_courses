@@ -59,7 +59,7 @@ const upladFile = (req, res) => {
 const saveContent = async (req, res) => {
   const { subtopicId, content, stepTitle, type } = req.body;
   const saveDir = path.join(__dirname, "..", "saved");
-  console.log("DATA FROM FRONTEND: ", req.body);
+  // console.log("DATA FROM FRONTEND: ", req.body);
 
   let fileName;
   if (type === "text") {
@@ -138,20 +138,22 @@ const deleteStep = async (req, res) => {
   const step = await Step.findByPk(req.params.stepId);
   console.log(step);
 
-  const filePath = path.join(
-    __dirname,
-    "..",
-    "saved",
-    step.dataValues.fileName
-  );
+  if (step.dataValues.fileName) {
+    const filePath = path.join(
+      __dirname,
+      "..",
+      "saved",
+      step.dataValues.fileName
+    );
 
-  fs.unlink(filePath, (err) => {
-    if (err) {
-      console.error("Error deleting file:", err);
-      return res.status(500).json("Error deleting file:", err);
-    }
-    console.log("File deleted successfully");
-  });
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+        return res.status(500).json("Error deleting file:", err);
+      }
+      console.log("File deleted successfully");
+    });
+  }
   try {
     await Step.destroy({ where: { id: stepId } });
     return res.json("Step deleted");

@@ -29,6 +29,7 @@ app.use("/api/user/", require("./routes/user.router"));
 app.use("/api/userProgress/", require("./routes/userProgress.router"));
 app.use("/api/course/", require("./routes/course.router"));
 app.use("/api/courseStructure/", require("./routes/courseStructure.router"));
+app.use("/api/questions/", require("./routes/question.router"));
 app.use("/api/comment/", require("./routes/course_comment.router"));
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 

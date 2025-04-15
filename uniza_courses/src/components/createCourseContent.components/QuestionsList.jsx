@@ -1,7 +1,12 @@
 import { Box, Typography } from "@mui/material";
 import QuestionInSideMenu from "./QuestionInSideMenu";
 
-const QuestionsList = ({ questions, setCreatingNewQuestion }) => {
+const QuestionsList = ({
+  questions,
+  setCreatingNewQuestion,
+  activeQuestion,
+  setActiveQuestion,
+}) => {
   return (
     <Box
       display={"flex"}
@@ -16,8 +21,12 @@ const QuestionsList = ({ questions, setCreatingNewQuestion }) => {
           <QuestionInSideMenu
             question={question}
             index={index}
-            selected={question.selected}
-            onClick={() => {}}
+            key={question.id}
+            selected={question.id === activeQuestion.id}
+            onClick={() => {
+              console.log("Question clicked: ", question);
+              setActiveQuestion(question);
+            }}
           />
         ))
       ) : (

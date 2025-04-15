@@ -25,8 +25,9 @@ module.exports = (sequelize, DataTypes) => {
   Questions.init(
     {
       stepId: { type: DataTypes.INTEGER, allowNull: false },
-      opened: { type: DataTypes.BOOLEAN, allowNull: false },
-      questionFileName: { type: DataTypes.STRING, allowNull: false },
+      opened: { type: DataTypes.BOOLEAN, allowNull: true },
+      order: { type: DataTypes.INTEGER, allowNull: false },
+      questionFileName: { type: DataTypes.STRING, allowNull: true },
     },
     {
       sequelize,

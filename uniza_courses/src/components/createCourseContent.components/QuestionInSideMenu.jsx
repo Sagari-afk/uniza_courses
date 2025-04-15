@@ -3,6 +3,7 @@ import { Box, Typography } from "@mui/material";
 const QuestionInSideMenu = ({ question, index, onClick, selected }) => {
   return (
     <Box
+      onClick={onClick}
       //   className="light_gradient-background-animation"
       sx={{
         cursor: "pointer",

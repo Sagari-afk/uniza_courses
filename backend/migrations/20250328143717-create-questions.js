@@ -20,11 +20,15 @@ module.exports = {
       },
       opened: {
         type: Sequelize.BOOLEAN,
+        allowNull: true,
+      },
+      order: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
       questionFileName: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

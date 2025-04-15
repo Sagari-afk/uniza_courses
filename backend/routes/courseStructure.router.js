@@ -28,19 +28,19 @@ const {
 
 const router = express.Router();
 
-router.get("/addStep/text", (req, res) => {
-  fs.readFile(
-    path.join(__dirname, "saved", "content.html"),
-    "utf8",
-    (err, data) => {
-      if (err) {
-        console.error("Error reading content:", err);
-        return res.status(500).json({ error: "Error reading content" });
-      }
-      res.json({ content: data });
-    }
-  );
-});
+// router.get("/addStep/text", (req, res) => {
+//   fs.readFile(
+//     path.join(__dirname, "saved", "content.html"),
+//     "utf8",
+//     (err, data) => {
+//       if (err) {
+//         console.error("Error reading content:", err);
+//         return res.status(500).json({ error: "Error reading content" });
+//       }
+//       res.json({ content: data });
+//     }
+//   );
+// });
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {

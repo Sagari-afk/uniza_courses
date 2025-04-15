@@ -30,10 +30,13 @@ const CreateTestStep = ({}) => {
 
   const [stepTitle, setStepTitle] = useState("");
   const [questionType, setQuestionType] = useState("");
-  const [activeStep, setActiveStep] = useState(1);
+  const [activeStep, setActiveStep] = useState(0);
   const [disabledBtnCreate, setDisabledBtnCreate] = useState(true);
   const [error, setError] = useState(false);
-  const [creatingNewQuestion, setCreatingNewQuestion] = useState(true);
+  const [edditingQuestion, setEdditingQuestion] = useState(false);
+
+  const [activeQuestion, setActiveQuestion] = useState(null);
+  const [allQuestions, setAllQuestions] = useState([]);
 
   const handleNext = async () => {
     await saveContent();
@@ -52,6 +55,12 @@ const CreateTestStep = ({}) => {
       setDisabledBtnCreate(true);
     }
   }, [stepTitle]);
+
+  useEffect(() => {
+    setActiveQuestion(
+      allQuestions.filter((q) => q.id === activeQuestion?.id)[0]
+    );
+  }, [allQuestions]);
 
   const saveContent = async () => {
     try {
@@ -95,7 +104,7 @@ const CreateTestStep = ({}) => {
   const createQuestion = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/courseStructure/create-question",
+        "http://localhost:3000/api/questions/addQuestion",
         {
           method: "POST",
           headers: {
@@ -107,15 +116,50 @@ const CreateTestStep = ({}) => {
           body: JSON.stringify({
             stepId,
             opened: questionType === "otvorená" ? true : false,
-            questionFileName,
           }),
         }
       );
+      if (res.status === 200) {
+        const data = await res.json();
+        console.log("data: ", data);
+        setActiveQuestion(data);
+        toast.success("Otázka bola úspešne vytvorená");
+        getQuestions();
+      }
     } catch (error) {
       console.error("Error creating question:", error);
       toast.error("Nastala chyba pri vytvoreni otazky");
+    } finally {
+      // setEdditingQuestion(false);
     }
   };
+
+  const getQuestions = async () => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/questions/getQuestions/${stepId}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      const data = await res.json();
+      setAllQuestions(data);
+      console.log("data: ", data);
+      console.log("Questiins updated");
+    } catch (error) {
+      console.error("Error fetching questions:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (stepId) getQuestions();
+  }, [stepId]);
 
   return (
     <>
@@ -180,14 +224,11 @@ const CreateTestStep = ({}) => {
                   </Typography>
 
                   <QuestionsCreator
-                    creatingNewQuestion={creatingNewQuestion}
-                    questions={[
-                      { open: true, selected: true, order: 1 },
-                      { open: false, selected: false, order: 2 },
-                      { open: false, selected: false, order: 3 },
-                      { open: false, selected: false, order: 4 },
-                      { open: false, selected: false, order: 5 },
-                    ]}
+                    edditingQuestion={edditingQuestion}
+                    questions={allQuestions}
+                    activeQuestion={activeQuestion}
+                    setActiveQuestion={setActiveQuestion}
+                    getQuestions={getQuestions}
                   />
 
                   <Box
@@ -215,7 +256,10 @@ const CreateTestStep = ({}) => {
                           Pridať otazku
                         </PrimaryBtn>
                       }
-                      handleSubmitModal={setCreatingNewQuestion}
+                      handleSubmitModal={() => {
+                        setEdditingQuestion(true);
+                        createQuestion();
+                      }}
                       submitBtnText="Pridať"
                     >
                       <Typography variant="h4">Pridať otázku</Typography>
