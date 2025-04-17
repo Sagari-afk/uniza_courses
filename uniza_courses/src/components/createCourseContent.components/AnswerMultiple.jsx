@@ -1,8 +1,9 @@
 import { Checkbox, Stack, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import { debounce } from "lodash";
 
 const AnswerMultiple = ({
   answer,
@@ -10,15 +11,20 @@ const AnswerMultiple = ({
   setQuestion,
   lastAnswerId,
   index,
+  answerUpdate,
 }) => {
   const [answerText, setAnswerText] = useState("");
   const [isCorrect, setIsCorrect] = useState(false);
   const [answerId, setAnswerId] = useState(index + 1);
 
-  useEffect(() => {
-    answer.text = answerText;
-    answer.isCorrect = isCorrect;
-  }, [answerText, isCorrect]);
+  const debouncedAnswerUpdate = useCallback(
+    debounce(
+      (answerText, isCorrect, answerId) =>
+        answerUpdate(answerText, isCorrect, answerId),
+      1000
+    ),
+    [answerUpdate]
+  );
 
   return (
     <Stack direction={"row"} gap={2} alignItems={"center"}>
@@ -29,6 +35,8 @@ const AnswerMultiple = ({
         value={answerText}
         onChange={(e) => {
           setAnswerText(e.target.value);
+          debouncedAnswerUpdate(e.target.value, isCorrect, answer.id);
+          answer.text = answerText;
         }}
       />
       <DeleteForeverIcon
@@ -44,7 +52,7 @@ const AnswerMultiple = ({
           handleAnswerDelete(answer.id);
         }}
       />
-      <FileUploadIcon
+      {/* <FileUploadIcon
         sx={{
           cursor: "pointer",
           color: "#888",
@@ -52,11 +60,13 @@ const AnswerMultiple = ({
             color: "secondary.main",
           },
         }}
-      />
+      /> */}
       <Checkbox
         checked={isCorrect}
-        onChange={() => {
-          setIsCorrect(!isCorrect);
+        onChange={(e) => {
+          setIsCorrect(e.target.checked);
+          debouncedAnswerUpdate(answerText, e.target.checked, answer.id);
+          answer.isCorrect = isCorrect;
         }}
       />
     </Stack>

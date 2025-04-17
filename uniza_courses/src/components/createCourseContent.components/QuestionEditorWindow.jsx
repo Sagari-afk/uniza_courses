@@ -197,6 +197,28 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
     }
   };
 
+  const answerUpdate = async (answerText, isCorrect, answerId) => {
+    console.log("Updating answer: ", answerText, isCorrect, answerId);
+    const res = await fetch(
+      `http://localhost:3000/api/questions/answerUpdate/${answerId}`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+        body: JSON.stringify({
+          answerText,
+          isCorrect,
+        }),
+      }
+    );
+    const data = await res.json();
+    console.log("Answer updated: ", data);
+  };
+
   return (
     <Box
       display="flex"
@@ -244,6 +266,7 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
               setQuestion={setQuestion}
               lastAnswerId={question?.answers?.length - 1}
               handleAnswerDelete={handleAnswerDelete}
+              answerUpdate={answerUpdate}
             />
           ))}
           <SecundaryBtn

@@ -14,6 +14,7 @@ const {
   getAnswers,
   getQuestionHtmlContent,
   getQuestion,
+  answerUpdate,
 } = require("../controllers/questions.controller");
 
 const router = express.Router();
@@ -44,5 +45,6 @@ router.get("/getQuestionHtmlContent/:fileUrl", getQuestionHtmlContent);
 router.post("/createAnswer", createAnswer);
 router.delete("/deleteAnswer/:answerId", deleteAnswer);
 router.get("/getAnswers/:questionId", getAnswers);
+router.post("/answerUpdate/:answerId", answerUpdate);
 
 module.exports = router;

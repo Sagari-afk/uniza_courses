@@ -253,6 +253,26 @@ const getQuestion = async (req, res) => {
   }
 };
 
+const answerUpdate = async (req, res) => {
+  const answerId = req.params.answerId;
+  const { answerText, isCorrect } = req.body;
+  console.log("answerId: ", answerId);
+  console.log("answerText: ", answerText);
+  console.log("isCorrect: ", isCorrect);
+
+  try {
+    const answer = await Answers.update(
+      { contentFileName: answerText, correctAnswer: isCorrect },
+      { where: { id: answerId } }
+    );
+
+    return res.json(answer);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   addQuestion,
   setQuestionText,
@@ -265,4 +285,5 @@ module.exports = {
   getAnswers,
   getQuestionHtmlContent,
   getQuestion,
+  answerUpdate,
 };
