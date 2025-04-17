@@ -6,39 +6,26 @@ import "froala-editor/css/froala_style.min.css";
 import "froala-editor/css/froala_editor.pkgd.min.css";
 import "froala-editor/js/plugins.pkgd.min.js";
 
-const FroalaTextEditor = ({ content, setContent, sendContent }) => {
+const FroalaTextEditor = ({
+  content,
+  setContent,
+  sendContent,
+  type,
+  config,
+}) => {
   const editorRef = useRef(null);
 
   const debouncedSendContent = useCallback(
-    debounce((newContent) => sendContent(newContent), 5000),
-    []
+    debounce((newContent) => sendContent(newContent), 1000),
+    [sendContent]
   );
 
   const handleModelChange = (newContent) => {
+    console.log("handleModelChange", newContent);
     setContent(newContent);
+    if (newContent === content) return; // Prevent unnecessary updates
+    if (type == "text") return;
     debouncedSendContent(newContent);
-  };
-
-  const config = {
-    placeholderText: "Napíš otázku tú...",
-    toolbarButtons: ["insertImage", "insertVideo"],
-    toolbarButtonsXS: ["insertImage", "insertVideo"],
-    toolbarButtonsSM: ["insertImage", "insertVideo"],
-    toolbarButtonsMD: ["insertImage", "insertVideo"],
-    imageUploadURL: "http://localhost:3000/api/courseStructure/upload-image",
-    videoUploadURL: "http://localhost:3000/api/courseStructure/upload-video",
-    imageUploadMethod: "POST",
-    videoUploadMethod: "POST",
-    imageAllowedTypes: ["jpeg", "jpg", "png"],
-    pastePlain: true,
-    pasteDeniedAttrs: ["style"],
-    htmlAllowedTags: ["p", "br", "img", "video"],
-    htmlAllowedAttrs: {
-      img: ["src", "alt"],
-      video: ["src", "controls"],
-    },
-    quickInsertButtons: [],
-    pluginsEnabled: ["image", "video"],
   };
 
   return (

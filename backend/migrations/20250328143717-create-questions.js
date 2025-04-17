@@ -26,8 +26,12 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      questionFileName: {
-        type: Sequelize.STRING,
+      // questionFileName: {
+      //   type: Sequelize.STRING,
+      //   allowNull: true,
+      // },
+      questionText: {
+        type: Sequelize.TEXT("long"),
         allowNull: true,
       },
       createdAt: {

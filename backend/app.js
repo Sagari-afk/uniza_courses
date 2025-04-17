@@ -4,33 +4,41 @@ require("dotenv").config({ path: path.resolve(__dirname, ".env") });
 const { sequelize } = require("./models");
 const authMiddleware = require("./middlewares/auth.middleware");
 const cors = require("cors");
-const multer = require("multer");
-multer({ dest: "uploads/" });
 const fs = require("fs");
 
-if (!process.env.API_KEY) {
-  console.log("Missing API KEY");
-  process.exit(1);
-}
 const ensureDir = (dir) => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir);
-  }
+  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 };
 ensureDir(path.join(__dirname, "uploads"));
 ensureDir(path.join(__dirname, "saved"));
 
 const app = express();
+
 app.use(cors());
-app.use(express.json());
+
+app.use(
+  express.json({
+    limit: "500mb",
+  })
+);
+app.use(
+  express.urlencoded({
+    limit: "500mb",
+    extended: true,
+  })
+);
+
 app.use(authMiddleware);
 
+// my routes
 app.use("/api/user/", require("./routes/user.router"));
 app.use("/api/userProgress/", require("./routes/userProgress.router"));
 app.use("/api/course/", require("./routes/course.router"));
 app.use("/api/courseStructure/", require("./routes/courseStructure.router"));
 app.use("/api/questions/", require("./routes/question.router"));
 app.use("/api/comment/", require("./routes/course_comment.router"));
+
+// static uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.listen(3000, async () => {

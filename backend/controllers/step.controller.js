@@ -3,41 +3,6 @@ const { body, validationResult } = require("express-validator");
 const path = require("path");
 const fs = require("fs");
 
-// ????
-const newStep = [
-  body("title").not().isEmpty(),
-  body("subtopicId").not().isEmpty(),
-
-  async (req, res) => {
-    const errors = validationResult(req);
-
-    if (!errors.isEmpty()) {
-      console.log(errors);
-      const errMessage = errors
-        .array()
-        .map((item) => `${item.path} - ${item.msg}`)
-        .join(",");
-      return res.status(400).json(errMessage);
-    }
-
-    const { title, subtopicId } = req.body;
-    const order = (await Step.count({ where: { subtopicId } })) + 1;
-
-    try {
-      const topic = await Step.create({
-        title,
-        subtopicId,
-        order,
-      });
-
-      return res.json(topic);
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json(error.message);
-    }
-  },
-];
-
 const uploadImage = (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   const fileUrl = `http://localhost:3000/uploads/${req.file.filename}`;
@@ -58,21 +23,21 @@ const upladFile = (req, res) => {
 
 const saveContent = async (req, res) => {
   const { subtopicId, content, stepTitle, type } = req.body;
-  const saveDir = path.join(__dirname, "..", "saved");
+  // const saveDir = path.join(__dirname, "..", "saved");
   // console.log("DATA FROM FRONTEND: ", req.body);
 
   let fileName;
   if (type === "text") {
-    if (!fs.existsSync(saveDir)) {
-      fs.mkdirSync(saveDir, { recursive: true });
-    }
-    const fileName = `textContent${subtopicId}Subtopic${stepTitle}.html`;
-    fs.writeFile(path.join(saveDir, fileName), content, (err) => {
-      if (err) {
-        console.error("Error saving content:", err);
-        return res.status(500).json({ error: "Error saving content" });
-      }
-    });
+    // if (!fs.existsSync(saveDir)) {
+    //   fs.mkdirSync(saveDir, { recursive: true });
+    // }
+    // const fileName = `textContent${subtopicId}Subtopic${stepTitle}.html`;
+    // fs.writeFile(path.join(saveDir, fileName), content, (err) => {
+    //   if (err) {
+    //     console.error("Error saving content:", err);
+    //     return res.status(500).json({ error: "Error saving content" });
+    //   }
+    // });
   }
 
   const order = (await Step.count({ where: { subtopicId } })) + 1;
@@ -84,6 +49,7 @@ const saveContent = async (req, res) => {
       order,
       fileName,
       type,
+      content,
     });
 
     return res.json(step);
@@ -94,25 +60,26 @@ const saveContent = async (req, res) => {
 };
 
 const updateContent = async (req, res) => {
-  const { subtopicId, content, stepTitle, stepId } = req.body;
-  const saveDir = path.join(__dirname, "..", "saved");
+  const { content, stepTitle, stepId } = req.body;
+  // const saveDir = path.join(__dirname, "..", "saved");
+  console.log("DATA FROM FRONTEND: ", req.body);
 
-  if (!fs.existsSync(saveDir)) {
-    fs.mkdirSync(saveDir, { recursive: true });
-  }
-  const fileName = `textContent${subtopicId}Subtopic${stepTitle}.html`;
-  fs.writeFile(path.join(saveDir, fileName), content, (err) => {
-    if (err) {
-      console.error("Error saving content:", err);
-      return res.status(500).json({ error: "Error saving content" });
-    }
-  });
+  // if (!fs.existsSync(saveDir)) {
+  //   fs.mkdirSync(saveDir, { recursive: true });
+  // }
+  // const fileName = `textContent${subtopicId}Subtopic${stepTitle}.html`;
+  // fs.writeFile(path.join(saveDir, fileName), content, (err) => {
+  //   if (err) {
+  //     console.error("Error saving content:", err);
+  //     return res.status(500).json({ error: "Error saving content" });
+  //   }
+  // });
 
   try {
     const existingStep = await Step.findByPk(stepId);
     await existingStep.update({
       title: stepTitle,
-      fileName,
+      content,
     });
 
     return res.json(existingStep);
@@ -138,22 +105,22 @@ const deleteStep = async (req, res) => {
   const step = await Step.findByPk(req.params.stepId);
   console.log(step);
 
-  if (step.dataValues.fileName) {
-    const filePath = path.join(
-      __dirname,
-      "..",
-      "saved",
-      step.dataValues.fileName
-    );
+  // if (step.dataValues.fileName) {
+  //   const filePath = path.join(
+  //     __dirname,
+  //     "..",
+  //     "saved",
+  //     step.dataValues.fileName
+  //   );
 
-    fs.unlink(filePath, (err) => {
-      if (err) {
-        console.error("Error deleting file:", err);
-        return res.status(500).json("Error deleting file:", err);
-      }
-      console.log("File deleted successfully");
-    });
-  }
+  //   fs.unlink(filePath, (err) => {
+  //     if (err) {
+  //       console.error("Error deleting file:", err);
+  //       return res.status(500).json("Error deleting file:", err);
+  //     }
+  //     console.log("File deleted successfully");
+  //   });
+  // }
   try {
     await Step.destroy({ where: { id: stepId } });
     return res.json("Step deleted");
@@ -164,7 +131,6 @@ const deleteStep = async (req, res) => {
 };
 
 module.exports = {
-  newStep,
   deleteStep,
   uploadImage,
   uploadVideo,

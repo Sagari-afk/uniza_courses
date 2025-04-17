@@ -1,5 +1,6 @@
 import {
   Box,
+  CircularProgress,
   Container,
   FormControl,
   FormControlLabel,
@@ -14,7 +15,7 @@ import Header from "../../components/core.components/Header";
 import SecundaryBtn from "../../components/core.components/SecundaryBtn";
 import { useSearchParams } from "react-router-dom";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import "froala-editor/css/froala_style.min.css";
 import "froala-editor/js/plugins.pkgd.min.js";
@@ -23,17 +24,20 @@ import "froala-editor/css/froala_editor.pkgd.min.css";
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import FroalaEditorComponent from "react-froala-wysiwyg";
 import { toast } from "react-toastify";
+import { set } from "lodash";
 
+const FroalaTextEditor = React.lazy(() =>
+  import("../../components/createCourseContent.components/FroalaTextEditor")
+);
 const CreateTextStep = () => {
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
   const subtopicTitle = searchParams.get("subtopicTitle");
   const [stepId, setStepId] = useState(searchParams.get("stepId") || null);
-  console.log(stepId);
 
   const [stepTitle, setStepTitle] = useState("");
   const [isPreview, setIsPreview] = useState(false);
-  const [content, setContent] = useState(" ");
+  const [content, setContent] = useState("");
   const editorRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -72,32 +76,36 @@ const CreateTextStep = () => {
         return;
       }
       setStepTitle(data.title);
-      const resFile = await fetch(
-        "http://localhost:3000/api/courseStructure/getHtmlContent/" +
-          data.fileName,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-        }
-      );
-      const file = await resFile.json();
-      if (file.error || !resFile.ok) {
-        toast.error(file.error);
-        return;
-      }
-      console.log(file.content);
-      setContent(file.content);
+      setContent(data.content);
+
+      // const resFile = await fetch(
+      //   "http://localhost:3000/api/courseStructure/getHtmlContent/" +
+      //     data.fileName,
+      //   {
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       "x-access-token":
+      //         localStorage.getItem("authToken") ||
+      //         sessionStorage.getItem("authToken"),
+      //     },
+      //   }
+      // );
+      // const file = await resFile.json();
+      // if (file.error || !resFile.ok) {
+      //   toast.error(file.error);
+      //   return;
+      // }
+      // console.log(file.content);
+      // setContent(file.content);
     } catch (error) {
       console.error("Error getting content:", error);
     }
   };
 
   useEffect(() => {
+    console.log("Content changed: ", content);
     sessionStorage.setItem("editorContent" + subtopicId, content);
+    console.log("Meh: ", content);
     const handleBeforeUnload = (event) => {
       if (content) {
         event.preventDefault();
@@ -109,9 +117,11 @@ const CreateTextStep = () => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
-  }, [content]);
+  }, []);
 
-  const saveContent = async () => {
+  const saveContent = useCallback(async () => {
+    console.log("Saving content...");
+    console.log("Content: ", content);
     try {
       const res = await fetch(
         stepId
@@ -146,7 +156,7 @@ const CreateTextStep = () => {
       console.error("Error saving content:", error);
       toast.error("Nastala chyba pri ulozeni kontentu");
     }
-  };
+  }, [stepId, subtopicId, stepTitle, content]);
 
   useEffect(() => {
     if (editorRef.current) {
@@ -223,7 +233,7 @@ const CreateTextStep = () => {
               />
             ) : (
               <Box>
-                {isMounted && content && (
+                {/* {isMounted && content && (
                   <FroalaEditorComponent
                     tag="textarea"
                     model={content}
@@ -233,7 +243,17 @@ const CreateTextStep = () => {
                       editorRef.current = editorInstance;
                     }}
                   />
-                )}
+                  
+                )} */}
+                <React.Suspense fallback={<CircularProgress />}>
+                  <FroalaTextEditor
+                    content={content}
+                    setContent={setContent}
+                    sendContent={saveContent}
+                    config={config}
+                    type="text"
+                  />
+                </React.Suspense>
               </Box>
             )}
           </Paper>

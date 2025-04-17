@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import {
   Box,
@@ -15,35 +15,70 @@ import SecundaryBtn from "../core.components/SecundaryBtn";
 import AnswerMultiple from "./AnswerMultiple";
 import { toast } from "react-toastify";
 
+const FroalaTextEditor = React.lazy(() => import("./FroalaTextEditor"));
 const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
-  const FroalaTextEditor = React.lazy(() => import("./FroalaTextEditor"));
   const [content, setContent] = useState("");
 
-  useEffect(() => {
-    if (question?.questionFileName) getContent(question?.questionFileName);
-    else setContent("");
-  }, [question]);
-
-  const getContent = async (questionFileName) => {
-    const resFile = await fetch(
-      "http://localhost:3000/api/questions/getHtmlContent/" + questionFileName,
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "x-access-token":
-            localStorage.getItem("authToken") ||
-            sessionStorage.getItem("authToken"),
-        },
-      }
-    );
-    const file = await resFile.json();
-    if (file.error || !resFile.ok) {
-      toast.error(file.error);
-      return;
-    }
-    console.log(file.content);
-    setContent(file.content);
+  const config = {
+    placeholderText: "Napíš otázku tú...",
+    toolbarButtons: ["insertImage", "insertVideo"],
+    toolbarButtonsXS: ["insertImage", "insertVideo"],
+    toolbarButtonsSM: ["insertImage", "insertVideo"],
+    toolbarButtonsMD: ["insertImage", "insertVideo"],
+    imageUploadURL: "http://localhost:3000/api/courseStructure/upload-image",
+    videoUploadURL: "http://localhost:3000/api/courseStructure/upload-video",
+    imageUploadMethod: "POST",
+    videoUploadMethod: "POST",
+    imageAllowedTypes: ["jpeg", "jpg", "png"],
+    pastePlain: true,
+    pasteDeniedAttrs: ["style"],
+    htmlAllowedTags: ["p", "br", "img", "video"],
+    htmlAllowedAttrs: {
+      img: ["src", "alt"],
+      video: ["src", "controls"],
+    },
+    quickInsertButtons: [],
+    pluginsEnabled: ["image", "video"],
   };
+
+  const fetchAnswers = useCallback(async () => {
+    const getContent = async (id) => {
+      const resFile = await fetch(
+        "http://localhost:3000/api/questions/getQuestion/" + id,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      const data = await resFile.json();
+      // if (file.error || !resFile.ok) {
+      //   toast.error(file.error);
+      //   return;
+      // }
+      // console.log(file.content);
+      console.log("Content: ", data.questionText);
+      if (!data.questionText) {
+        setContent("");
+        return;
+      }
+      setContent(data.questionText);
+    };
+
+    if (question?.id) {
+      console.log("questionId: ", question.id);
+      await getContent(question?.id);
+    } else {
+      setContent("");
+    }
+  }, [question?.id]);
+
+  useEffect(() => {
+    fetchAnswers();
+  }, [fetchAnswers]);
 
   const getAnswers = async () => {
     try {
@@ -132,29 +167,34 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
     }
   };
 
-  const saveQuestionContent = (newContent) => {
-    fetch("http://localhost:3000/api/questions/setQuestionText", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-access-token":
-          localStorage.getItem("authToken") ||
-          sessionStorage.getItem("authToken"),
-      },
-      body: JSON.stringify({ content: newContent, questionId: question?.id }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
+  const saveQuestionContent = async (newContent) => {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/questions/setQuestionText",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+          body: JSON.stringify({
+            content: newContent,
+            questionId: question?.id,
+          }),
         }
-        return response.json();
-      })
-      .then((data) => {
-        console.log("Content saved successfully:", data);
-      })
-      .catch((error) => {
-        console.error("Error saving content:", error);
-      });
+      );
+      console.log("Saving content for question: ", question);
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await res.json();
+      getQuestions();
+      console.log("Content saved successfully:", data);
+    } catch (error) {
+      console.error("Error saving content:", error);
+    }
   };
 
   return (
@@ -182,6 +222,8 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
             content={content}
             setContent={setContent}
             sendContent={saveQuestionContent}
+            config={config}
+            type="question"
           />
         </React.Suspense>
       </Box>

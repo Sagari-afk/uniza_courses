@@ -24,8 +24,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: false,
       },
-      fileName: {
-        type: DataTypes.STRING,
+      // fileName: {
+      //   type: DataTypes.STRING,
+      //   allowNull: true,
+      // },
+      content: {
+        type: DataTypes.TEXT("long"),
         allowNull: true,
       },
       type: {

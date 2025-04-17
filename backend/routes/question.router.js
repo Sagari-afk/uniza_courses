@@ -12,6 +12,8 @@ const {
   createAnswer,
   deleteAnswer,
   getAnswers,
+  getQuestionHtmlContent,
+  getQuestion,
 } = require("../controllers/questions.controller");
 
 const router = express.Router();
@@ -30,11 +32,14 @@ const upload = multer({ storage });
 
 router.get("/getQuestions/:stepId", getQuestions);
 
+router.get("/getQuestion/:questionId", getQuestion);
+
 router.post("/addQuestion", addQuestion);
 router.post("/setQuestionOpened", setQuestionOpened);
 router.post("/setQuestionText", setQuestionText);
 router.post("/upload-image", upload.single("file"), uploadImage);
 router.post("/upload-video", upload.single("file"), uploadVideo);
+router.get("/getQuestionHtmlContent/:fileUrl", getQuestionHtmlContent);
 
 router.post("/createAnswer", createAnswer);
 router.delete("/deleteAnswer/:answerId", deleteAnswer);

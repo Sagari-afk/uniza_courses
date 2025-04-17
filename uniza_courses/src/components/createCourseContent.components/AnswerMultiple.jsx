@@ -15,8 +15,6 @@ const AnswerMultiple = ({
   const [isCorrect, setIsCorrect] = useState(false);
   const [answerId, setAnswerId] = useState(index + 1);
 
-  // Dorobit delete answer!!!!
-
   useEffect(() => {
     answer.text = answerText;
     answer.isCorrect = isCorrect;

@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
       stepId: { type: DataTypes.INTEGER, allowNull: false },
       opened: { type: DataTypes.BOOLEAN, allowNull: true },
       order: { type: DataTypes.INTEGER, allowNull: false },
-      questionFileName: { type: DataTypes.STRING, allowNull: true },
+      // questionFileName: { type: DataTypes.STRING, allowNull: true },
+      questionText: { type: DataTypes.TEXT("long"), allowNull: true },
     },
     {
       sequelize,

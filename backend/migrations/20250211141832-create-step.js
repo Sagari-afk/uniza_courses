@@ -19,8 +19,8 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
-      fileName: {
-        type: Sequelize.STRING,
+      content: {
+        type: Sequelize.TEXT("long"),
         allowNull: true,
       },
       type: {
