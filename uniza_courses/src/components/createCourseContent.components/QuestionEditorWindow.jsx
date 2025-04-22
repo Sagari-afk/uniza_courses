@@ -64,7 +64,6 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
     };
 
     if (question?.id) {
-      console.log("questionId: ", question.id);
       await getContent(question?.id);
     } else {
       setContent("");
@@ -94,8 +93,8 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
       }
       const data = await res.json();
 
-      console.log("Answers: ", data);
       setQuestion({ ...question, Answers: data });
+      console.log("Answers: ", question?.Answers);
     } catch (error) {
       console.log("Error fetching answers: ", error);
       toast.error("Chyba pri načítaní odpovedí");

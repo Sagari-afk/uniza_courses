@@ -1,7 +1,6 @@
 import { Checkbox, Stack, TextField } from "@mui/material";
 import { useCallback, useEffect, useState } from "react";
 
-import FileUploadIcon from "@mui/icons-material/FileUpload";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { debounce } from "lodash";
 
@@ -15,11 +14,10 @@ const AnswerMultiple = ({
   const [answerText, setAnswerText] = useState(
     answer ? answer.contentFileName : ""
   );
-  console.log("AnswerMultiple answerText", answer);
   const [isCorrect, setIsCorrect] = useState(
-    openedQuestion || !!answer?.isCorrect
+    openedQuestion || !!answer?.correctAnswer
   );
-  const [answerId, setAnswerId] = useState(index + 1);
+  const [answerIndex, setAnswerIndex] = useState(index + 1);
 
   const debouncedAnswerUpdate = useCallback(
     debounce(
@@ -30,12 +28,19 @@ const AnswerMultiple = ({
     [answerUpdate]
   );
 
+  useEffect(() => {
+    if (answer) {
+      setAnswerText(answer ? answer.contentFileName : "");
+      setIsCorrect(openedQuestion || !!answer?.correctAnswer);
+    }
+  }, [answer]);
+
   return (
     <Stack direction={"row"} gap={2} alignItems={"center"}>
       <TextField
         fullWidth
         placeholder="Napíš odpoveď"
-        label={openedQuestion ? "Odpoveď" : "Odpoveď č. " + answerId}
+        label={openedQuestion ? "Odpoveď" : "Odpoveď č. " + answerIndex}
         value={answerText}
         onChange={(e) => {
           setAnswerText(e.target.value);
@@ -64,7 +69,7 @@ const AnswerMultiple = ({
             onChange={(e) => {
               setIsCorrect(e.target.checked);
               debouncedAnswerUpdate(answerText, e.target.checked, answer.id);
-              answer.isCorrect = isCorrect;
+              answer.correctAnswer = isCorrect;
             }}
           />
         </>
