@@ -124,6 +124,7 @@ const CreateTestStep = ({}) => {
         console.log("data: ", data);
         setActiveQuestion(data);
         toast.success("Otázka bola úspešne vytvorená");
+        createAnswer(data.id);
         getQuestions();
       }
     } catch (error) {
@@ -131,6 +132,35 @@ const CreateTestStep = ({}) => {
       toast.error("Nastala chyba pri vytvoreni otazky");
     } finally {
       // setEdditingQuestion(false);
+    }
+  };
+
+  const createAnswer = async (questionId, answerText) => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/questions/createAnswer`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+          body: JSON.stringify({
+            questionId,
+            answerText,
+            isCorrect: true,
+          }),
+        }
+      );
+      if (!res.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await res.json();
+      console.log("Answer created: ", data);
+    } catch (error) {
+      console.log("Error creating answer: ", error);
     }
   };
 

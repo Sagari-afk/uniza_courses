@@ -13,6 +13,7 @@ import SignUp from "./pages/SignUp";
 import Courses from "./pages/Courses";
 import EditCourse from "./pages/EditCourse/";
 import EditIcon from "@mui/icons-material/Edit";
+import NotFound from "./pages/NotFound";
 import AppsIcon from "@mui/icons-material/Apps";
 import CreateCourseContent from "./pages/CreateCourseContent";
 
@@ -160,35 +161,31 @@ function App() {
     <ThemeProvider theme={theme}>
       {globalStyles}
       <Routes>
-        {!authToken && <Route path="/" element={<HomePage />} />}
-        {!authToken && (
-          <Route
-            path="signIn"
-            element={<SignIn setAuthToken={setAuthToken} />}
-          />
-        )}
-        {!authToken && (
-          <Route
-            path="signUp"
-            element={<SignUp setAuthToken={setAuthToken} />}
-          />
-        )}
         <Route
           path="courses"
           element={<Courses handleLogout={handleLogout} />}
         />
-        {authToken && <Route path="/Course/:courseName" element={<Course />} />}
-        {authToken && userData.userRole === "teacher" && (
-          <Route path="/editCourse" element={<EditCourse />} />
+        {!authToken && <Route path="/" element={<HomePage />} />}
+        {!authToken && (
+          <>
+            <Route
+              path="signIn"
+              element={<SignIn setAuthToken={setAuthToken} />}
+            />
+            <Route
+              path="signUp"
+              element={<SignUp setAuthToken={setAuthToken} />}
+            />
+          </>
         )}
-        {authToken && userData.userRole === "teacher" && (
-          <Route
-            path="/EditCourse/:courseName/content"
-            element={<CreateCourseContent />}
-          />
-        )}
+
         {authToken && userData.userRole === "teacher" && (
           <>
+            <Route path="/editCourse" element={<EditCourse />} />
+            <Route
+              path="/EditCourse/:courseName/content"
+              element={<CreateCourseContent />}
+            />
             <Route
               path="/CourseContent/createStep/text"
               element={<CreateTextStep />}
@@ -197,19 +194,24 @@ function App() {
               path="/CourseContent/createStep/test"
               element={<CreateTestStep />}
             />
+            <Route
+              path="/allCourses/teacher"
+              element={<AllTeachersCourses />}
+            />
           </>
         )}
 
-        {authToken && userData.userRole === "teacher" && (
-          <Route path="/allCourses/teacher" element={<AllTeachersCourses />} />
+        {authToken && (
+          <>
+            <Route
+              path="StudenCourseContent/:courseName"
+              element={<StudentCourseContent />}
+            />
+            <Route path="/Course/:courseName" element={<Course />} />
+          </>
         )}
 
-        {authToken && (
-          <Route
-            path="StudenCourseContent/:courseName"
-            element={<StudentCourseContent />}
-          />
-        )}
+        <Route path="*" element={<NotFound />} />
       </Routes>
 
       {authToken && userData.userRole === "teacher" && (

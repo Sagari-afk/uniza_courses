@@ -187,7 +187,7 @@ const createAnswer = async (req, res) => {
   try {
     const answer = await Answers.create({
       questionId,
-      contentFileName: "",
+      contentFileName: answerText || "",
       correctAnswer: isCorrect,
     });
 

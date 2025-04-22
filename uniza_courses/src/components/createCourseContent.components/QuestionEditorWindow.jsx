@@ -14,8 +14,8 @@ import {
 import SecundaryBtn from "../core.components/SecundaryBtn";
 import AnswerMultiple from "./AnswerMultiple";
 import { toast } from "react-toastify";
+import FroalaTextEditor from "./FroalaTextEditor";
 
-const FroalaTextEditor = React.lazy(() => import("./FroalaTextEditor"));
 const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
   const [content, setContent] = useState("");
 
@@ -55,17 +55,12 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
         }
       );
       const data = await resFile.json();
-      // if (file.error || !resFile.ok) {
-      //   toast.error(file.error);
-      //   return;
-      // }
-      // console.log(file.content);
-      console.log("Content: ", data.questionText);
       if (!data.questionText) {
         setContent("");
         return;
       }
       setContent(data.questionText);
+      getAnswers();
     };
 
     if (question?.id) {
@@ -239,20 +234,20 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
       </Typography>
 
       <Box sx={{ position: "relative" }}>
-        <React.Suspense fallback={<CircularProgress />}>
-          <FroalaTextEditor
-            content={content}
-            setContent={setContent}
-            sendContent={saveQuestionContent}
-            config={config}
-            type="question"
-          />
-        </React.Suspense>
+        <FroalaTextEditor
+          content={content}
+          setContent={setContent}
+          sendContent={saveQuestionContent}
+          config={config}
+          type="question"
+        />
       </Box>
 
       <Typography variant="h6" mt={2}>
         Pridať odpoveď{" "}
-        <span style={{ color: "#888" }}>(zaškrtni ak je správna)</span>:
+        {!question?.opened && (
+          <span style={{ color: "#888" }}>(zaškrtni ak je správna)</span>
+        )}
       </Typography>
 
       {!question?.opened ? (
@@ -262,9 +257,6 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
               key={index}
               index={index}
               answer={answer}
-              questionId={question?.id}
-              setQuestion={setQuestion}
-              lastAnswerId={question?.answers?.length - 1}
               handleAnswerDelete={handleAnswerDelete}
               answerUpdate={answerUpdate}
             />
@@ -272,8 +264,6 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
           <SecundaryBtn
             text={"Pridať odpoveď"}
             onClick={() => {
-              // question?.answers.push({});
-              // setQuestion({ ...question });
               newAnswerMultiple();
             }}
             style={{ width: "fit-content", marginRight: "auto" }}
@@ -282,10 +272,11 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
           </SecundaryBtn>
         </Box>
       ) : (
-        <TextField
-          fullWidth
-          placeholder="Napíš spravnú odpoveď"
-          label="Spravná odpoveď"
+        // <OpenedQuestionCreation />
+        <AnswerMultiple
+          answer={question?.Answers ? question?.Answers[0] : null}
+          openedQuestion={true}
+          answerUpdate={answerUpdate}
         />
       )}
     </Box>

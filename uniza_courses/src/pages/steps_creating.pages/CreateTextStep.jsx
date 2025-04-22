@@ -26,10 +26,10 @@ import FroalaEditorComponent from "react-froala-wysiwyg";
 import { toast } from "react-toastify";
 import { set } from "lodash";
 
-const FroalaTextEditor = React.lazy(() =>
-  import("../../components/createCourseContent.components/FroalaTextEditor")
-);
 const CreateTextStep = () => {
+  const FroalaTextEditor = React.lazy(() =>
+    import("../../components/createCourseContent.components/FroalaTextEditor")
+  );
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
   const subtopicTitle = searchParams.get("subtopicTitle");
@@ -245,15 +245,13 @@ const CreateTextStep = () => {
                   />
                   
                 )} */}
-                <React.Suspense fallback={<CircularProgress />}>
-                  <FroalaTextEditor
-                    content={content}
-                    setContent={setContent}
-                    sendContent={saveContent}
-                    config={config}
-                    type="text"
-                  />
-                </React.Suspense>
+                <FroalaTextEditor
+                  content={content}
+                  setContent={setContent}
+                  sendContent={saveContent}
+                  config={config}
+                  type="text"
+                />
               </Box>
             )}
           </Paper>

@@ -8,19 +8,23 @@ import { debounce } from "lodash";
 const AnswerMultiple = ({
   answer,
   handleAnswerDelete,
-  setQuestion,
-  lastAnswerId,
   index,
   answerUpdate,
+  openedQuestion,
 }) => {
-  const [answerText, setAnswerText] = useState("");
-  const [isCorrect, setIsCorrect] = useState(false);
+  const [answerText, setAnswerText] = useState(
+    answer ? answer.contentFileName : ""
+  );
+  console.log("AnswerMultiple answerText", answer);
+  const [isCorrect, setIsCorrect] = useState(
+    openedQuestion || !!answer?.isCorrect
+  );
   const [answerId, setAnswerId] = useState(index + 1);
 
   const debouncedAnswerUpdate = useCallback(
     debounce(
       (answerText, isCorrect, answerId) =>
-        answerUpdate(answerText, isCorrect, answerId),
+        answerUpdate(answerText, openedQuestion ? true : isCorrect, answerId),
       1000
     ),
     [answerUpdate]
@@ -31,7 +35,7 @@ const AnswerMultiple = ({
       <TextField
         fullWidth
         placeholder="Napíš odpoveď"
-        label={"Odpoveď č. " + answerId}
+        label={openedQuestion ? "Odpoveď" : "Odpoveď č. " + answerId}
         value={answerText}
         onChange={(e) => {
           setAnswerText(e.target.value);
@@ -39,36 +43,32 @@ const AnswerMultiple = ({
           answer.text = answerText;
         }}
       />
-      <DeleteForeverIcon
-        sx={{
-          cursor: "pointer",
-          color: "#888",
-          "&:hover": {
-            color: "#f44336",
-          },
-        }}
-        onClick={() => {
-          console.log("Deleting answer with id: ", answerId);
-          handleAnswerDelete(answer.id);
-        }}
-      />
-      {/* <FileUploadIcon
-        sx={{
-          cursor: "pointer",
-          color: "#888",
-          "&:hover": {
-            color: "secondary.main",
-          },
-        }}
-      /> */}
-      <Checkbox
-        checked={isCorrect}
-        onChange={(e) => {
-          setIsCorrect(e.target.checked);
-          debouncedAnswerUpdate(answerText, e.target.checked, answer.id);
-          answer.isCorrect = isCorrect;
-        }}
-      />
+      {!openedQuestion && (
+        <>
+          <DeleteForeverIcon
+            sx={{
+              cursor: "pointer",
+              color: "#888",
+              "&:hover": {
+                color: "#f44336",
+              },
+            }}
+            onClick={() => {
+              console.log("Deleting answer with id: ", answer.id);
+              handleAnswerDelete(answer.id);
+            }}
+          />
+
+          <Checkbox
+            checked={isCorrect}
+            onChange={(e) => {
+              setIsCorrect(e.target.checked);
+              debouncedAnswerUpdate(answerText, e.target.checked, answer.id);
+              answer.isCorrect = isCorrect;
+            }}
+          />
+        </>
+      )}
     </Stack>
   );
 };
