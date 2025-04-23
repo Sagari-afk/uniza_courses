@@ -15,6 +15,7 @@ const {
   getQuestionHtmlContent,
   getQuestion,
   answerUpdate,
+  deleteQuestion,
 } = require("../controllers/questions.controller");
 
 const router = express.Router();
@@ -34,6 +35,7 @@ const upload = multer({ storage });
 router.get("/getQuestions/:stepId", getQuestions);
 
 router.get("/getQuestion/:questionId", getQuestion);
+router.delete("/deleteQuestion/:questionId", deleteQuestion);
 
 router.post("/addQuestion", addQuestion);
 router.post("/setQuestionOpened", setQuestionOpened);

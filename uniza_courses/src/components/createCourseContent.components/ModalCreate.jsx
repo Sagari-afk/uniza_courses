@@ -59,7 +59,7 @@ export default function ModalCreate({
             <PrimaryBtn
               onClick={(e) => {
                 if (submitModalFuncParams)
-                  handleSubmitModal(e, ...submitModalFuncParams);
+                  handleSubmitModal(...submitModalFuncParams);
                 else handleSubmitModal(e);
                 handleClose();
               }}

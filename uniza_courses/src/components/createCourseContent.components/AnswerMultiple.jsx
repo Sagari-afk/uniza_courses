@@ -23,7 +23,7 @@ const AnswerMultiple = ({
     debounce(
       (answerText, isCorrect, answerId) =>
         answerUpdate(answerText, openedQuestion ? true : isCorrect, answerId),
-      1000
+      500
     ),
     [answerUpdate]
   );

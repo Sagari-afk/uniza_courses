@@ -9,6 +9,7 @@ const QuestionsCreator = ({
   activeQuestion,
   setActiveQuestion,
   getQuestions,
+  handleQuestionDelete,
 }) => {
   return (
     <Grid2 my="2rem" textAlign={"center"} container spacing={2}>
@@ -17,6 +18,7 @@ const QuestionsCreator = ({
           questions={questions}
           activeQuestion={activeQuestion}
           setActiveQuestion={setActiveQuestion}
+          handleQuestionDelete={handleQuestionDelete}
         />
       </Grid2>
       <Grid2
@@ -26,7 +28,7 @@ const QuestionsCreator = ({
         alignItems={!edditingQuestion && "center"}
         justifyContent={!edditingQuestion && "center"}
       >
-        {edditingQuestion ? (
+        {edditingQuestion && questions.length > 0 ? (
           <QuestionEditorWindow
             question={activeQuestion}
             setQuestion={setActiveQuestion}

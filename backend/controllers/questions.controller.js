@@ -273,6 +273,25 @@ const answerUpdate = async (req, res) => {
   }
 };
 
+const deleteQuestion = async (req, res) => {
+  const { questionId } = req.params;
+  console.log("Deleting question with id: ", questionId);
+
+  try {
+    const question = await Questions.destroy({
+      where: { id: questionId },
+    });
+    if (!question) {
+      return res.status(404).json({ error: "Question not found" });
+    }
+
+    return res.json(question);
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   addQuestion,
   setQuestionText,
@@ -286,4 +305,5 @@ module.exports = {
   getQuestionHtmlContent,
   getQuestion,
   answerUpdate,
+  deleteQuestion,
 };

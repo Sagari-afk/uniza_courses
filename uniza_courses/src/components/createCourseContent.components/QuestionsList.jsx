@@ -6,6 +6,7 @@ const QuestionsList = ({
   setCreatingNewQuestion,
   activeQuestion,
   setActiveQuestion,
+  handleQuestionDelete,
 }) => {
   return (
     <Box
@@ -22,7 +23,8 @@ const QuestionsList = ({
             question={question}
             index={index}
             key={question.id}
-            selected={question.id === activeQuestion.id}
+            selected={question?.id === activeQuestion?.id}
+            handleQuestionDelete={handleQuestionDelete}
             onClick={() => {
               console.log("Question clicked: ", question);
               setActiveQuestion(question);

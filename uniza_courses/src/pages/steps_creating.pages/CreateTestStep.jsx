@@ -187,6 +187,36 @@ const CreateTestStep = ({}) => {
     }
   };
 
+  const handleQuestionDelete = async (questionId) => {
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/questions/deleteQuestion/${questionId}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      const data = await res.json();
+      console.log("data: ", data);
+      if (res.status === 200) {
+        toast.success("Otázka bola úspešne zmazaná");
+        setAllQuestions((prevQuestions) =>
+          prevQuestions.filter((question) => question.id !== questionId)
+        );
+      } else {
+        toast.error("Nastala chyba pri mazani otazky");
+      }
+    } catch (error) {
+      console.error("Error deleting question:", error);
+      toast.error("Nastala chyba pri mazani otazky");
+    }
+  };
+
   useEffect(() => {
     if (stepId) getQuestions();
   }, [stepId]);
@@ -259,6 +289,7 @@ const CreateTestStep = ({}) => {
                     activeQuestion={activeQuestion}
                     setActiveQuestion={setActiveQuestion}
                     getQuestions={getQuestions}
+                    handleQuestionDelete={handleQuestionDelete}
                   />
 
                   <Box
