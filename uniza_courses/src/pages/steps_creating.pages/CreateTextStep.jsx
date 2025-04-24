@@ -26,10 +26,8 @@ import FroalaEditorComponent from "react-froala-wysiwyg";
 import { toast } from "react-toastify";
 import { set } from "lodash";
 
+import FroalaTextEditor from "../../components/createCourseContent.components/FroalaTextEditor";
 const CreateTextStep = () => {
-  const FroalaTextEditor = React.lazy(() =>
-    import("../../components/createCourseContent.components/FroalaTextEditor")
-  );
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
   const subtopicTitle = searchParams.get("subtopicTitle");
@@ -37,7 +35,7 @@ const CreateTextStep = () => {
 
   const [stepTitle, setStepTitle] = useState("");
   const [isPreview, setIsPreview] = useState(false);
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(" ");
   const editorRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
@@ -233,7 +231,7 @@ const CreateTextStep = () => {
               />
             ) : (
               <Box>
-                {/* {isMounted && content && (
+                {isMounted && content && (
                   <FroalaEditorComponent
                     tag="textarea"
                     model={content}
@@ -243,15 +241,14 @@ const CreateTextStep = () => {
                       editorRef.current = editorInstance;
                     }}
                   />
-                  
-                )} */}
-                <FroalaTextEditor
+                )}
+                {/* <FroalaTextEditor
                   content={content}
                   setContent={setContent}
                   sendContent={saveContent}
                   config={config}
                   type="text"
-                />
+                /> */}
               </Box>
             )}
           </Paper>

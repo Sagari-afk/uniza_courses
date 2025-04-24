@@ -9,9 +9,8 @@ const FroalaTextEditor = ({
   sendContent,
   type,
   config,
+  onInitialized,
 }) => {
-  const editorRef = useRef(null);
-
   const debouncedSendContent = useCallback(
     debounce((newContent) => sendContent(newContent), 1000),
     [sendContent]
@@ -31,9 +30,7 @@ const FroalaTextEditor = ({
         model={content}
         config={config}
         onModelChange={handleModelChange}
-        onInitialized={(editorInstance) => {
-          editorRef.current = editorInstance;
-        }}
+        onInitialized={onInitialized}
       />
     </React.Suspense>
   );

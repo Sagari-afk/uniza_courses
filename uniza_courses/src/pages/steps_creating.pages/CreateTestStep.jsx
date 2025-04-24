@@ -187,7 +187,7 @@ const CreateTestStep = ({}) => {
     }
   };
 
-  const handleQuestionDelete = async (questionId) => {
+  const handleQuestionDelete = async (e, questionId) => {
     try {
       const res = await fetch(
         `http://localhost:3000/api/questions/deleteQuestion/${questionId}`,

@@ -52,7 +52,7 @@ const Topic = ({ id, topic, load }) => {
   };
 
   const handleSubmitCreateSubTopic = async (e, subtopicTitle, topicId) => {
-    e.preventDefault();
+    console.log("handleSubmitCreateSubTopic", subtopicTitle, topicId);
 
     try {
       const payload = {
@@ -227,7 +227,7 @@ const Topic = ({ id, topic, load }) => {
               }
               handleSubmitModal={handleSubmitCreateSubTopic}
               submitBtnText="Vytvoriť"
-              submitModalFuncParams={[subtopicTitle, topic.topicId]}
+              submitModalFuncParams={[subtopicTitle, topic?.topicId]}
             >
               <Typography variant="h4">Nová podtema</Typography>
               <Typography variant="h6">Pre temu {topic.title}</Typography>

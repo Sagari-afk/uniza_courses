@@ -1,23 +1,22 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-  Box,
-  Button,
-  CircularProgress,
-  Checkbox,
-  Radio,
-  RadioGroup,
-  Stack,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import SecundaryBtn from "../core.components/SecundaryBtn";
 import AnswerMultiple from "./AnswerMultiple";
 import { toast } from "react-toastify";
 import FroalaTextEditor from "./FroalaTextEditor";
 
 const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState(" ");
+  const [isMounted, setIsMounted] = useState(false);
+  const editorRef = useRef(null);
+
+  console.log(
+    editorRef.current ? "Editor is mounted" : "Editor is not mounted",
+    isMounted,
+    "content: ",
+    content
+  );
 
   const config = {
     placeholderText: "Napíš otázku tú...",
@@ -56,7 +55,7 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
       );
       const data = await resFile.json();
       if (!data.questionText) {
-        setContent("");
+        setContent(" ");
         return;
       }
       setContent(data.questionText);
@@ -66,13 +65,23 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
     if (question?.id) {
       await getContent(question?.id);
     } else {
-      setContent("");
+      setContent(" ");
     }
   }, [question?.id]);
 
   useEffect(() => {
     fetchAnswers();
+    setIsMounted(true);
   }, [fetchAnswers]);
+
+  useEffect(() => {
+    if (editorRef.current) {
+      console.log(editorRef.current);
+      setIsMounted(true);
+    } else {
+      console.warn("Editor not yet initialized.");
+    }
+  }, [editorRef.current]);
 
   const getAnswers = async () => {
     try {
@@ -233,13 +242,18 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
       </Typography>
 
       <Box sx={{ position: "relative" }}>
-        <FroalaTextEditor
-          content={content}
-          setContent={setContent}
-          sendContent={saveQuestionContent}
-          config={config}
-          type="question"
-        />
+        {isMounted && content !== null && (
+          <FroalaTextEditor
+            content={content}
+            setContent={setContent}
+            sendContent={saveQuestionContent}
+            config={config}
+            type="question"
+            onInitialized={(editorInstance) => {
+              editorRef.current = editorInstance;
+            }}
+          />
+        )}
       </Box>
 
       <Typography variant="h6" mt={2}>

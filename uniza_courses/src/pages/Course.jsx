@@ -303,7 +303,7 @@ const Course = () => {
                             >
                               {topic.subtopics.map((subtopic, subIndex) => (
                                 <Typography key={subIndex}>
-                                  {subtopic.title}
+                                  - {subtopic.title}
                                 </Typography>
                               ))}
                             </Box>

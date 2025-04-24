@@ -9,6 +9,7 @@ const QuestionInSideMenu = ({
   selected,
   handleQuestionDelete,
 }) => {
+  console.log("QuestionInSideMenu question: ", question);
   return (
     <Box
       onClick={onClick}
