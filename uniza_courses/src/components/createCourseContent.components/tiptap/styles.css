@@ -1,0 +1,34 @@
+/* Basic editor styles */
+
+.button-group button {
+  background-color: transparent;
+  color: black;
+  /* border: solid 1px #df6690; */
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  margin-right: 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.button-group button:hover {
+  background-color: #ffe2ed;
+}
+.button-group {
+  display: flex;
+}
+
+.editor-content {
+  margin-top: 2rem;
+}
+.ProseMirror {
+  padding: 1rem;
+  border: #df669057 solid 1px;
+  border-radius: 1em;
+}
+.ProseMirror:focus-visible {
+  outline: none !important;
+}

@@ -3,7 +3,7 @@ import { Pagination, Box, Stack, Typography } from "@mui/material";
 
 import CourseCard from "./CourseCard";
 
-const CoursesPagination = ({ courses, load }) => {
+const CoursesPagination = ({ courses, load, teacher }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const coursesPerPage = 9;
@@ -30,6 +30,8 @@ const CoursesPagination = ({ courses, load }) => {
               course={course}
               linkTo={`/Course/${course.name}`}
               load={load}
+              teacher={teacher}
+              teachers={course.teachers}
             />
           ))
         ) : (

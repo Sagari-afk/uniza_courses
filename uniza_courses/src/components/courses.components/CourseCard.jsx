@@ -1,13 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import { Icon } from "@iconify/react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Stack } from "@mui/material";
+
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ModalCreate from "../createCourseContent.components/ModalCreate";
 
 import cardClasses from "../../styles/CourseCard.module.css";
 import SecundaryBtn from "../core.components/SecundaryBtn";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
-const CourseCard = ({ course, linkTo }) => {
+const CourseCard = ({ course, linkTo, teacher, teachers, load }) => {
   const navigate = useNavigate();
 
   let date = new Date(course.updatedAt);
@@ -50,6 +55,32 @@ const CourseCard = ({ course, linkTo }) => {
       }
     } catch (error) {
       console.error("Error fetching students count:", error);
+    }
+  };
+
+  const handleSubmitDeleteCourse = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/course/deleteCourse/" + course.id,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      if (response.ok) {
+        toast.success("Kurz bol vymazan");
+      } else {
+        throw new Error("Failed to delete course");
+      }
+      load();
+    } catch (error) {
+      console.log(error);
+      toast.error("Nastala chyba pri vymazavani kurzu");
     }
   };
 
@@ -111,14 +142,90 @@ const CourseCard = ({ course, linkTo }) => {
           }}
           className={`${cardClasses.courseFooter}`}
         >
-          <Typography
-            className={cardClasses.courseInstructor}
-            sx={{ width: "50%" }}
-          >
-            {course.teachers
-              .map((teacher, index) => teacher.user.secondName)
-              .join(", ")}
-          </Typography>
+          {teacher ? (
+            <Stack gap={1}>
+              <Typography
+                sx={{ cursor: "pointer" }}
+                onClick={() =>
+                  navigate("/editCourse", {
+                    state: {
+                      id: course.id,
+                      name: course.name,
+                      img_url: course.img_url,
+                      description: course.description,
+                      updatedAt: course.updatedAt,
+                      linkTo,
+                      courseId: course.id,
+                      teachers,
+                      disciplines: course.Disciplines,
+                      teacher: course.teachers,
+                      year: course.year,
+                      courseLongDescription: course.courseLongDescription,
+                    },
+                  })
+                }
+              >
+                <EditIcon
+                  sx={{
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    px: "4px",
+                  }}
+                />
+                Upravovať zaklad...
+              </Typography>
+              <Typography
+                sx={{ cursor: "pointer" }}
+                onClick={() =>
+                  navigate(`/EditCourse/${course.name}/content`, {
+                    state: {
+                      id: course.id,
+                    },
+                  })
+                }
+              >
+                <EditIcon
+                  sx={{
+                    fontSize: "1rem",
+                    cursor: "pointer",
+                    px: "4px",
+                  }}
+                />
+                Upravovať štrukturu...
+              </Typography>
+              <ModalCreate
+                btn={
+                  <Typography sx={{ cursor: "pointer" }}>
+                    <DeleteForeverIcon
+                      sx={{
+                        fontSize: "1.2rem",
+                        cursor: "pointer",
+                        px: "4px",
+                      }}
+                    />
+                    Vymazať navždy?
+                  </Typography>
+                }
+                handleSubmitModal={handleSubmitDeleteCourse}
+                submitBtnText="Vymazať"
+              >
+                <Typography variant="h4">Vymazať kurz</Typography>
+                <Typography variant="h6">
+                  Ste si isti že chcete vymazať kurz {course.name}
+                </Typography>
+              </ModalCreate>
+            </Stack>
+          ) : (
+            <Typography
+              className={cardClasses.courseInstructor}
+              sx={{ width: "50%" }}
+            >
+              {teachers
+                .map((teacher, index) => teacher.user.secondName)
+                .join(", ")}
+            </Typography>
+          )}
+
           <SecundaryBtn
             sxChildren={{
               width: "auto",

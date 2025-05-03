@@ -1,44 +1,17 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { Box, Typography } from "@mui/material";
-import SecundaryBtn from "../core.components/SecundaryBtn";
+import SecundaryBtn from "../../core.components/SecundaryBtn";
 import AnswerMultiple from "./AnswerMultiple";
 import { toast } from "react-toastify";
-import FroalaTextEditor from "./FroalaTextEditor";
+import TipTap from "../tiptap/TipTap";
+import { set } from "lodash";
 
 const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
   const [content, setContent] = useState(" ");
   const [isMounted, setIsMounted] = useState(false);
-  const editorRef = useRef(null);
 
-  console.log(
-    editorRef.current ? "Editor is mounted" : "Editor is not mounted",
-    isMounted,
-    "content: ",
-    content
-  );
-
-  const config = {
-    placeholderText: "Napíš otázku tú...",
-    toolbarButtons: ["insertImage", "insertVideo"],
-    toolbarButtonsXS: ["insertImage", "insertVideo"],
-    toolbarButtonsSM: ["insertImage", "insertVideo"],
-    toolbarButtonsMD: ["insertImage", "insertVideo"],
-    imageUploadURL: "http://localhost:3000/api/courseStructure/upload-image",
-    videoUploadURL: "http://localhost:3000/api/courseStructure/upload-video",
-    imageUploadMethod: "POST",
-    videoUploadMethod: "POST",
-    imageAllowedTypes: ["jpeg", "jpg", "png"],
-    pastePlain: true,
-    pasteDeniedAttrs: ["style"],
-    htmlAllowedTags: ["p", "br", "img", "video"],
-    htmlAllowedAttrs: {
-      img: ["src", "alt"],
-      video: ["src", "controls"],
-    },
-    quickInsertButtons: [],
-    pluginsEnabled: ["image", "video"],
-  };
+  console.log("Content: ", content);
 
   const fetchAnswers = useCallback(async () => {
     const getContent = async (id) => {
@@ -70,18 +43,18 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
   }, [question?.id]);
 
   useEffect(() => {
+    if (question?.id) {
+      console.log("Fetching content for question: ", question?.questionText);
+      setContent(question?.questionText);
+    } else {
+      setContent(" ");
+    }
+  }, [question?.id]);
+
+  useEffect(() => {
     fetchAnswers();
     setIsMounted(true);
   }, [fetchAnswers]);
-
-  useEffect(() => {
-    if (editorRef.current) {
-      console.log(editorRef.current);
-      setIsMounted(true);
-    } else {
-      console.warn("Editor not yet initialized.");
-    }
-  }, [editorRef.current]);
 
   const getAnswers = async () => {
     try {
@@ -193,10 +166,12 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
         throw new Error("Network response was not ok");
       }
       const data = await res.json();
+      toast.success("Obsah bol úspešne uložený");
       getQuestions();
       console.log("Content saved successfully:", data);
     } catch (error) {
       console.error("Error saving content:", error);
+      toast.error("Chyba pri ukladaní obsahu");
     }
   };
 
@@ -235,7 +210,6 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
         <Typography variant="h4" className="font-gradient">
           Editácia otázky č. {question?.order}
         </Typography>
-        {/* <PrimaryBtn style={{ width: "auto" }}>Uložiť otázku</PrimaryBtn> */}
       </Box>
       <Typography>
         Typ otázky: {question?.opened ? "otvorená" : "s viacerými možnosťami"}
@@ -243,16 +217,15 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
 
       <Box sx={{ position: "relative" }}>
         {isMounted && content !== null && (
-          <FroalaTextEditor
-            content={content}
-            setContent={setContent}
-            sendContent={saveQuestionContent}
-            config={config}
-            type="question"
-            onInitialized={(editorInstance) => {
-              editorRef.current = editorInstance;
-            }}
-          />
+          <>
+            <TipTap content={content} setContent={setContent} />
+            <SecundaryBtn
+              onClick={() => saveQuestionContent(content)}
+              style={{ width: "auto" }}
+            >
+              Uložiť otázku
+            </SecundaryBtn>
+          </>
         )}
       </Box>
 

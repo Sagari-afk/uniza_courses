@@ -7,6 +7,7 @@ const QuestionsList = ({
   activeQuestion,
   setActiveQuestion,
   handleQuestionDelete,
+  setEdditingQuestion,
 }) => {
   return (
     <Box
@@ -28,6 +29,7 @@ const QuestionsList = ({
             onClick={() => {
               console.log("Question clicked: ", question);
               setActiveQuestion(question);
+              setEdditingQuestion(true);
             }}
           />
         ))

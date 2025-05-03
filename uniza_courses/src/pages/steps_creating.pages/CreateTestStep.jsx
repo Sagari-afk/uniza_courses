@@ -19,18 +19,21 @@ import ModalCreate from "../../components/createCourseContent.components/ModalCr
 import SecundaryBtn from "../../components/core.components/SecundaryBtn";
 import { useSearchParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import QuestionsCreator from "../../components/createCourseContent.components/QuestionsCreator";
+import QuestionsCreator from "../../components/createCourseContent.components/test/QuestionsCreator";
 import PrimaryBtn from "../../components/core.components/PrimaryBtn";
 
 const CreateTestStep = ({}) => {
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
   const subtopicTitle = searchParams.get("subtopicTitle");
-  const [stepId, setStepId] = useState(null);
+  const [stepId, setStepId] = useState(searchParams.get("stepId"));
+  console.log("StepId: ", stepId);
 
-  const [stepTitle, setStepTitle] = useState("");
+  const [stepTitle, setStepTitle] = useState(
+    searchParams.get("stepTitle") || ""
+  );
   const [questionType, setQuestionType] = useState("");
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = useState(stepId ? 1 : 0);
   const [disabledBtnCreate, setDisabledBtnCreate] = useState(true);
   const [error, setError] = useState(false);
   const [edditingQuestion, setEdditingQuestion] = useState(false);
@@ -237,7 +240,7 @@ const CreateTestStep = ({}) => {
         <Container maxWidth="lg">
           <Paper sx={{ padding: 3, borderRadius: "1rem" }}>
             <Typography variant="h3" className="font-gradient" mb={2}>
-              Vytvoriť nový test
+              {stepId ? "Editovať test" : "Vytvoriť nový test"}
             </Typography>
             <Typography color={"#888"} mb={4}>
               Pre podtemu {subtopicTitle}
@@ -290,6 +293,7 @@ const CreateTestStep = ({}) => {
                     setActiveQuestion={setActiveQuestion}
                     getQuestions={getQuestions}
                     handleQuestionDelete={handleQuestionDelete}
+                    setEdditingQuestion={setEdditingQuestion}
                   />
 
                   <Box

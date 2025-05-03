@@ -1,6 +1,6 @@
 import { Box, Grid2, Typography } from "@mui/material";
 
-import noQuestions from "../../assets/NoQuestions.svg";
+import noQuestions from "../../../assets/NoQuestions.svg";
 import QuestionsList from "./QuestionsList";
 import QuestionEditorWindow from "./QuestionEditorWindow";
 const QuestionsCreator = ({
@@ -10,6 +10,7 @@ const QuestionsCreator = ({
   setActiveQuestion,
   getQuestions,
   handleQuestionDelete,
+  setEdditingQuestion,
 }) => {
   return (
     <Grid2 my="2rem" textAlign={"center"} container spacing={2}>
@@ -19,6 +20,7 @@ const QuestionsCreator = ({
           activeQuestion={activeQuestion}
           setActiveQuestion={setActiveQuestion}
           handleQuestionDelete={handleQuestionDelete}
+          setEdditingQuestion={setEdditingQuestion}
         />
       </Grid2>
       <Grid2
@@ -28,14 +30,20 @@ const QuestionsCreator = ({
         alignItems={!edditingQuestion && "center"}
         justifyContent={!edditingQuestion && "center"}
       >
-        {edditingQuestion && questions.length > 0 ? (
+        {edditingQuestion && questions.length > 0 && activeQuestion ? (
           <QuestionEditorWindow
             question={activeQuestion}
             setQuestion={setActiveQuestion}
             getQuestions={getQuestions}
           ></QuestionEditorWindow>
         ) : (
-          <Box display={"flex"} flexDirection={"column"} gap={3}>
+          <Box
+            display={"flex"}
+            flexDirection={"column"}
+            gap={3}
+            width={"100%"}
+            alignItems={"center"}
+          >
             <Typography color={"#888"} textAlign={"center"}>
               Žiadná otázka nebola vybraná
             </Typography>

@@ -97,6 +97,7 @@ const Step = ({ subtopic, step, id, load }) => {
               subtopicId: subtopic.subtopicId,
               subtopicTitle: subtopic.title,
               stepId: step.id,
+              stepTitle: step.title,
             };
             const queryParams = new URLSearchParams(data).toString();
             if (stepFull.type === "text") {

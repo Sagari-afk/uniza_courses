@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ModalCreate from "./ModalCreate";
+import ModalCreate from "../ModalCreate";
 
 const QuestionInSideMenu = ({
   question,
@@ -9,7 +9,7 @@ const QuestionInSideMenu = ({
   selected,
   handleQuestionDelete,
 }) => {
-  console.log("QuestionInSideMenu question: ", question);
+  // console.log("QuestionInSideMenu question: ", question);
   return (
     <Box
       onClick={onClick}
