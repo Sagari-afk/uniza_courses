@@ -7,6 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "subtopicId",
         onDelete: "CASCADE",
       });
+      Step.hasMany(models.Questions, {
+        as: "questions",
+        onDelete: "CASCADE",
+      });
     }
   }
   Step.init(

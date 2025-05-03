@@ -1,25 +1,14 @@
-import { Box, CircularProgress } from "@mui/material";
+import { Box } from "@mui/material";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import TestViewer from "./TestViewer";
 
-const TextContentViewer = ({ stepId }) => {
-  const [content, setContent] = useState("");
-  const [step, setStep] = useState(null);
-  console.log("stepId", stepId);
-  console.log("step", step);
+const TestViewer = ({ testId, step }) => {
+  const [test, setTest] = useState();
 
-  useEffect(() => {
-    const fetchAll = async () => {
-      getStep();
-    };
-    fetchAll();
-  }, [stepId]);
-
-  const getStep = async () => {
+  const getTest = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/courseStructure/getStep/" + stepId,
+        "http://localhost:3000/api/courseStructure/getTest/" + testId,
         {
           headers: {
             "Content-Type": "application/json",
@@ -34,31 +23,42 @@ const TextContentViewer = ({ stepId }) => {
         toast.error(data?.error);
         return;
       }
-      setContent(data.content);
-      setStep(data);
-      console.log("step", data);
+      setTest(data);
+      console.log("test", data);
     } catch (error) {
       console.log("Error getting content:", error);
       toast.error("Error getting content");
     }
   };
+  useEffect(() => {
+    const fetchAll = async () => {
+      getTest();
+    };
+    fetchAll();
+  }, [testId]);
 
   return (
     <Box>
-      {step?.type === "text" ? (
+      {test?.questions?.map((question, index) => (
         <Box
-          className="fr-view"
+          key={index}
+          padding={1}
           border={(theme) => `1px solid ${theme.palette.divider}`}
           borderRadius={(theme) => theme.shape.borderRadius}
-          padding={2}
           bgcolor={"#fff"}
-          dangerouslySetInnerHTML={{ __html: content }}
-        />
-      ) : (
-        <TestViewer testId={stepId} step={step} />
-      )}
+          marginBottom={2}
+        >
+          <Box
+            padding={2}
+            dangerouslySetInnerHTML={{ __html: question?.questionText }}
+          />
+          {question?.Answers?.map((answer, index) => (
+            <Box key={index}>{answer.contentFileName}</Box>
+          ))}
+        </Box>
+      ))}
     </Box>
   );
 };
 
-export default TextContentViewer;
+export default TestViewer;

@@ -24,85 +24,87 @@ const SideMenu = ({ handleLogout, sideMenuLinks, children }) => {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          margin: "3rem 1rem 0 2rem",
-          minHeight: "550px",
-        }}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-      >
+    <Box>
+      <Box display={"flex"}>
         <Box
+          display={{ md: "flex", xs: "none" }}
           sx={{
-            display: "flex",
             flexDirection: "column",
-            color: "primary.dark",
-            gap: "2rem",
+            justifyContent: "space-between",
+            margin: "3rem 1rem 0 2rem",
+            minHeight: "550px",
           }}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
-          <Icon
-            icon="material-symbols:menu-rounded"
-            style={{
-              fontSize: "2rem",
-              opacity: isHovered || openedByClick ? 0.3 : 1,
-            }}
-            onClick={() => setOpenedByClick(!openedByClick)}
-          />
-
           <Box
             sx={{
               display: "flex",
               flexDirection: "column",
               color: "primary.dark",
               gap: "2rem",
-              transition: "all 0.3s ease",
-              width: isHovered || openedByClick ? "250px" : "60px",
             }}
           >
-            {sideMenuLinks.map((el) => (
-              <LinkWithIconBox
-                isHovered={isHovered || openedByClick}
-                text={el.text}
-                iconName={el.iconName}
-                key={el.iconName}
-              />
-            ))}
-          </Box>
-          {(isHovered || openedByClick) && (
-            <Typography
-              sx={{
-                color: "white.dark",
-                whiteSpace: "nowrap",
-                opacity: 0.3,
-                cursor: "pointer",
-                position: "fixed",
-                bottom: "1rem",
+            <Icon
+              icon="material-symbols:menu-rounded"
+              style={{
+                fontSize: "2rem",
+                opacity: isHovered || openedByClick ? 0.3 : 1,
               }}
-              onClick={handleLogout}
+              onClick={() => setOpenedByClick(!openedByClick)}
+            />
+
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                color: "primary.dark",
+                gap: "2rem",
+                transition: "all 0.3s ease",
+                width: isHovered || openedByClick ? "250px" : "60px",
+              }}
             >
-              Odhlasiť sa
-            </Typography>
-          )}
+              {sideMenuLinks.map((el) => (
+                <LinkWithIconBox
+                  isHovered={isHovered || openedByClick}
+                  text={el.text}
+                  iconName={el.iconName}
+                  key={el.iconName}
+                />
+              ))}
+            </Box>
+            {(isHovered || openedByClick) && (
+              <Typography
+                sx={{
+                  color: "white.dark",
+                  whiteSpace: "nowrap",
+                  opacity: 0.3,
+                  cursor: "pointer",
+                  position: "fixed",
+                  bottom: "1rem",
+                }}
+                onClick={handleLogout}
+              >
+                Odhlasiť sa
+              </Typography>
+            )}
+          </Box>
         </Box>
-      </Box>
-      <Box
-        sx={{
-          borderRadius: "42px 0px 0px 0px",
-          backgroundColor: "white.main",
-          minHeight: "100vh",
-          py: "2rem",
-          px: "4rem",
-          marginTop: "1rem",
-          color: "black.main",
-          width: "100%",
-        }}
-        className="light_gradient-background-animation"
-      >
-        {children}
+        <Box
+          borderRadius={{ md: "42px 0px 0px 0px", xs: "0px" }}
+          px={{ md: "4rem", xs: "1rem" }}
+          sx={{
+            backgroundColor: "white.main",
+            minHeight: "100vh",
+            py: "2rem",
+            marginTop: "1rem",
+            color: "black.main",
+            width: "100%",
+          }}
+          className="light_gradient-background-animation"
+        >
+          {children}
+        </Box>
       </Box>
     </Box>
   );

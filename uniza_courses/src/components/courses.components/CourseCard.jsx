@@ -1,39 +1,39 @@
-import cardClasses from "../../styles/CourseCard.module.css";
 import { useNavigate } from "react-router-dom";
 import Badge from "@mui/material/Badge";
 import { Icon } from "@iconify/react";
-import { Box, Stack, Typography } from "@mui/material";
-import SecundaryBtn from "../core.components/SecundaryBtn";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import ModalCreate from "../createCourseContent.components/ModalCreate";
-import PrimaryBtn from "../core.components/PrimaryBtn";
-import { toast } from "react-toastify";
+import { Box, Typography } from "@mui/material";
 
-const CourseCard = ({
-  id,
-  name,
-  img_url,
-  description,
-  updatedAt,
-  linkTo,
-  courseId,
-  teachers,
-  disciplines,
-  year,
-  teacher,
-  courseLongDescription,
-  load,
-}) => {
-  const date = new Date(updatedAt);
+import cardClasses from "../../styles/CourseCard.module.css";
+import SecundaryBtn from "../core.components/SecundaryBtn";
+import { useEffect, useState } from "react";
+
+const CourseCard = ({ course, linkTo }) => {
   const navigate = useNavigate();
 
-  const handleSubmitDeleteCourse = async () => {
+  let date = new Date(course.updatedAt);
+  date = new Intl.DateTimeFormat("sk-SK", {
+    dateStyle: "long",
+  }).format(date);
+
+  const values = course.CourseComments;
+  const [averageRate, setAverageRate] = useState(
+    values.length > 0
+      ? Math.round(
+          (values.reduce((sum, rating) => sum + rating.commentRate, 0) /
+            values.length) *
+            100
+        ) / 100
+      : 0
+  );
+
+  const [studentsCount, setStudentsCount] = useState(0);
+
+  const getStudentsCount = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/course/deleteCourse/" + id,
+        `http://localhost:3000/api/course/getStudentsCount/${course.id}`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
             "x-access-token":
@@ -43,16 +43,19 @@ const CourseCard = ({
         }
       );
       if (response.ok) {
-        toast.success("Kurz bol vymazan");
+        const data = await response.json();
+        setStudentsCount(data);
       } else {
-        throw new Error("Failed to delete course");
+        console.error("Failed to fetch students count");
       }
-      load();
     } catch (error) {
-      console.log(error);
-      toast.error("Nastala chyba pri vymazavani kurzu");
+      console.error("Error fetching students count:", error);
     }
   };
+
+  useEffect(() => {
+    getStudentsCount();
+  }, []);
 
   return (
     <Box
@@ -73,13 +76,13 @@ const CourseCard = ({
       >
         <Box className={cardClasses.courseTitle}>
           <Typography variant="h5" className={cardClasses.courseName}>
-            {name}
+            {course.name}
           </Typography>
           <Typography
             className={cardClasses.courseDescription}
             sx={{ display: "inline" }}
           >
-            {description.slice(0, 50)}
+            {course.description.slice(0, 50)}
             <span>...</span>
           </Typography>
         </Box>
@@ -97,7 +100,7 @@ const CourseCard = ({
           }
           className="c-main-purple"
         >
-          <img src={img_url} className={cardClasses.img} />
+          <img src={course.img_url} className={cardClasses.img} />
         </Badge>
       </Box>
       <Box>
@@ -108,95 +111,19 @@ const CourseCard = ({
           }}
           className={`${cardClasses.courseFooter}`}
         >
-          {teacher ? (
-            <Stack gap={1}>
-              <Typography
-                sx={{ cursor: "pointer" }}
-                onClick={() =>
-                  navigate("/editCourse", {
-                    state: {
-                      id,
-                      name,
-                      img_url,
-                      description,
-                      updatedAt,
-                      linkTo,
-                      courseId,
-                      teachers,
-                      disciplines,
-                      teacher,
-                      year,
-                      courseLongDescription,
-                    },
-                  })
-                }
-              >
-                <EditIcon
-                  sx={{
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                    px: "4px",
-                  }}
-                />
-                Upravovať zaklad...
-              </Typography>
-              <Typography
-                sx={{ cursor: "pointer" }}
-                onClick={() =>
-                  navigate(`/EditCourse/${name}/content`, {
-                    state: {
-                      id,
-                    },
-                  })
-                }
-              >
-                <EditIcon
-                  sx={{
-                    fontSize: "1rem",
-                    cursor: "pointer",
-                    px: "4px",
-                  }}
-                />
-                Upravovať štrukturu...
-              </Typography>
-              <ModalCreate
-                btn={
-                  <Typography sx={{ cursor: "pointer" }}>
-                    <DeleteForeverIcon
-                      sx={{
-                        fontSize: "1.2rem",
-                        cursor: "pointer",
-                        px: "4px",
-                      }}
-                    />
-                    Vymazať navždy?
-                  </Typography>
-                }
-                handleSubmitModal={handleSubmitDeleteCourse}
-                submitBtnText="Vymazať"
-              >
-                <Typography variant="h4">Vymazať kurz</Typography>
-                <Typography variant="h6">
-                  Ste si isti že chcete vymazať kurz {name}
-                </Typography>
-              </ModalCreate>
-            </Stack>
-          ) : (
-            <Typography
-              className={cardClasses.courseInstructor}
-              sx={{ width: "50%" }}
-            >
-              {teachers
-                .map((teacher, index) => teacher.user.secondName)
-                .join(", ")}
-            </Typography>
-          )}
-
+          <Typography
+            className={cardClasses.courseInstructor}
+            sx={{ width: "50%" }}
+          >
+            {course.teachers
+              .map((teacher, index) => teacher.user.secondName)
+              .join(", ")}
+          </Typography>
           <SecundaryBtn
             sxChildren={{
               width: "auto",
             }}
-            onClick={() => navigate(linkTo, { state: { courseId } })}
+            onClick={() => navigate(linkTo, { state: { courseId: course.id } })}
           >
             Viac...
           </SecundaryBtn>
@@ -214,14 +141,14 @@ const CourseCard = ({
                 icon="material-symbols:star"
                 style={{ width: "12px", height: "12px" }}
               ></Icon>{" "}
-              5
+              {values.length > 0 ? averageRate : "Žiadne"}
             </Typography>
             <Typography style={{ display: "flex", alignItems: "center" }}>
               <Icon
                 icon="material-symbols:person"
                 style={{ width: "12px", height: "12px" }}
               ></Icon>{" "}
-              10
+              {studentsCount}
             </Typography>
             <Typography style={{ display: "flex", alignItems: "center" }}>
               <Icon
@@ -232,7 +159,7 @@ const CourseCard = ({
             </Typography>
           </Box>
 
-          <Typography>{date.toDateString()}</Typography>
+          <Typography>{date}</Typography>
         </Box>
       </Box>
     </Box>

@@ -227,16 +227,28 @@ const CreateTextStep = () => {
                 border={(theme) => `1px solid ${theme.palette.divider}`}
                 borderRadius={(theme) => theme.shape.borderRadius}
                 padding={2}
-                dangerouslySetInnerHTML={{ __html: content }}
+                // dangerouslySetInnerHTML={{ __html: content }}
               />
             ) : (
               <Box>
-                {isMounted && content && (
+                {/* {isMounted && content && (
                   <FroalaEditorComponent
                     tag="textarea"
                     model={content}
                     config={config}
                     onModelChange={(newContent) => setContent(newContent)}
+                    onInitialized={(editorInstance) => {
+                      editorRef.current = editorInstance;
+                    }}
+                  />
+                )} */}
+                {isMounted && content !== null && (
+                  <FroalaTextEditor
+                    content={content}
+                    setContent={setContent}
+                    sendContent={saveContent}
+                    config={config}
+                    type="text"
                     onInitialized={(editorInstance) => {
                       editorRef.current = editorInstance;
                     }}

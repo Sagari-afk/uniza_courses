@@ -14,6 +14,7 @@ import TextContentViewer from "../components/studentCourseContent.components/Tex
 import CheckIcon from "@mui/icons-material/Check";
 import { toast } from "react-toastify";
 import AnimatedNextIcon from "../components/studentCourseContent.components/AnimatedNextIcon";
+import TestViewer from "../components/studentCourseContent.components/TestViewer";
 
 const StudentCourseContent = () => {
   const userData = JSON.parse(sessionStorage.getItem("userData"));
@@ -32,6 +33,9 @@ const StudentCourseContent = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepsCount, setStepsCount] = useState(0);
   const [allStepsCount, setAllStepsCount] = useState(0);
+  console.log("Course ID: ", courseId);
+  console.log("topics: ", topics);
+  console.log("currentStep: ", currentStep);
 
   const loadCourse = async () => {
     try {
@@ -203,7 +207,8 @@ const StudentCourseContent = () => {
         }
       );
       if (!response.ok) {
-        throw new Error(`Server error: ${response.status}`);
+        console.log(response);
+        throw new Error(`Podtema nemá žiaden kontent.`);
       }
       if (response.status !== 204) {
         var responseData = await response.json();
@@ -216,8 +221,8 @@ const StudentCourseContent = () => {
         setCompleted(responseData.dataValues.completed);
       }
     } catch (error) {
-      console.error("Error completing step:", error);
-      toast.error("Error completing step: " + error.message);
+      console.error("Error changing subtopic:", error);
+      toast.warning("Error changing subtopic: " + error);
     }
   };
 
@@ -269,6 +274,8 @@ const StudentCourseContent = () => {
           }),
         }
       );
+      const data = await response.json();
+
       setCurrentStep(stepId);
     } catch (error) {
       console.error("Error getting status:", error);
@@ -285,13 +292,9 @@ const StudentCourseContent = () => {
   }, [currentStep]);
 
   useEffect(() => {
-    const fetchAll = async () => {
-      await loadCourse();
-      await loadUserLastProgress();
-      setReady(true);
-    };
-
-    fetchAll();
+    loadCourse();
+    loadUserLastProgress();
+    setReady(true);
   }, []);
 
   return (

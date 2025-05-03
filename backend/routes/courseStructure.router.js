@@ -24,6 +24,7 @@ const {
   upladFile,
   saveContent,
   updateContent,
+  getTest,
 } = require("../controllers/step.controller");
 
 const router = express.Router();
@@ -69,6 +70,8 @@ router.post("/newSubtopic", newSubTopic);
 router.post("/editSubtopicOrder", editSubtopicOrder);
 router.post("/editSubtopic", editSubtopic);
 router.post("/deleteSubtopic/:subtopicId", deleteSubtopic);
+
+router.get("/getTest/:testId", getTest);
 
 // router.post("/newStep", newStep);
 router.get("/getStep/:stepId", getStep);

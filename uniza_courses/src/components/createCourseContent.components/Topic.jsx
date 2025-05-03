@@ -23,7 +23,6 @@ import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 
 import ModalCreate from "./ModalCreate";
-import PrimaryBtn from "../core.components/PrimaryBtn";
 import SubTopic from "./SubTopic";
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import { toast } from "react-toastify";

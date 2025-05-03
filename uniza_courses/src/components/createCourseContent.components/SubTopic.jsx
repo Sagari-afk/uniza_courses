@@ -43,13 +43,13 @@ const SubTopic = ({ id, subtopic, load }) => {
         id: step.order,
         subtopicId: step.id,
         title: step.title,
+        type: step.type,
       }))
       .sort((a, b) => a.id - b.id)
   ); // for dnd
   const [stepOrderEdditing, setStepOrderEdditing] = React.useState(false);
   const [stepType, setStepType] = React.useState("text");
   const [selectedFile, setSelectedFile] = React.useState(null);
-  const navigate = useNavigate();
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
@@ -62,6 +62,7 @@ const SubTopic = ({ id, subtopic, load }) => {
           id: step.order,
           subtopicId: step.id,
           title: step.title,
+          type: step.type,
         }))
         .sort((a, b) => a.id - b.id)
     );

@@ -1,4 +1,4 @@
-const { sequelize, Step } = require("../models");
+const { sequelize, Step, Questions, Answers } = require("../models");
 const { body, validationResult } = require("express-validator");
 const path = require("path");
 const fs = require("fs");
@@ -92,8 +92,7 @@ const updateContent = async (req, res) => {
 const getStep = async (req, res) => {
   try {
     const record = await Step.findByPk(req.params.stepId);
-    const step = record.toJSON();
-    return res.status(200).json(step);
+    return res.status(200).json(record);
   } catch (error) {
     console.log(error);
     return res.status(500).json(error.message);
@@ -130,6 +129,29 @@ const deleteStep = async (req, res) => {
   }
 };
 
+const getTest = async (req, res) => {
+  try {
+    const record = await Step.findByPk(req.params.testId, {
+      include: [
+        {
+          model: Questions,
+          as: "questions",
+          include: [
+            {
+              model: Answers,
+            },
+          ],
+        },
+      ],
+    });
+
+    return res.status(200).json(record);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json(error.message);
+  }
+};
+
 module.exports = {
   deleteStep,
   uploadImage,
@@ -138,4 +160,5 @@ module.exports = {
   saveContent,
   getStep,
   updateContent,
+  getTest,
 };

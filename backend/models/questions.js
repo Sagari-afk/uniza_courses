@@ -3,7 +3,6 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Questions extends Model {
     static associate(models) {
-      // define association here
       Questions.belongsTo(models.Step, {
         foreignKey: "stepId",
         onDelete: "CASCADE",

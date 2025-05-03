@@ -376,9 +376,9 @@ const getIsStarted = async (req, res) => {
     const record = await StudentProgressHistory.findOne({
       where: { courseId: req.params.courseId, userId: req.params.userId },
     });
-    if (record) return res.status(200).json({});
+    if (record) return res.status(200).json({ started: true });
     console.log("Is started: ", record);
-    return res.status(400).json({});
+    return res.status(200).json({ started: false });
   } catch (error) {
     console.log(error);
     return res.status(500).json(error.message);

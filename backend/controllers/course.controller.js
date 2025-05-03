@@ -8,6 +8,7 @@ const {
   Step,
   Topic,
   SubTopic,
+  StudentProgressHistory,
 } = require("../models");
 const { body, validationResult } = require("express-validator");
 
@@ -353,6 +354,23 @@ const getAllTeachersCourses = async (req, res) => {
   }
 };
 
+const getStudentsCount = async (req, res) => {
+  try {
+    const courseId = req.params.id;
+    const count = await StudentProgressHistory.count({
+      where: { courseId },
+      distinct: true,
+      col: "userId",
+    });
+    console.log("count", count);
+
+    return res.status(200).json(count);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 module.exports = {
   getCourses,
   newCourse,
@@ -360,4 +378,5 @@ module.exports = {
   deleteCourse,
   getCourseBy,
   getAllTeachersCourses,
+  getStudentsCount,
 };

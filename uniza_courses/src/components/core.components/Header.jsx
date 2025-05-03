@@ -28,12 +28,15 @@ const Header = () => {
   return (
     <Box
       id="header"
+      mb={{ xs: -1, md: 0 }}
+      px={{ xs: 2, md: 5 }}
       sx={{
         display: "flex",
         justifyContent: "space-between",
-        px: 4,
+
         py: 1,
         marginTop: -2,
+
         alignItems: "center",
 
         position: isSticky ? "fixed" : "relative",
@@ -55,7 +58,7 @@ const Header = () => {
       </Link>
 
       <Box sx={{ display: "flex", gap: 2 }}>
-        <SelectLanguage />
+        {/* <SelectLanguage /> */}
         {localStorage.getItem("authToken") ||
         sessionStorage.getItem("authToken") ? (
           <Link>

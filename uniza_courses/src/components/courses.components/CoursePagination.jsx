@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Pagination, Box, Stack, Typography } from "@mui/material";
+
 import CourseCard from "./CourseCard";
 
-const CoursesPagination = ({ courses, teacher, load }) => {
-  const coursesPerPage = 9;
+const CoursesPagination = ({ courses, load }) => {
   const [currentPage, setCurrentPage] = useState(1);
+
+  const coursesPerPage = 9;
   const indexOfLastCourse = currentPage * coursesPerPage;
   const indexOfFirstCourse = indexOfLastCourse - coursesPerPage;
   const currentCourses = courses.slice(indexOfFirstCourse, indexOfLastCourse);
@@ -25,23 +27,13 @@ const CoursesPagination = ({ courses, teacher, load }) => {
           currentCourses.map((course, index) => (
             <CourseCard
               key={index}
-              id={course.id}
-              name={course.name}
-              img_url={course.img_url}
-              teachers={course.teachers}
-              updatedAt={course.updatedAt}
-              description={course.description}
+              course={course}
               linkTo={`/Course/${course.name}`}
-              courseId={course.id}
-              disciplines={course.disciplines}
-              year={course.year}
-              teacher={teacher}
-              courseLongDescription={course.long_description}
               load={load}
             />
           ))
         ) : (
-          <Typography>Nenasiel sa ziaden kurz</Typography>
+          <Typography>Nenašiel sa žiaden kurz</Typography>
         )}
       </Box>
 

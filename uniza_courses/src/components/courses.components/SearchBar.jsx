@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import {
   Select,
   MenuItem,
@@ -7,6 +7,7 @@ import {
   TextField,
   Box,
 } from "@mui/material";
+
 import SecundaryBtn from "../core.components/SecundaryBtn";
 
 const SearchBar = ({ restData, setFilteredData }) => {

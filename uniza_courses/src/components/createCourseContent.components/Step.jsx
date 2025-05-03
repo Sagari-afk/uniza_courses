@@ -1,26 +1,47 @@
 import { Typography, Box, Grid2, TextField } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
 import { CSS } from "@dnd-kit/utilities";
 
 import ModalCreate from "./ModalCreate";
-import PrimaryBtn from "../core.components/PrimaryBtn";
 import { useSortable } from "@dnd-kit/sortable";
 import { toast } from "react-toastify";
 
 const Step = ({ subtopic, step, id, load }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
-  const [stepTitle, setStepTitle] = React.useState(step.title);
   const style = {
     transition,
     transform: CSS.Transform.toString(transform),
   };
-  console.log("Step: ", step);
+  const [stepFull, setStepFull] = useState(step);
+
+  const getStep = async () => {
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/courseStructure/getStep/" + step.id,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      const data = await res.json();
+      if (!data || !res || data?.error || !res?.ok) {
+        toast.error(data?.error);
+        return;
+      }
+      setStepFull(data);
+    } catch (error) {
+      console.log("Error getting content:", error);
+      toast.error("Error getting content");
+    }
+  };
 
   const handleSubmitDeleteStep = async () => {
     try {
@@ -48,6 +69,13 @@ const Step = ({ subtopic, step, id, load }) => {
     }
   };
 
+  useEffect(() => {
+    const fetchAll = async () => {
+      getStep();
+    };
+    fetchAll();
+  }, [id]);
+
   // Steps DND doesn't work!!!!!!!!!!!!
 
   return (
@@ -57,10 +85,10 @@ const Step = ({ subtopic, step, id, load }) => {
       {...attributes}
       style={style}
     >
-      <Box {...listeners} sx={{ cursor: "grab" }}>
+      {/* <Box {...listeners} sx={{ cursor: "grab" }}>
         <DragIndicatorIcon />
-      </Box>
-      <Typography fontSize={"1.3rem"}>{step.title}</Typography>
+      </Box> */}
+      <Typography fontSize={"1.3rem"}>- {step.title}</Typography>
       <Box sx={{ display: "flex", gap: 1 }}>
         <EditIcon
           sx={{ color: "secondary.main", fontSize: "1.5rem" }}
@@ -71,10 +99,17 @@ const Step = ({ subtopic, step, id, load }) => {
               stepId: step.id,
             };
             const queryParams = new URLSearchParams(data).toString();
-            window.open(
-              `/CourseContent/createStep/text?${queryParams}`,
-              "_blank"
-            );
+            if (stepFull.type === "text") {
+              window.open(
+                `/CourseContent/createStep/text?${queryParams}`,
+                "_blank"
+              );
+            } else if (stepFull.type === "test") {
+              window.open(
+                `/CourseContent/createStep/test?${queryParams}`,
+                "_blank"
+              );
+            }
           }}
         />
 

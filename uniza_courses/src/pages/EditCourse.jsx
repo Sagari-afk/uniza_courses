@@ -22,7 +22,7 @@ import { toast } from "react-toastify";
 
 const EditCourse = () => {
   const location = useLocation();
-  const { id, teacher } = location.state || {};
+  const { id } = location.state || {};
 
   const [courseName, setCourseName] = useState("");
   const [selectedOdbor, setSelectedOdbor] = useState([]);

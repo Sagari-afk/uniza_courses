@@ -25,21 +25,23 @@ const StepsContainer = ({ steps, stepIdActive, style, changeStepSubmit }) => {
             },
           }}
         >
-          <Fab
-            color={"primary"}
-            size="small"
-            sx={{ mt: step.id === stepIdActive ? "1rem" : 0 }}
-            key={step.title}
-            onClick={() => changeStepSubmit(step.id)}
-          >
-            <AssignmentIcon sx={{ fontSize: "1.2rem", cursor: "pointer" }} />
-          </Fab>
+          {step.type === "test" ? (
+            <Fab color={"primary"} size="small">
+              <QuizIcon sx={{ fontSize: "1.2rem", cursor: "pointer" }} />
+            </Fab>
+          ) : (
+            <Fab
+              color={"primary"}
+              size="small"
+              sx={{ mt: step.id === stepIdActive ? "1rem" : 0 }}
+              key={step.title}
+              onClick={() => changeStepSubmit(step.id)}
+            >
+              <AssignmentIcon sx={{ fontSize: "1.2rem", cursor: "pointer" }} />
+            </Fab>
+          )}
         </Tooltip>
       ))}
-
-      <Fab color={"primary"} size="small">
-        <QuizIcon sx={{ fontSize: "1.2rem", cursor: "pointer" }} />
-      </Fab>
     </Stack>
   );
 };
