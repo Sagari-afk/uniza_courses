@@ -7,6 +7,8 @@ const {
   changeSubtopic,
   getCompletedStatus,
   getIsStarted,
+  submitTestResults,
+  getTestResults,
 } = require("../controllers/userProgress");
 
 const router = express.Router();
@@ -14,10 +16,12 @@ const router = express.Router();
 router.get("/getLastUserProgress/:courseId/:userId", getLastUserProgress);
 router.get("/getCompletedStatus/:stepId/:userId", getCompletedStatus);
 router.get("/getIsStarted/:courseId/:userId", getIsStarted);
+router.get("/getTestResults/:stepId/:userId", getTestResults);
 
 router.post("/addLastUserProgress", addLastUserProgress);
 router.post("/setStepCompleted/:stepId/:userId", setStepCompleted);
 router.post("/nextStep", nextStep);
 router.post("/changeSubtopic", changeSubtopic);
+router.post("/submitTestResults", submitTestResults);
 
 module.exports = router;

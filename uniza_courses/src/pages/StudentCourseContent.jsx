@@ -375,7 +375,7 @@ const StudentCourseContent = () => {
                 />
               </Stack>
             </Box>
-            <TextContentViewer stepId={currentStep} />
+            <TextContentViewer stepId={currentStep} userData={userData} />
           </Box>
         </SideMenu>
       ) : (

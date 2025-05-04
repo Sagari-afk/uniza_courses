@@ -120,7 +120,7 @@ const getCourseBy = async (req, res) => {
               include: [
                 {
                   model: Step,
-                  attributes: ["title", "order", "id"],
+                  attributes: ["title", "order", "id", "type"],
                   as: "steps",
                 },
               ],

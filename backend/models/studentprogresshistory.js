@@ -36,6 +36,7 @@ module.exports = (sequelize, DataTypes) => {
       subtopicId: { type: DataTypes.INTEGER, allowNull: false },
       stepId: { type: DataTypes.INTEGER, allowNull: false },
       completed: { type: DataTypes.BOOLEAN, defaultValue: false },
+      score: { type: DataTypes.INTEGER, defaultValue: 0 },
     },
     {
       sequelize,

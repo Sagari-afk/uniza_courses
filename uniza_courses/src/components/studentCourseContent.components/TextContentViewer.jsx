@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import TestViewer from "./TestViewer";
 
-const TextContentViewer = ({ stepId }) => {
+const TextContentViewer = ({ stepId, userData }) => {
   const [content, setContent] = useState("");
   const [step, setStep] = useState(null);
   console.log("stepId", stepId);
@@ -55,7 +55,7 @@ const TextContentViewer = ({ stepId }) => {
           dangerouslySetInnerHTML={{ __html: content }}
         />
       ) : (
-        <TestViewer testId={stepId} step={step} />
+        <TestViewer testId={stepId} step={step} userData={userData} />
       )}
     </Box>
   );

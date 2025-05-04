@@ -215,9 +215,9 @@ const nextStep = async (req, res) => {
         where: { subtopicId, order: step.order + 1 },
       });
       // console.log("Next step in subtopic: ", nextStepInSubtopic);
-      // if (!nextStepInSubtopic) {
-      //   return res.status(400).json({ error: "Next step not found" });
-      // }
+      if (!nextStepInSubtopic) {
+        return res.status(404).json({ error: "Next step not found" });
+      }
       const record = await StudentProgressHistory.create({
         userId,
         courseId,
@@ -373,12 +373,53 @@ const getCompletedStatus = async (req, res) => {
 
 const getIsStarted = async (req, res) => {
   try {
-    const record = await StudentProgressHistory.findOne({
-      where: { courseId: req.params.courseId, userId: req.params.userId },
+    const record = await StudentProgressHistory.findAll({
+      where: {
+        courseId: req.params.courseId,
+        userId: req.params.userId,
+      },
     });
     if (record) return res.status(200).json({ started: true });
     console.log("Is started: ", record);
     return res.status(200).json({ started: false });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }
+};
+
+const submitTestResults = async (req, res) => {
+  try {
+    const { userId, testId, results, score } = req.body;
+    console.log("Results: ", results);
+    const records = await StudentProgressHistory.findAll({
+      where: { userId, stepId: testId },
+    });
+    const record = records[records.length - 1];
+    if (!record) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+    record.score = score;
+    await record.save();
+    console.log("Record: ", record);
+    return res.status(200).json({ message: "Test results saved successfully" });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json(error.message);
+  }
+};
+
+const getTestResults = async (req, res) => {
+  try {
+    const { userId, stepId } = req.params;
+    const records = await StudentProgressHistory.findAll({
+      where: { userId, stepId, score: { [Op.gt]: 0 } },
+    });
+    const record = records[records.length - 1];
+    if (!record) {
+      return res.status(404).json({ error: "Record not found" });
+    }
+    return res.status(200).json({ results: record.dataValues.score });
   } catch (error) {
     console.log(error);
     return res.status(500).json(error.message);
@@ -393,4 +434,6 @@ module.exports = {
   changeSubtopic,
   getCompletedStatus,
   getIsStarted,
+  submitTestResults,
+  getTestResults,
 };
