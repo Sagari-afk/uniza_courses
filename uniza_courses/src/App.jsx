@@ -58,11 +58,9 @@ function App() {
   const [userData, setUserData] = useState(() =>
     JSON.parse(sessionStorage.getItem("userData"))
   );
-  console.log(userData);
   const navigate = useNavigate();
 
   const getUserData = async (token) => {
-    console.log("Fetching user data...", token);
     try {
       const response = await fetch(
         "http://localhost:3000/api/user/getUserData",
@@ -89,13 +87,11 @@ function App() {
   };
 
   useEffect(() => {
-    if (!userData) getUserData(authToken);
-  }, [authToken, userData]);
-
-  useEffect(() => {
     setAuthToken(
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken")
     );
+    console.log("Auth token changed:", authToken);
+    getUserData(authToken);
   }, [localStorage.getItem("authToken"), sessionStorage.getItem("authToken")]);
 
   useEffect(() => {
@@ -103,7 +99,6 @@ function App() {
       const token =
         localStorage.getItem("authToken") ||
         sessionStorage.getItem("authToken");
-      console.log("Auth token: ", authToken);
       if (token) {
         setAuthToken(token);
         const data = await getUserData(token);

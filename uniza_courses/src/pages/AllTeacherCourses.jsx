@@ -17,7 +17,7 @@ const AllTeachersCourses = () => {
     try {
       const response = await fetch(
         "http://localhost:3000/api/course/getAllTeachersCourses/" +
-          teacherData.userId,
+          teacherData.id,
         {
           headers: {
             "Content-Type": "application/json",

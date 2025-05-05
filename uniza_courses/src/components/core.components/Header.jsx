@@ -10,7 +10,6 @@ const Header = ({ style }) => {
   const [userData, setUserData] = useState(() =>
     JSON.parse(sessionStorage.getItem("userData"))
   );
-  console.log(userData);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +27,13 @@ const Header = ({ style }) => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  useEffect(() => {
+    setUserData(
+      JSON.parse(sessionStorage.getItem("userData")) ||
+        JSON.parse(localStorage.getItem("userData"))
+    );
+  }, [localStorage.getItem("authToken")]);
 
   return (
     <Box

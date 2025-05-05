@@ -96,7 +96,7 @@ const TestViewer = ({ testId, userData, step }) => {
             testId: testId,
             score: score,
             results: results,
-            userId: userData?.userId,
+            userId: userData?.id,
           }),
         }
       );
@@ -120,7 +120,7 @@ const TestViewer = ({ testId, userData, step }) => {
       try {
         const res = await fetch(
           "http://localhost:3000/api/userProgress/getTestResults/" +
-            `${step?.id || testId}/${userData?.userId}`,
+            `${step?.id || testId}/${userData?.id}`,
           {
             headers: {
               "Content-Type": "application/json",

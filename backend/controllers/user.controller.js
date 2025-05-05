@@ -1,5 +1,8 @@
 const { sequelize, User, Teacher, Student } = require("../models");
 const jwt = require("jsonwebtoken");
+
+const path = require("path");
+const multer = require("multer");
 const { body, validationResult } = require("express-validator");
 
 const getUsers = async (req, res) => {
@@ -246,7 +249,7 @@ const updateUser = async (req, res) => {
         },
       ],
     });
-    console.log("Updated user: ", updatedUser);
+    console.log("Image url: ", updatedUser.profile_img_url);
 
     const token = jwt.sign(
       {
@@ -336,6 +339,17 @@ const getUserData = async (req, res) => {
   }
 };
 
+const uploadProfileImage = async (req, res) => {
+  if (!req.file) {
+    return res.status(400).json({ error: "No file uploaded" });
+  }
+  const img_url = req.file ? req.file.path : null;
+
+  const url = `http://localhost:3000/${img_url}`;
+
+  res.json({ url });
+};
+
 module.exports = {
   getUsers,
   getUserBy,
@@ -345,4 +359,5 @@ module.exports = {
   loginUser,
   getTeachers,
   getUserData,
+  uploadProfileImage,
 };

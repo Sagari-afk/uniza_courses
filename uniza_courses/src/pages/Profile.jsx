@@ -1,12 +1,15 @@
 import { Box, FormControl, TextField, Typography } from "@mui/material";
 import Header from "../components/core.components/Header";
 import profile_pic from "../assets/profile_pic.jpg";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import LightTextField from "../components/core.components/LightTextField";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import { toast } from "react-toastify";
 
 const Profile = ({ userData, getUserData }) => {
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(userData?.profile_img_url || null);
+
   const [name, setName] = useState(userData?.firstName || "");
   const [secondName, setSecondName] = useState(userData?.secondName || "");
   const [email, setEmail] = useState(userData?.email || "");
@@ -22,6 +25,8 @@ const Profile = ({ userData, getUserData }) => {
   const [office, setOffice] = useState(userData?.teacher?.office || "");
 
   const [userImage, setUserImage] = useState(userData?.profile_img_url);
+
+  const fileInputRef = useRef();
 
   useEffect(() => {
     setName(userData?.firstName || "");
@@ -48,7 +53,7 @@ const Profile = ({ userData, getUserData }) => {
       return toast.error("Kancelária je povinná.");
 
     try {
-      console.log("saveUser", userData?.id);
+      const url = await handleUpload();
       const res = await fetch(
         `http://localhost:3000/api/user/editUser/${userData?.id}`,
         {
@@ -67,6 +72,7 @@ const Profile = ({ userData, getUserData }) => {
             personalNum: personalNumber,
             institute: institute,
             office: office,
+            profile_img_url: url,
           }),
         }
       );
@@ -82,14 +88,52 @@ const Profile = ({ userData, getUserData }) => {
       if (!data?.token) {
         return toast.error("Chyba pri ukladaní používateľských údajov.");
       }
-      toast.success("Údaje boli úspešne uložené.");
       localStorage.setItem("authToken", data.token);
-      // getUserData(data.token);
+      toast.success("Údaje boli úspešne uložené.");
+      getUserData(
+        localStorage.getItem("authToken") || sessionStorage.getItem("authToken")
+      );
     } catch (error) {
       console.error("Error saving user data:", error);
       toast.error(
         "Chyba pri ukladaní používateľských údajov. Skúste to znova."
       );
+    }
+  };
+
+  const handleFileChange = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    setFile(f);
+    setPreview(URL.createObjectURL(f));
+  };
+
+  const handleUpload = async () => {
+    if (!file || !preview) return toast.warning("Najprv vyberte súbor");
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const res = await fetch(
+        "http://localhost:3000/api/user/uploadProfileImage",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        }
+      );
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Upload failed");
+      setUserImage(data.url);
+      console.log("Image URL:", data.url);
+      return data.url;
+    } catch (err) {
+      console.error(err);
+      toast.error("Upload error: " + err.message);
     }
   };
 
@@ -130,17 +174,27 @@ const Profile = ({ userData, getUserData }) => {
             alignItems="center"
             gap={2}
           >
-            <img
-              src={userImage || profile_pic}
-              alt="Profile"
-              style={{
-                borderRadius: "50%",
-                width: "250px",
-                height: "250px",
-                objectFit: "cover",
-                border: "3px solid #e7407b",
-              }}
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: "none" }}
+              id="image-upload-input"
             />
+            <label htmlFor="image-upload-input" style={{ cursor: "pointer" }}>
+              <img
+                src={preview || profile_pic}
+                alt="Profile"
+                style={{
+                  borderRadius: "50%",
+                  width: "250px",
+                  height: "250px",
+                  objectFit: "cover",
+                  border: "3px solid #e7407b",
+                }}
+              />
+            </label>
             <Box
               sx={{
                 display: "flex",
