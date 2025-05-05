@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import SecundaryBtn from "../components/core.components/SecundaryBtn";
 import { toast } from "react-toastify";
+import LightTextFieldWrapper from "../components/core.components/LightTextField";
 
 const SignIn = ({ setAuthToken }) => {
   const [email, setEmail] = useState("");
@@ -73,116 +74,135 @@ const SignIn = ({ setAuthToken }) => {
   };
 
   return (
-    <>
-      <Header />
-      <Container
-        sx={{ overflow: "hidden", height: "100%", backgroundColor: "black" }}
+    <Box
+      sx={{
+        height: "100vh",
+        backgroundImage: "url(/homepage.png)",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "rgba(0,0,0,0.6)",
+        backgroundBlendMode: "overlay",
+        backgroundPosition: "center 70%",
+      }}
+    >
+      <Box
+        className="light_gradient-background-animation"
+        sx={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            gap: 6,
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "100%",
-            paddingBottom: "10rem",
-            color: "white",
-            marginTop: "-2rem",
-          }}
+        <Header style={{ background: "transparent" }} />
+        <Container
+          sx={{ overflow: "hidden", height: "100%", backgroundColor: "black" }}
         >
-          <Typography variant="h3" color="primary.main">
-            Prihlasiť sa
-          </Typography>
-          <FormControl
-            component="form"
-            onSubmit={handleSubmit}
+          <Box
             sx={{
               display: "flex",
-              gap: 2,
-              width: "20rem",
-              border: "solid rgba(255, 255, 255, 0.1)",
-              padding: "1rem",
-              borderRadius: "8px",
+              gap: 6,
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              height: "100%",
+              paddingBottom: "10rem",
+              color: "white",
+              marginTop: "-2rem",
             }}
           >
-            <FormLabel htmlFor="email" sx={{ color: "white.main" }}>
-              Školský email
-            </FormLabel>
-            <TextField
-              id="email"
-              type="email"
-              name="email"
-              placeholder="your@stud.uniza.sk"
-              autoComplete="email"
-              autoFocus
-              required
-              fullWidth
-              variant="outlined"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              InputLabelProps={{ style: { color: "white" } }}
-              InputProps={{ style: { color: "white" } }}
+            <Typography variant="h3" color="primary.main">
+              Prihlasiť sa
+            </Typography>
+            <FormControl
+              component="form"
+              onSubmit={handleSubmit}
               sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": { borderColor: "white" },
-                  "&:hover fieldset": { borderColor: "white" },
-                  "&.Mui-focused fieldset": { borderColor: "white" },
-                },
+                display: "flex",
+                gap: 2,
+                width: "20rem",
+                border: "solid 2px rgba(223, 102, 144, 0.15)",
+                padding: "1rem",
+                borderRadius: "8px",
               }}
-            />
-            <FormLabel htmlFor="password" sx={{ color: "white.main" }}>
-              Heslo
-            </FormLabel>
-            <TextField
-              name="password"
-              placeholder="•••••••••"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-              required
-              fullWidth
-              variant="outlined"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              InputLabelProps={{ style: { color: "white" } }}
-              InputProps={{ style: { color: "white" } }}
-              sx={{
-                "& .MuiOutlinedInput-root": {
-                  "& fieldset": { borderColor: "white" },
-                  "&:hover fieldset": { borderColor: "white" },
-                  "&.Mui-focused fieldset": { borderColor: "white" },
-                },
-              }}
-            />
-            <FormControlLabel
-              control={
-                <Checkbox
-                  value="remember"
-                  color="primary"
-                  checked={rememberMe}
-                  onChange={(e) => setRememberMe(e.target.checked)} // Update the rememberMe state
-                  sx={{ color: "white" }}
-                />
-              }
-              label="Zapamatať si ma"
-              sx={{ color: "white" }}
-            />
-            {error && (
-              <Typography color="error" sx={{ marginBottom: 2 }}>
-                {error}
-              </Typography>
-            )}
-            <PrimaryBtn type="submit">Prihlasiť sa</PrimaryBtn>
-            <Link to="/SignUp">
-              <SecundaryBtn style={{ color: "#DF6690" }}>
-                Vytvoriť nový učet
-              </SecundaryBtn>
-            </Link>
-          </FormControl>
-        </Box>
-      </Container>
-    </>
+            >
+              <FormLabel htmlFor="email" sx={{ color: "white.main" }}>
+                Školský email
+              </FormLabel>
+              <LightTextFieldWrapper
+                id="email"
+                type="email"
+                name="email"
+                placeholder="your@stud.uniza.sk"
+                autoComplete="email"
+                autoFocus
+                required
+                fullWidth
+                variant="outlined"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                InputLabelProps={{ style: { color: "white" } }}
+                InputProps={{ style: { color: "white" } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "white" },
+                    "&:hover fieldset": { borderColor: "white" },
+                    "&.Mui-focused fieldset": { borderColor: "white" },
+                  },
+                }}
+              />
+              <FormLabel htmlFor="password" sx={{ color: "white.main" }}>
+                Heslo
+              </FormLabel>
+              <LightTextFieldWrapper
+                name="password"
+                placeholder="•••••••••"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                required
+                fullWidth
+                variant="outlined"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                InputLabelProps={{ style: { color: "white" } }}
+                InputProps={{ style: { color: "white" } }}
+                sx={{
+                  "& .MuiOutlinedInput-root": {
+                    "& fieldset": { borderColor: "white" },
+                    "&:hover fieldset": { borderColor: "white" },
+                    "&.Mui-focused fieldset": { borderColor: "white" },
+                  },
+                }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    value="remember"
+                    color="primary"
+                    checked={rememberMe}
+                    onChange={(e) => setRememberMe(e.target.checked)} // Update the rememberMe state
+                    sx={{ color: "white" }}
+                  />
+                }
+                label="Zapamatať si ma"
+                sx={{ color: "white" }}
+              />
+              {error && (
+                <Typography color="error" sx={{ marginBottom: 2 }}>
+                  {error}
+                </Typography>
+              )}
+              <PrimaryBtn type="submit">Prihlasiť sa</PrimaryBtn>
+              <Link to="/SignUp">
+                <SecundaryBtn style={{ color: "#DF6690" }}>
+                  Vytvoriť nový učet
+                </SecundaryBtn>
+              </Link>
+            </FormControl>
+          </Box>
+        </Container>
+      </Box>
+    </Box>
   );
 };
 

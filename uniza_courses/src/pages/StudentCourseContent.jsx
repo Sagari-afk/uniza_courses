@@ -73,7 +73,7 @@ const StudentCourseContent = () => {
         "http://localhost:3000/api/userProgress/getLastUserProgress/" +
           courseId +
           "/" +
-          userData.userId,
+          userData.id,
         {
           headers: {
             "Content-Type": "application/json",
@@ -110,7 +110,7 @@ const StudentCourseContent = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/userProgress/setStepCompleted/${currentStep}/${userData.userId}`,
+        `http://localhost:3000/api/userProgress/setStepCompleted/${currentStep}/${userData.id}`,
         {
           method: "POST",
           headers: {
@@ -158,7 +158,7 @@ const StudentCourseContent = () => {
               sessionStorage.getItem("authToken"),
           },
           body: JSON.stringify({
-            userId: userData.userId,
+            userId: userData.id,
             courseId: courseId,
             topicId: currentTopic,
             subtopicId: currentSubtopic,
@@ -200,7 +200,7 @@ const StudentCourseContent = () => {
               sessionStorage.getItem("authToken"),
           },
           body: JSON.stringify({
-            userId: userData.userId,
+            userId: userData.id,
             courseId: course.id,
             subtopicId,
           }),
@@ -229,7 +229,7 @@ const StudentCourseContent = () => {
   const fetchCompletedStatus = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/userProgress/getCompletedStatus/${currentStep}/${userData.userId}`,
+        `http://localhost:3000/api/userProgress/getCompletedStatus/${currentStep}/${userData.id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -266,7 +266,7 @@ const StudentCourseContent = () => {
               sessionStorage.getItem("authToken"),
           },
           body: JSON.stringify({
-            userId: userData.userId,
+            userId: userData.id,
             courseId: courseId,
             topicId: currentTopic,
             subtopicId: currentSubtopic,

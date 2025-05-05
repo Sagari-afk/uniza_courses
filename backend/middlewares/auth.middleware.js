@@ -16,12 +16,15 @@ const authMiddleware = async (req, res, next) => {
     console.log("Chyba overenia totoznosti");
     return res.status(401).send({ message: "Chyba overenia totoznosti" });
   }
-
+  console.log("Token: ", token);
   try {
-    const decoded = jwt.verify(token, process.env.API_KEY);
-
-    res.user = decoded;
-    return next();
+    jwt.verify(token, process.env.API_KEY, (err, decoded) => {
+      if (err) {
+        return res.status(403).json({ message: "Invalid or expired token" });
+      }
+      req.user = decoded;
+      return next();
+    });
   } catch (error) {
     if (!token) {
       console.log("Chyba overenia totoznosti");

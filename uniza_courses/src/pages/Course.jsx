@@ -105,7 +105,7 @@ const Course = () => {
   const getIfCourseStarted = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/userProgress/getIsStarted/${courseId}/${userData.userId}`,
+        `http://localhost:3000/api/userProgress/getIsStarted/${courseId}/${userData.id}`,
         {
           headers: {
             "Content-Type": "application/json",

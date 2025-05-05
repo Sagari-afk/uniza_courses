@@ -23,16 +23,9 @@ import AllTeachersCourses from "./pages/AllTeacherCourses";
 import StudentCourseContent from "./pages/StudentCourseContent";
 import PrimaryBtn from "./components/core.components/PrimaryBtn";
 import CreateTestStep from "./pages/steps_creating.pages/CreateTestStep";
+import Profile from "./pages/Profile";
 
 function App() {
-  const [authToken, setAuthToken] = useState(() =>
-    localStorage.getItem("api-token")
-  );
-  const [userData, setUserData] = useState(() =>
-    sessionStorage.getItem("userData")
-  );
-  const navigate = useNavigate();
-
   const globalStyles = (
     <GlobalStyles
       styles={{
@@ -59,8 +52,17 @@ function App() {
       }}
     />
   );
+  const [authToken, setAuthToken] = useState(() =>
+    localStorage.getItem("authToken")
+  );
+  const [userData, setUserData] = useState(() =>
+    JSON.parse(sessionStorage.getItem("userData"))
+  );
+  console.log(userData);
+  const navigate = useNavigate();
 
-  const getUserData = useCallback(async (token) => {
+  const getUserData = async (token) => {
+    console.log("Fetching user data...", token);
     try {
       const response = await fetch(
         "http://localhost:3000/api/user/getUserData",
@@ -74,6 +76,7 @@ function App() {
       if (response.ok) {
         const responseData = await response.json();
         sessionStorage.setItem("userData", JSON.stringify(responseData.user));
+        setUserData(responseData.user);
         return responseData.user;
       } else {
         console.log(response);
@@ -83,13 +86,24 @@ function App() {
       console.log(error.message);
       toast.error("Error loading user data");
     }
-  }, []);
+  };
+
+  useEffect(() => {
+    if (!userData) getUserData(authToken);
+  }, [authToken, userData]);
+
+  useEffect(() => {
+    setAuthToken(
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken")
+    );
+  }, [localStorage.getItem("authToken"), sessionStorage.getItem("authToken")]);
 
   useEffect(() => {
     async function fetchUserData() {
       const token =
         localStorage.getItem("authToken") ||
         sessionStorage.getItem("authToken");
+      console.log("Auth token: ", authToken);
       if (token) {
         setAuthToken(token);
         const data = await getUserData(token);
@@ -97,7 +111,7 @@ function App() {
       }
     }
     fetchUserData();
-  }, [getUserData]);
+  }, []);
 
   const theme = createTheme({
     palette: {
@@ -179,7 +193,7 @@ function App() {
           </>
         )}
 
-        {authToken && userData.userRole === "teacher" && (
+        {authToken && userData?.role === "teacher" && (
           <>
             <Route path="/editCourse" element={<EditCourse />} />
             <Route
@@ -208,13 +222,19 @@ function App() {
               element={<StudentCourseContent />}
             />
             <Route path="/Course/:courseName" element={<Course />} />
+            <Route
+              path="/Profile"
+              element={
+                <Profile userData={userData} getUserData={getUserData} />
+              }
+            />
           </>
         )}
 
         <Route path="*" element={<NotFound />} />
       </Routes>
 
-      {authToken && userData.userRole === "teacher" && (
+      {authToken && userData?.role === "teacher" && (
         <CreateNewCourseBtn
           actions={[
             {

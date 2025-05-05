@@ -7,18 +7,34 @@ import SecundaryBtn from "../components/core.components/SecundaryBtn";
 
 const HomePage = () => {
   return (
-    <>
-      <Header />
-      <Container sx={{ overflow: "hidden", height: "100%" }}>
+    <Box
+      sx={{
+        height: "100vh",
+        backgroundImage: "url(/homepage.png)",
+        backgroundSize: "cover",
+        backgroundRepeat: "no-repeat",
+        backgroundColor: "rgba(0,0,0,0.6)",
+        backgroundBlendMode: "overlay",
+        backgroundPosition: "center 70%",
+      }}
+    >
+      <Box
+        className="light_gradient-background-animation"
+        sx={{
+          height: "100vh",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <Header style={{ background: "transparent" }} />
         <Box
           sx={{
+            flex: 1,
             display: "flex",
             gap: 3,
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
-            height: "100%",
-            paddingBottom: "10rem",
           }}
         >
           <Typography
@@ -33,15 +49,15 @@ const HomePage = () => {
 
           <Box sx={{ display: "flex", justifyContent: "center", gap: 3 }}>
             <Link to="/SignIn">
-              <PrimaryBtn>Prihlásiť</PrimaryBtn>
+              <PrimaryBtn style={{ color: "#000" }}>Prihlásiť</PrimaryBtn>
             </Link>
             <Link to="/Courses">
               <SecundaryBtn style={{ color: "#DF6690" }}>Kurzy</SecundaryBtn>
             </Link>
           </Box>
         </Box>
-      </Container>
-    </>
+      </Box>
+    </Box>
   );
 };
 

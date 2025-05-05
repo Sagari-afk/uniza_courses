@@ -1,11 +1,7 @@
 import {
   Box,
-  CircularProgress,
   Container,
-  FormControl,
   FormControlLabel,
-  FormGroup,
-  Grid2,
   Paper,
   Switch,
   TextField,
@@ -17,17 +13,9 @@ import { useSearchParams } from "react-router-dom";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import "froala-editor/css/froala_style.min.css";
-import "froala-editor/js/plugins.pkgd.min.js";
-import "froala-editor/css/froala_editor.pkgd.min.css";
-
-import "froala-editor/js/froala_editor.pkgd.min.js";
 import TipTap from "../../components/createCourseContent.components/tiptap/TipTap";
-import FroalaEditorComponent from "react-froala-wysiwyg";
 import { toast } from "react-toastify";
-import { set } from "lodash";
 
-import FroalaTextEditor from "../../components/createCourseContent.components/FroalaTextEditor";
 const CreateTextStep = () => {
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
@@ -40,7 +28,6 @@ const CreateTextStep = () => {
   const [isPreview, setIsPreview] = useState(false);
   const [content, setContent] = useState(" ");
 
-  // const editorRef = useRef(null);
   const [isMounted, setIsMounted] = useState(false);
 
   // const config = {

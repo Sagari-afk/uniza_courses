@@ -14,6 +14,8 @@ import { toast } from "react-toastify";
 
 const CourseCard = ({ course, linkTo, teacher, teachers, load }) => {
   const navigate = useNavigate();
+  const isAuthorized =
+    localStorage.getItem("authToken") || sessionStorage.getItem("authToken");
 
   let date = new Date(course.updatedAt);
   date = new Intl.DateTimeFormat("sk-SK", {
@@ -226,14 +228,18 @@ const CourseCard = ({ course, linkTo, teacher, teachers, load }) => {
             </Typography>
           )}
 
-          <SecundaryBtn
-            sxChildren={{
-              width: "auto",
-            }}
-            onClick={() => navigate(linkTo, { state: { courseId: course.id } })}
-          >
-            Viac...
-          </SecundaryBtn>
+          {isAuthorized && (
+            <SecundaryBtn
+              sxChildren={{
+                width: "auto",
+              }}
+              onClick={() =>
+                navigate(linkTo, { state: { courseId: course.id } })
+              }
+            >
+              Viac...
+            </SecundaryBtn>
+          )}
         </Box>
         <Box
           sx={{
