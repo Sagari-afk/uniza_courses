@@ -92,7 +92,11 @@ function App() {
     setAuthToken(
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken")
     );
-    getUserData(authToken);
+    if (
+      localStorage.getItem("authToken") ||
+      sessionStorage.getItem("authToken")
+    )
+      getUserData(authToken);
   }, [localStorage.getItem("authToken"), sessionStorage.getItem("authToken")]);
 
   useEffect(() => {

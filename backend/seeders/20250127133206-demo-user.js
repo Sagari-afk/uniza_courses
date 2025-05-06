@@ -6,8 +6,8 @@ module.exports = {
 
     await queryInterface.bulkInsert("User", [
       {
-        firstName: "Иван",
-        secondName: "Иванов",
+        firstName: "Ivan",
+        secondName: "Ivanov",
         email: "ivanov@example.com",
         role: "teacher",
         salt: salt,
@@ -20,8 +20,8 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        firstName: "Мария",
-        secondName: "Петрова",
+        firstName: "Maria",
+        secondName: "Petrova",
         email: "petrova@example.com",
         role: "teacher",
         salt: salt,
@@ -34,8 +34,8 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        firstName: "Петр",
-        secondName: "Петров",
+        firstName: "Pter",
+        secondName: "Petrov",
         email: "petrov@example.com",
         role: "student",
         salt: salt,

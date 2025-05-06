@@ -17,7 +17,7 @@ const Profile = ({ userData, getUserData }) => {
     userData?.teacher?.phone || ""
   );
   const [personalNumber, setPersonalNumber] = useState(
-    userData?.student?.personalNumber || ""
+    userData?.student?.personalNum || ""
   );
   const [institute, setInstitute] = useState(
     userData?.teacher?.institute || ""
@@ -33,7 +33,7 @@ const Profile = ({ userData, getUserData }) => {
     setSecondName(userData?.secondName || "");
     setEmail(userData?.email || "");
     setPhoneNumber(userData?.teacher?.phone || "");
-    setPersonalNumber(userData?.student?.personalNumber || "");
+    setPersonalNumber(userData?.student?.personalNum || "");
     setInstitute(userData?.teacher?.institute || "");
     setOffice(userData?.teacher?.office || "");
     setUserImage(userData?.profile_img_url);
