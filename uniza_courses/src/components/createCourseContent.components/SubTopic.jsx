@@ -173,7 +173,9 @@ const SubTopic = ({ id, subtopic, load }) => {
                 };
                 const queryParams = new URLSearchParams(data).toString();
                 window.open(
-                  stepType === "text"
+                  stepType === "pdf"
+                    ? `/CourseContent/createStep/presentation?${queryParams}`
+                    : stepType === "text"
                     ? `/CourseContent/createStep/text?${queryParams}`
                     : `/CourseContent/createStep/test?${queryParams}`,
                   "_blank"
@@ -212,12 +214,12 @@ const SubTopic = ({ id, subtopic, load }) => {
                         value="video"
                         control={<Radio />}
                         label="Video"
-                      />
-                      <FormControlLabel
-                        value="pdf"
-                        control={<Radio />}
-                        label="Dokument pdf"
-                      />
+                        />
+                        <FormControlLabel
+                          value="pdf"
+                          control={<Radio />}
+                          label="Prezentacia"
+                        />
                     </Box>
                     <Box>
                       <FormControlLabel
@@ -233,14 +235,6 @@ const SubTopic = ({ id, subtopic, load }) => {
                     </Box>
                   </RadioGroup>
                 </FormControl>
-                <input
-                  type="file"
-                  hidden
-                  onChange={(e) => {
-                    setSelectedFile(e.target.files[0]);
-                  }}
-                  accept="image/*,application/pdf,application/vnd.openxmlformats-officedocument.presentationml.presentation"
-                />
               </Grid2>
             </ModalCreate>
 

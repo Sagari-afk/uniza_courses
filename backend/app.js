@@ -40,6 +40,11 @@ app.use("/api/comment/", require("./routes/course_comment.router"));
 
 // static uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+app.use(express.static(path.join(__dirname, "uniza_courses", "dist")));
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "uniza_courses", "build", "index.html"));
+});
 
 app.listen(3000, async () => {
   console.log("Server is running on port 3000");

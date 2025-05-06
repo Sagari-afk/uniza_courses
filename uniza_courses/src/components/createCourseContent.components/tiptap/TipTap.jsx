@@ -19,8 +19,10 @@ import {
   FaRedo,
   FaStrikethrough,
   FaUndo,
+  FaVideo,
 } from "react-icons/fa";
 import { Box } from "@mui/material";
+import Video from "./Video";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -30,6 +32,11 @@ const uploadImage = async (file) => {
 
   const response = await fetch(`${API_URL}/api/courseStructure/upload-image`, {
     method: "POST",
+    headers: {
+      "x-access-token":
+        localStorage.getItem("authToken") ||
+        sessionStorage.getItem("authToken"),
+    },
     body: formData,
   });
 
@@ -49,6 +56,39 @@ const addImage = async (editor) => {
     const url = await uploadImage(input.files[0]);
 
     editor.chain().focus().setImage({ src: url }).run();
+  };
+};
+
+const uploadVideo = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`${API_URL}/api/courseStructure/upload-video`, {
+    method: "POST",
+    headers: {
+      "x-access-token":
+        localStorage.getItem("authToken") ||
+        sessionStorage.getItem("authToken"),
+    },
+    body: formData,
+  });
+
+  const data = await response.json();
+  return data.fileUrl;
+};
+
+const addVideo = async (editor) => {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "video/*";
+  input.click();
+
+  input.onchange = async () => {
+    if (!input.files?.length) return;
+    const url = await uploadVideo(input.files[0]);
+    console.log("Video URL:", url);
+
+    editor.chain().focus().insertContent(`<video src="${url}"></video>`).run();
   };
 };
 
@@ -113,6 +153,9 @@ const MenuBar = ({ editor }) => {
         <button onClick={() => addImage(editor)}>
           <FaImage />
         </button>
+        <button onClick={() => addVideo(editor)}>
+          <FaVideo />
+        </button>
         <button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={editor.isActive("codeBlock") ? "is-active" : ""}
@@ -155,6 +198,7 @@ const TipTap = ({ content, setContent }) => {
     extensions: [
       StarterKit,
       Image,
+      Video,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),

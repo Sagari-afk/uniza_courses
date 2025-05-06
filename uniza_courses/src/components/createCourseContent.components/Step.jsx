@@ -48,7 +48,7 @@ const Step = ({ subtopic, step, id, load }) => {
   const handleSubmitDeleteStep = async () => {
     try {
       const response = await fetch(
-        `${API_URL}/api/courseStructure/deleteStep/$id`,
+        `${API_URL}/api/courseStructure/deleteStep/${id}`,
         {
           method: "POST",
           headers: {

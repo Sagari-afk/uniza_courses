@@ -6,39 +6,24 @@ const fs = require("fs");
 const uploadImage = (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
   const fileUrl = `http://localhost:3000/uploads/${req.file.filename}`;
-  res.json({ link: fileUrl });
+  res.json({ fileUrl });
 };
 
 const uploadVideo = (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-  const fileUrl = `http://localhost:3000/uploads/video/${req.file.filename}`;
-  res.json({ link: fileUrl });
+  const fileUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+  res.json({ fileUrl });
 };
 
 const upladFile = (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-  const fileUrl = `http://localhost:3000/uploads/files/${req.file.filename}`;
-  res.json({ link: fileUrl });
+  const fileUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+  res.json({ fileUrl });
 };
 
 const saveContent = async (req, res) => {
   const { subtopicId, content, stepTitle, type } = req.body;
-  // const saveDir = path.join(__dirname, "..", "saved");
-  // console.log("DATA FROM FRONTEND: ", req.body);
-
   let fileName;
-  if (type === "text") {
-    // if (!fs.existsSync(saveDir)) {
-    //   fs.mkdirSync(saveDir, { recursive: true });
-    // }
-    // const fileName = `textContent${subtopicId}Subtopic${stepTitle}.html`;
-    // fs.writeFile(path.join(saveDir, fileName), content, (err) => {
-    //   if (err) {
-    //     console.error("Error saving content:", err);
-    //     return res.status(500).json({ error: "Error saving content" });
-    //   }
-    // });
-  }
 
   const order = (await Step.count({ where: { subtopicId } })) + 1;
 
@@ -61,19 +46,7 @@ const saveContent = async (req, res) => {
 
 const updateContent = async (req, res) => {
   const { content, stepTitle, stepId } = req.body;
-  // const saveDir = path.join(__dirname, "..", "saved");
   console.log("DATA FROM FRONTEND: ", req.body);
-
-  // if (!fs.existsSync(saveDir)) {
-  //   fs.mkdirSync(saveDir, { recursive: true });
-  // }
-  // const fileName = `textContent${subtopicId}Subtopic${stepTitle}.html`;
-  // fs.writeFile(path.join(saveDir, fileName), content, (err) => {
-  //   if (err) {
-  //     console.error("Error saving content:", err);
-  //     return res.status(500).json({ error: "Error saving content" });
-  //   }
-  // });
 
   try {
     const existingStep = await Step.findByPk(stepId);

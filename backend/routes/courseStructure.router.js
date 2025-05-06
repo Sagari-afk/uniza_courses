@@ -29,20 +29,6 @@ const {
 
 const router = express.Router();
 
-// router.get("/addStep/text", (req, res) => {
-//   fs.readFile(
-//     path.join(__dirname, "saved", "content.html"),
-//     "utf8",
-//     (err, data) => {
-//       if (err) {
-//         console.error("Error reading content:", err);
-//         return res.status(500).json({ error: "Error reading content" });
-//       }
-//       res.json({ content: data });
-//     }
-//   );
-// });
-
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -76,29 +62,5 @@ router.get("/getTest/:testId", getTest);
 // router.post("/newStep", newStep);
 router.get("/getStep/:stepId", getStep);
 router.post("/deleteStep/:stepId", deleteStep);
-
-router.get("/getHtmlContent/:fileUrl", (req, res) => {
-  try {
-    const fileUrl = req.params.fileUrl;
-    if (!fileUrl) {
-      return res.status(400).json({ error: "File URL is required" });
-    }
-
-    const filePath = path.join(__dirname, "..", "/saved/", fileUrl);
-    console.log("File path: ", filePath);
-
-    fs.readFile(filePath, "utf8", (err, content) => {
-      if (err) {
-        console.error("Error reading file:", err);
-        return res.status(500).json({ error: "Error reading file" });
-      }
-      console.log("Content: ", content);
-      return res.status(200).json({ content });
-    });
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(error.message);
-  }
-});
 
 module.exports = router;

@@ -26,6 +26,7 @@ import CreateTestStep from "./pages/steps_creating.pages/CreateTestStep";
 import Profile from "./pages/Profile";
 import CoursesInProgress from "./pages/CoursessInProgress";
 import CoursessArhive from "./pages/CoursessArhive";
+import CreatePresentationStep from "./pages/steps_creating.pages/CreatePresentationStep";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
@@ -207,6 +208,10 @@ function App() {
             <Route
               path="/CourseContent/createStep/test"
               element={<CreateTestStep />}
+            />
+            <Route
+              path="/CourseContent/createStep/presentation"
+              element={<CreatePresentationStep />}
             />
             <Route
               path="/allCourses/teacher"
