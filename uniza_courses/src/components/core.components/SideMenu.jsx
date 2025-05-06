@@ -11,8 +11,11 @@ import {
 import { Icon } from "@iconify/react";
 import LinkWithIconBox from "../courses.components/LinkWIthIconBox";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useNavigate } from "react-router-dom";
 
 const SideMenu = ({ handleLogout, sideMenuLinks, children }) => {
+  const navigate = useNavigate();
+
   const [isHovered, setIsHovered] = useState(false);
   const [openedByClick, setOpenedByClick] = useState(false);
   const handleMouseEnter = () => {
@@ -70,6 +73,9 @@ const SideMenu = ({ handleLogout, sideMenuLinks, children }) => {
                   text={el.text}
                   iconName={el.iconName}
                   key={el.iconName}
+                  onClick={() => {
+                    navigate(el.link);
+                  }}
                 />
               ))}
             </Box>

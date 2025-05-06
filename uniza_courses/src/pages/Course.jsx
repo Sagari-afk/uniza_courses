@@ -120,6 +120,7 @@ const Course = () => {
         throw new Error(data.message || "Failed to fetch course status");
       }
       setCourseStarted(data.started);
+      console.log("Kurz bol zacaty: ", data.started);
     } catch (error) {
       console.log("error: ", error);
       setError(error.message);

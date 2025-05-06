@@ -40,10 +40,14 @@ const Courses = ({ handleLogout }) => {
       <SideMenu
         handleLogout={handleLogout}
         sideMenuLinks={[
-          { text: "Robim teraz", iconName: "hugeicons:course", link: "" },
+          {
+            text: "Robim teraz",
+            iconName: "hugeicons:course",
+            link: "/inProgress",
+          },
+          { text: "Archiv", iconName: "mage:archive", link: "/arhive" },
           // { text: "Chcem robiť", iconName: "tabler:clock", link: "" },
           // { text: "Obľubene", iconName: "tabler:heart", link: "" },
-          { text: "Archiv", iconName: "mage:archive", link: "" },
         ]}
         type="links"
       >

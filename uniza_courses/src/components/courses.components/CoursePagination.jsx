@@ -3,7 +3,7 @@ import { Pagination, Box, Stack, Typography } from "@mui/material";
 
 import CourseCard from "./CourseCard";
 
-const CoursesPagination = ({ courses, load, teacher }) => {
+const CoursesPagination = ({ courses, load, teacher, typeOfPage }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const coursesPerPage = 9;
@@ -20,7 +20,7 @@ const CoursesPagination = ({ courses, load, teacher }) => {
           display: "grid",
           gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
           gap: "20px",
-          padding: "20px",
+          px: { md: 4, xs: 1 },
         }}
       >
         {currentCourses.length > 0 ? (

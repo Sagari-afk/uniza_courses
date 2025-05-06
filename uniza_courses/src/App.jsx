@@ -24,6 +24,8 @@ import StudentCourseContent from "./pages/StudentCourseContent";
 import PrimaryBtn from "./components/core.components/PrimaryBtn";
 import CreateTestStep from "./pages/steps_creating.pages/CreateTestStep";
 import Profile from "./pages/Profile";
+import CoursesInProgress from "./pages/CoursessInProgress";
+import CoursessArhive from "./pages/CoursessArhive";
 
 function App() {
   const globalStyles = (
@@ -90,7 +92,6 @@ function App() {
     setAuthToken(
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken")
     );
-    console.log("Auth token changed:", authToken);
     getUserData(authToken);
   }, [localStorage.getItem("authToken"), sessionStorage.getItem("authToken")]);
 
@@ -223,6 +224,8 @@ function App() {
                 <Profile userData={userData} getUserData={getUserData} />
               }
             />
+            <Route path="/InProgress" element={<CoursesInProgress />} />
+            <Route path="/arhive" element={<CoursessArhive />} />
           </>
         )}
 

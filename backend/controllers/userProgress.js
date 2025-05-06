@@ -1,4 +1,4 @@
-const { Op } = require("sequelize");
+const { Op, fn, col } = require("sequelize");
 const {
   StudentProgressHistory,
   User,
@@ -6,6 +6,9 @@ const {
   Topic,
   SubTopic,
   Step,
+  CourseComments,
+  Teacher,
+  Discipline,
 } = require("../models");
 
 const startCourse = async (userId, courseId) => {
@@ -373,14 +376,14 @@ const getCompletedStatus = async (req, res) => {
 
 const getIsStarted = async (req, res) => {
   try {
-    const record = await StudentProgressHistory.findAll({
+    const record = await StudentProgressHistory.findOne({
       where: {
         courseId: req.params.courseId,
         userId: req.params.userId,
       },
     });
-    if (record) return res.status(200).json({ started: true });
     console.log("Is started: ", record);
+    if (record) return res.status(200).json({ started: true });
     return res.status(200).json({ started: false });
   } catch (error) {
     console.log(error);
@@ -426,6 +429,271 @@ const getTestResults = async (req, res) => {
   }
 };
 
+// const getCoursesInProgress = async (req, res) => {
+//   try {
+//     const userId = req.params.userId;
+//     const rows = await StudentProgressHistory.findAll({
+//       where: { userId, completed: false },
+//       attributes: [[fn("DISTINCT", col("courseId")), "courseId"]],
+//       raw: true,
+//     });
+//     const courseIds = rows.map((r) => r.courseId);
+
+//     const records = await Course.findAll({
+//       where: { id: { [Op.in]: courseIds } },
+//       include: [
+//         {
+//           model: CourseComments,
+//           include: {
+//             model: User,
+//             as: "user",
+//             attributes: ["firstName", "secondName", "email", "profile_img_url"],
+//             required: false,
+//           },
+//         },
+//         {
+//           model: Teacher,
+//           attributes: ["id", "institute", "office", "phone"],
+//           through: { attributes: [] },
+//           as: "teachers",
+//           include: [
+//             {
+//               model: User,
+//               attributes: [
+//                 "firstName",
+//                 "secondName",
+//                 "email",
+//                 "profile_img_url",
+//               ],
+//               as: "user",
+//               required: false,
+//             },
+//           ],
+//         },
+//         {
+//           model: Discipline,
+//           attributes: ["name"],
+//           through: { attributes: [] },
+//           as: "disciplines",
+//         },
+//       ],
+//     });
+
+//     const courses = records.map((record) => {
+//       const course = record.toJSON();
+
+//       if (course.img_url) {
+//         course.img_url = `${req.protocol}://${req.get("host")}/${
+//           course.img_url
+//         }`;
+//       }
+//       return course;
+//     });
+
+//     return res.status(200).json({ courses });
+//   } catch (error) {
+//     console.log(error);
+//     return res.status(500).json(error.message);
+//   }
+// };
+
+async function countStepsInCourse(courseId) {
+  const topics = await Topic.findAll({
+    where: { courseId },
+    attributes: ["id"],
+    raw: true,
+  });
+  const topicIds = topics.map((t) => t.id);
+
+  const subtopics = await SubTopic.findAll({
+    where: { topicId: { [Op.in]: topicIds } },
+    attributes: ["id"],
+    raw: true,
+  });
+  const subtopicIds = subtopics.map((s) => s.id);
+
+  const totalSteps = await Step.count({
+    where: { subtopicId: { [Op.in]: subtopicIds } },
+  });
+
+  return totalSteps;
+}
+
+const getCoursesInProgress = async (req, res) => {
+  try {
+    const userId = +req.params.userId;
+
+    const started = await StudentProgressHistory.findAll({
+      where: { userId },
+      attributes: [[fn("DISTINCT", col("courseId")), "courseId"]],
+      raw: true,
+    });
+    const courseIds = started.map((r) => r.courseId);
+
+    const inProgressCourseIds = [];
+    await Promise.all(
+      courseIds.map(async (courseId) => {
+        const totalSteps = await countStepsInCourse(courseId);
+        const completedSteps = await StudentProgressHistory.count({
+          where: { userId, courseId, completed: true },
+        });
+
+        if (completedSteps > 0 && completedSteps < totalSteps) {
+          inProgressCourseIds.push(courseId);
+        }
+      })
+    );
+
+    if (!inProgressCourseIds.length) {
+      return res.json({ courses: [] });
+    }
+
+    const records = await Course.findAll({
+      where: { id: { [Op.in]: inProgressCourseIds } },
+      include: [
+        {
+          model: CourseComments,
+          include: {
+            model: User,
+            as: "user",
+            attributes: ["firstName", "secondName", "email", "profile_img_url"],
+            required: false,
+          },
+        },
+        {
+          model: Teacher,
+          attributes: ["id", "institute", "office", "phone"],
+          through: { attributes: [] },
+          as: "teachers",
+          include: [
+            {
+              model: User,
+              attributes: [
+                "firstName",
+                "secondName",
+                "email",
+                "profile_img_url",
+              ],
+              as: "user",
+              required: false,
+            },
+          ],
+        },
+        {
+          model: Discipline,
+          attributes: ["name"],
+          through: { attributes: [] },
+          as: "disciplines",
+        },
+      ],
+    });
+
+    const courses = records.map((r) => {
+      const c = r.toJSON();
+      if (c.img_url) {
+        c.img_url = `${req.protocol}://${req.get("host")}/${c.img_url}`;
+      }
+      return c;
+    });
+
+    return res.json({ courses });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ error: error.message });
+  }
+};
+
+const getCompletedCourses = async (req, res) => {
+  try {
+    const userId = +req.params.userId;
+
+    const rows = await StudentProgressHistory.findAll({
+      where: { userId },
+      attributes: [
+        [
+          StudentProgressHistory.sequelize.fn(
+            "DISTINCT",
+            StudentProgressHistory.sequelize.col("courseId")
+          ),
+          "courseId",
+        ],
+      ],
+      raw: true,
+    });
+    const courseIds = rows.map((r) => r.courseId);
+
+    const completedCourseIds = [];
+    await Promise.all(
+      courseIds.map(async (courseId) => {
+        const totalSteps = await countStepsInCourse(courseId);
+        const completedSteps = await StudentProgressHistory.count({
+          where: { userId, courseId, completed: true },
+        });
+        if (totalSteps > 0 && completedSteps === totalSteps) {
+          completedCourseIds.push(courseId);
+        }
+      })
+    );
+
+    if (completedCourseIds.length === 0) {
+      return res.json({ courses: [] });
+    }
+
+    const records = await Course.findAll({
+      where: { id: { [Op.in]: completedCourseIds } },
+      include: [
+        {
+          model: CourseComments,
+          include: {
+            model: User,
+            as: "user",
+            attributes: ["firstName", "secondName", "email", "profile_img_url"],
+            required: false,
+          },
+        },
+        {
+          model: Teacher,
+          attributes: ["id", "institute", "office", "phone"],
+          through: { attributes: [] },
+          as: "teachers",
+          include: [
+            {
+              model: User,
+              as: "user",
+              attributes: [
+                "firstName",
+                "secondName",
+                "email",
+                "profile_img_url",
+              ],
+              required: false,
+            },
+          ],
+        },
+        {
+          model: Discipline,
+          attributes: ["name"],
+          through: { attributes: [] },
+          as: "disciplines",
+        },
+      ],
+    });
+
+    const courses = records.map((r) => {
+      const c = r.toJSON();
+      if (c.img_url) {
+        c.img_url = `${req.protocol}://${req.get("host")}/${c.img_url}`;
+      }
+      return c;
+    });
+
+    return res.json({ courses });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ error: err.message });
+  }
+};
+
 module.exports = {
   getLastUserProgress,
   addLastUserProgress,
@@ -436,4 +704,6 @@ module.exports = {
   getIsStarted,
   submitTestResults,
   getTestResults,
+  getCoursesInProgress,
+  getCompletedCourses,
 };
