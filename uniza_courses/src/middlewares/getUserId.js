@@ -1,1 +1,0 @@
-// Treba spravit ehhhhhhh

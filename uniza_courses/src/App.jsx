@@ -56,8 +56,9 @@ function App() {
       }}
     />
   );
-  const [authToken, setAuthToken] = useState(() =>
-    localStorage.getItem("authToken")
+  const [authToken, setAuthToken] = useState(
+    () =>
+      localStorage.getItem("authToken") || sessionStorage.getItem("authToken")
   );
   const [userData, setUserData] = useState(() =>
     JSON.parse(sessionStorage.getItem("userData"))
@@ -91,12 +92,12 @@ function App() {
     setAuthToken(
       localStorage.getItem("authToken") || sessionStorage.getItem("authToken")
     );
-    if (
-      localStorage.getItem("authToken") ||
-      sessionStorage.getItem("authToken")
-    )
-      getUserData(authToken);
   }, [localStorage.getItem("authToken"), sessionStorage.getItem("authToken")]);
+
+  useEffect(() => {
+    if (!authToken) return;
+    getUserData(authToken).then((user) => setUserData(user));
+  }, [authToken]);
 
   useEffect(() => {
     async function fetchUserData() {

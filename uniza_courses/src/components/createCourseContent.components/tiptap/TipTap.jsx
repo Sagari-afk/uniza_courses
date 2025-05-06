@@ -1,11 +1,8 @@
 import "./styles.css";
 
-import { Color } from "@tiptap/extension-color";
-import ListItem from "@tiptap/extension-list-item";
-import TextStyle from "@tiptap/extension-text-style";
-
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
+import Image from "@tiptap/extension-image";
 
 import { EditorContent, useCurrentEditor, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
@@ -14,6 +11,7 @@ import React, { useEffect } from "react";
 import {
   FaBold,
   FaCode,
+  FaImage,
   FaItalic,
   FaListOl,
   FaListUl,
@@ -23,6 +21,36 @@ import {
   FaUndo,
 } from "react-icons/fa";
 import { Box } from "@mui/material";
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+const uploadImage = async (file) => {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const response = await fetch(`${API_URL}/api/courseStructure/upload-image`, {
+    method: "POST",
+    body: formData,
+  });
+
+  const data = await response.json();
+  console.log(data);
+  return data.fileUrl;
+};
+
+const addImage = async (editor) => {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+  input.click();
+
+  input.onchange = async () => {
+    if (!input.files?.length) return;
+    const url = await uploadImage(input.files[0]);
+
+    editor.chain().focus().setImage({ src: url }).run();
+  };
+};
 
 const MenuBar = ({ editor }) => {
   if (!editor) {
@@ -82,6 +110,9 @@ const MenuBar = ({ editor }) => {
         >
           <FaListOl />
         </button>
+        <button onClick={() => addImage(editor)}>
+          <FaImage />
+        </button>
         <button
           onClick={() => editor.chain().focus().toggleCodeBlock().run()}
           className={editor.isActive("codeBlock") ? "is-active" : ""}
@@ -123,6 +154,7 @@ const TipTap = ({ content, setContent }) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
+      Image,
       TextAlign.configure({
         types: ["heading", "paragraph"],
       }),
@@ -133,12 +165,6 @@ const TipTap = ({ content, setContent }) => {
       setContent(editor.getHTML());
     },
   });
-  // useEffect(() => {
-  //   console.log(editor.getHTML());
-  //   if (!editor.getHTML() || editor.getHTML() == "<p></p>")
-  //     editor.commands.setContent(content);
-  // }, [content]);
-
   useEffect(() => {
     if (!editor) return;
     if (editor.getHTML() !== content) {
