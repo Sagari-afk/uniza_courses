@@ -10,6 +10,8 @@ import Comment from "./Comment";
 import SecundaryBtn from "../core.components/SecundaryBtn";
 import { useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Comments = ({ restData }) => {
   const [newComment, setNewComment] = useState("");
   const [rate, setRate] = useState(2);
@@ -18,7 +20,7 @@ const Comments = ({ restData }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:3000/api/comment/new", {
+      const response = await fetch(`${API_URL}/api/comment/new`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

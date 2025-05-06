@@ -27,6 +27,8 @@ import SubTopic from "./SubTopic";
 import { closestCorners, DndContext } from "@dnd-kit/core";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Topic = ({ id, topic, load }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
@@ -59,7 +61,7 @@ const Topic = ({ id, topic, load }) => {
         topicId: topicId,
       };
       const response = await fetch(
-        "http://localhost:3000/api/courseStructure/newSubtopic",
+        `${API_URL}/api/courseStructure/newSubtopic`,
         {
           method: "POST",
           headers: {
@@ -88,7 +90,7 @@ const Topic = ({ id, topic, load }) => {
   const handleSubmitEditTopic = async (e) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/courseStructure/editTopic/",
+        `${API_URL}/api/courseStructure/editTopic/`,
         {
           method: "POST",
           headers: {
@@ -118,8 +120,7 @@ const Topic = ({ id, topic, load }) => {
   const handleSubmitDeleteTopic = async (e) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/courseStructure/deleteTopic/" +
-          topic.topicId,
+        `${API_URL}/api/courseStructure/deleteTopic/$topic.topicId`,
         {
           method: "POST",
           headers: {
@@ -145,7 +146,7 @@ const Topic = ({ id, topic, load }) => {
   const handleEditSubtopicPos = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/courseStructure/editSubtopicOrder",
+        `${API_URL}/api/courseStructure/editSubtopicOrder`,
         {
           method: "POST",
           headers: {

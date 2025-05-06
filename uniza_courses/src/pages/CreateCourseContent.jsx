@@ -9,6 +9,8 @@ import SecundaryBtn from "../components/core.components/SecundaryBtn";
 import CourseStructureDND from "../components/createCourseContent.components/CourseStructureDND";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const CreateCourseContent = () => {
   const location = useLocation();
   const id = location.state.id || {};
@@ -25,19 +27,16 @@ const CreateCourseContent = () => {
         courseId: course.id,
       };
       console.log(payload);
-      const response = await fetch(
-        "http://localhost:3000/api/courseStructure/newTopic",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-          body: JSON.stringify(payload),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/courseStructure/newTopic`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+        body: JSON.stringify(payload),
+      });
       if (response.ok) {
         load();
         toast.success("Tema bola úspešne vytvorena");
@@ -53,17 +52,14 @@ const CreateCourseContent = () => {
   const load = async () => {
     try {
       console.log("IDECKO: ", id);
-      const response = await fetch(
-        "http://localhost:3000/api/course/getCourse/" + id,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/course/getCourse/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+      });
       const data = await response.json();
       setCourse(data);
       console.log("Loading data", data);

@@ -13,7 +13,7 @@ const HomePage = () => {
         backgroundImage: "url(/homepage.png)",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
-        backgroundColor: "rgba(0,0,0,0.6)",
+        backgroundColor: "rgba(0,0,0,0.2)",
         backgroundBlendMode: "overlay",
         backgroundPosition: "center 70%",
       }}

@@ -4,6 +4,8 @@ import Column from "./Column";
 import { arrayMove } from "@dnd-kit/sortable";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const CourseStructureDND = ({ data, load }) => {
   const [topicOrderEdditing, setTopicOrderEdditing] = useState(false);
   const [courseStructure, setCourseStructure] = useState(
@@ -40,7 +42,7 @@ const CourseStructureDND = ({ data, load }) => {
   const handleEditTopicPos = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/courseStructure/editTopicOrder",
+        `${API_URL}/api/courseStructure/editTopicOrder`,
         {
           method: "POST",
           headers: {

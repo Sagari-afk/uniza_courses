@@ -22,6 +22,8 @@ import { useEffect, useState } from "react";
 import QuestionsCreator from "../../components/createCourseContent.components/test/QuestionsCreator";
 import PrimaryBtn from "../../components/core.components/PrimaryBtn";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const CreateTestStep = ({}) => {
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
@@ -69,8 +71,8 @@ const CreateTestStep = ({}) => {
     try {
       const res = await fetch(
         stepId
-          ? "http://localhost:3000/api/courseStructure/update-content"
-          : "http://localhost:3000/api/courseStructure/save-content",
+          ? `${API_URL}/api/courseStructure/update-content`
+          : `${API_URL}/api/courseStructure/save-content`,
         {
           method: "POST",
           headers: {
@@ -106,22 +108,19 @@ const CreateTestStep = ({}) => {
 
   const createQuestion = async () => {
     try {
-      const res = await fetch(
-        "http://localhost:3000/api/questions/addQuestion",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-          body: JSON.stringify({
-            stepId,
-            opened: questionType === "otvorená" ? true : false,
-          }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/questions/addQuestion`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+        body: JSON.stringify({
+          stepId,
+          opened: questionType === "otvorená" ? true : false,
+        }),
+      });
       if (res.status === 200) {
         const data = await res.json();
         console.log("data: ", data);
@@ -140,23 +139,20 @@ const CreateTestStep = ({}) => {
 
   const createAnswer = async (questionId, answerText) => {
     try {
-      const res = await fetch(
-        `http://localhost:3000/api/questions/createAnswer`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-          body: JSON.stringify({
-            questionId,
-            answerText,
-            isCorrect: true,
-          }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/questions/createAnswer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+        body: JSON.stringify({
+          questionId,
+          answerText,
+          isCorrect: true,
+        }),
+      });
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
@@ -170,7 +166,7 @@ const CreateTestStep = ({}) => {
   const getQuestions = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/questions/getQuestions/${stepId}`,
+        `${API_URL}/api/questions/getQuestions/${stepId}`,
         {
           method: "GET",
           headers: {
@@ -193,7 +189,7 @@ const CreateTestStep = ({}) => {
   const handleQuestionDelete = async (e, questionId) => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/questions/deleteQuestion/${questionId}`,
+        `${API_URL}/api/questions/deleteQuestion/${questionId}`,
         {
           method: "DELETE",
           headers: {

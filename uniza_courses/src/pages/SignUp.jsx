@@ -12,6 +12,8 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const SignUp = ({ setAuthToken }) => {
   const [email, setEmail] = useState("");
   const [personalNum, setPersonalNum] = useState("");
@@ -61,7 +63,7 @@ const SignUp = ({ setAuthToken }) => {
     console.log("Logging in with", payloadRegister);
 
     try {
-      const response = await fetch("http://localhost:3000/api/user/signUp", {
+      const response = await fetch(`${API_URL}/api/user/signUp`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -16,6 +16,8 @@ import { toast } from "react-toastify";
 import AnimatedNextIcon from "../components/studentCourseContent.components/AnimatedNextIcon";
 import TestViewer from "../components/studentCourseContent.components/TestViewer";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const StudentCourseContent = () => {
   const userData = JSON.parse(sessionStorage.getItem("userData"));
   const location = useLocation();
@@ -40,7 +42,7 @@ const StudentCourseContent = () => {
   const loadCourse = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/course/getCourse/" + courseId
+        `${API_URL}/api/course/getCourse/${courseId}`
       );
       if (response.ok) {
         const responseData = await response.json();
@@ -70,10 +72,9 @@ const StudentCourseContent = () => {
   const loadUserLastProgress = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/userProgress/getLastUserProgress/" +
-          courseId +
-          "/" +
-          userData.id,
+        `${API_URL}/api/userProgress/getLastUserProgress/${courseId}
+          /
+          ${userData.id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -110,7 +111,7 @@ const StudentCourseContent = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/api/userProgress/setStepCompleted/${currentStep}/${userData.id}`,
+        `${API_URL}/api/userProgress/setStepCompleted/${currentStep}/${userData.id}`,
         {
           method: "POST",
           headers: {
@@ -147,25 +148,22 @@ const StudentCourseContent = () => {
 
   const navigateNextStep = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/userProgress/nextStep",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-          body: JSON.stringify({
-            userId: userData.id,
-            courseId: courseId,
-            topicId: currentTopic,
-            subtopicId: currentSubtopic,
-            stepId: currentStep,
-          }),
-        }
-      );
+      const response = await fetch(`${API_URL}/api/userProgress/nextStep`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+        body: JSON.stringify({
+          userId: userData.id,
+          courseId: courseId,
+          topicId: currentTopic,
+          subtopicId: currentSubtopic,
+          stepId: currentStep,
+        }),
+      });
       if (response.ok) {
         var responseData = await response.json();
         if (responseData.message == "No further steps available.")
@@ -190,7 +188,7 @@ const StudentCourseContent = () => {
     console.log(subtopicId);
     try {
       const response = await fetch(
-        `http://localhost:3000/api/userProgress/changeSubtopic`,
+        `${API_URL}/api/userProgress/changeSubtopic`,
         {
           method: "POST",
           headers: {
@@ -229,7 +227,7 @@ const StudentCourseContent = () => {
   const fetchCompletedStatus = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/userProgress/getCompletedStatus/${currentStep}/${userData.id}`,
+        `${API_URL}/api/userProgress/getCompletedStatus/${currentStep}/${userData.id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -256,7 +254,7 @@ const StudentCourseContent = () => {
   const changeStepSubmit = async (stepId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/userProgress/addLastUserProgress`,
+        `${API_URL}/api/userProgress/addLastUserProgress`,
         {
           method: "POST",
           headers: {

@@ -4,6 +4,8 @@ import CoursesPagination from "../components/courses.components/CoursePagination
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const CoursessArhive = () => {
   const [courses, setCourses] = useState([]);
   const [userData] = useState(
@@ -14,8 +16,7 @@ const CoursessArhive = () => {
   const getCoursess = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/userProgress/completedCourses/" +
-          userData.id,
+        `${API_URL}/api/userProgress/completedCourses/${userData.id}`,
         {
           method: "GET",
           headers: {

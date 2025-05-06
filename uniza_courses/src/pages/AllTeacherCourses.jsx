@@ -1,9 +1,10 @@
 import { Box, Typography } from "@mui/material";
 import Header from "../components/core.components/Header";
-import SearchBar from "../components/courses.components/SearchBar";
 import CoursesPagination from "../components/courses.components/CoursePagination";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const AllTeachersCourses = () => {
   const [restData, setRestData] = useState([]);
@@ -16,8 +17,7 @@ const AllTeachersCourses = () => {
     console.log("teacherData", teacherData);
     try {
       const response = await fetch(
-        "http://localhost:3000/api/course/getAllTeachersCourses/" +
-          teacherData.id,
+        `${API_URL}/api/course/getAllTeachersCourses/${teacherData.id}`,
         {
           headers: {
             "Content-Type": "application/json",

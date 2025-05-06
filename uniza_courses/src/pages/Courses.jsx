@@ -7,6 +7,8 @@ import SideMenu from "../components/core.components//SideMenu";
 import SearchBar from "../components/courses.components/SearchBar";
 import CoursesPagination from "../components/courses.components/CoursePagination";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Courses = ({ handleLogout }) => {
   const [restData, setRestData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
@@ -15,9 +17,7 @@ const Courses = ({ handleLogout }) => {
   useEffect(() => {
     const load = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/api/course/getAllCourses"
-        );
+        const response = await fetch(`${API_URL}/api/course/getAllCourses`);
         if (response.ok) {
           const responseData = await response.json();
           setRestData(responseData.records);

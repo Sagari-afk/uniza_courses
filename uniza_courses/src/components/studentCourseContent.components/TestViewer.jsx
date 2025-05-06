@@ -4,6 +4,8 @@ import { toast } from "react-toastify";
 import Question from "./Question";
 import PrimaryBtn from "../core.components/PrimaryBtn";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const TestViewer = ({ testId, userData, step }) => {
   const [test, setTest] = useState();
   const [answers, setAnswers] = useState({});
@@ -15,7 +17,7 @@ const TestViewer = ({ testId, userData, step }) => {
   const getTest = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/courseStructure/getTest/" + testId,
+        `${API_URL}/api/courseStructure/getTest/${testId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -82,24 +84,21 @@ const TestViewer = ({ testId, userData, step }) => {
 
   const sendResults = async (score) => {
     try {
-      const res = await fetch(
-        "http://localhost:3000/api/userProgress/submitTestResults",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-          body: JSON.stringify({
-            testId: testId,
-            score: score,
-            results: results,
-            userId: userData?.id,
-          }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/userProgress/submitTestResults`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+        body: JSON.stringify({
+          testId: testId,
+          score: score,
+          results: results,
+          userId: userData?.id,
+        }),
+      });
 
       console.log("Sending data to backend", score);
       const data = await res.json();
@@ -119,8 +118,9 @@ const TestViewer = ({ testId, userData, step }) => {
     const getTestResults = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3000/api/userProgress/getTestResults/" +
-            `${step?.id || testId}/${userData?.id}`,
+          `${API_URL}/api/userProgress/getTestResults/${step?.id || testId}/${
+            userData?.id
+          }`,
           {
             headers: {
               "Content-Type": "application/json",

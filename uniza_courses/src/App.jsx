@@ -27,6 +27,8 @@ import Profile from "./pages/Profile";
 import CoursesInProgress from "./pages/CoursessInProgress";
 import CoursessArhive from "./pages/CoursessArhive";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 function App() {
   const globalStyles = (
     <GlobalStyles
@@ -64,15 +66,12 @@ function App() {
 
   const getUserData = async (token) => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/user/getUserData",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token": token,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/api/user/getUserData`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token": token,
+        },
+      });
       if (response.ok) {
         const responseData = await response.json();
         sessionStorage.setItem("userData", JSON.stringify(responseData.user));

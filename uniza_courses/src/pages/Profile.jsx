@@ -6,6 +6,8 @@ import LightTextField from "../components/core.components/LightTextField";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Profile = ({ userData, getUserData }) => {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(userData?.profile_img_url || null);
@@ -54,28 +56,25 @@ const Profile = ({ userData, getUserData }) => {
 
     try {
       const url = await handleUpload();
-      const res = await fetch(
-        `http://localhost:3000/api/user/editUser/${userData?.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-          body: JSON.stringify({
-            firstName: name,
-            secondName: secondName,
-            email: email,
-            phone: phoneNumber,
-            personalNum: personalNumber,
-            institute: institute,
-            office: office,
-            profile_img_url: url,
-          }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/user/editUser/${userData?.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+        body: JSON.stringify({
+          firstName: name,
+          secondName: secondName,
+          email: email,
+          phone: phoneNumber,
+          personalNum: personalNumber,
+          institute: institute,
+          office: office,
+          profile_img_url: url,
+        }),
+      });
 
       if (!res.ok) {
         return toast.error(
@@ -114,18 +113,15 @@ const Profile = ({ userData, getUserData }) => {
     formData.append("image", file);
 
     try {
-      const res = await fetch(
-        "http://localhost:3000/api/user/uploadProfileImage",
-        {
-          method: "POST",
-          body: formData,
-          headers: {
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-        }
-      );
+      const res = await fetch(`${API_URL}/api/user/uploadProfileImage`, {
+        method: "POST",
+        body: formData,
+        headers: {
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+      });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Upload failed");
       setUserImage(data.url);

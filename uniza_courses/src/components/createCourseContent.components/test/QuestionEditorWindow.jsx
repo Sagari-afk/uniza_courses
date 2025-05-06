@@ -5,7 +5,8 @@ import SecundaryBtn from "../../core.components/SecundaryBtn";
 import AnswerMultiple from "./AnswerMultiple";
 import { toast } from "react-toastify";
 import TipTap from "../tiptap/TipTap";
-import { set } from "lodash";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
   const [content, setContent] = useState(" ");
@@ -16,7 +17,7 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
   const fetchAnswers = useCallback(async () => {
     const getContent = async (id) => {
       const resFile = await fetch(
-        "http://localhost:3000/api/questions/getQuestion/" + id,
+        `${API_URL}/api/questions/getQuestion/${id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +60,7 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
   const getAnswers = async () => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/questions/getAnswers/${question?.id}`,
+        `${API_URL}/api/questions/getAnswers/${question?.id}`,
         {
           method: "GET",
           headers: {
@@ -85,23 +86,20 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
 
   const newAnswerMultiple = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:3000/api/questions/createAnswer`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-          body: JSON.stringify({
-            questionId: question?.id,
-            answerText: "",
-            isCorrect: false,
-          }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/questions/createAnswer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+        body: JSON.stringify({
+          questionId: question?.id,
+          answerText: "",
+          isCorrect: false,
+        }),
+      });
       if (!res.ok) {
         throw new Error("Network response was not ok");
       }
@@ -119,7 +117,7 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
   const handleAnswerDelete = async (answerId) => {
     try {
       const res = await fetch(
-        `http://localhost:3000/api/questions/deleteAnswer/${answerId}`,
+        `${API_URL}/api/questions/deleteAnswer/${answerId}`,
         {
           method: "DELETE",
           headers: {
@@ -145,22 +143,19 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
 
   const saveQuestionContent = async (newContent) => {
     try {
-      const res = await fetch(
-        "http://localhost:3000/api/questions/setQuestionText",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "x-access-token":
-              localStorage.getItem("authToken") ||
-              sessionStorage.getItem("authToken"),
-          },
-          body: JSON.stringify({
-            content: newContent,
-            questionId: question?.id,
-          }),
-        }
-      );
+      const res = await fetch(`${API_URL}/api/questions/setQuestionText`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-access-token":
+            localStorage.getItem("authToken") ||
+            sessionStorage.getItem("authToken"),
+        },
+        body: JSON.stringify({
+          content: newContent,
+          questionId: question?.id,
+        }),
+      });
       console.log("Saving content for question: ", question);
       if (!res.ok) {
         throw new Error("Network response was not ok");
@@ -178,7 +173,7 @@ const QuestionEditorWindow = ({ question, setQuestion, getQuestions }) => {
   const answerUpdate = async (answerText, isCorrect, answerId) => {
     console.log("Updating answer: ", answerText, isCorrect, answerId);
     const res = await fetch(
-      `http://localhost:3000/api/questions/answerUpdate/${answerId}`,
+      `${API_URL}/api/questions/answerUpdate/${answerId}`,
       {
         method: "POST",
         headers: {

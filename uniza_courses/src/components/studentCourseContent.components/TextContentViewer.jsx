@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import TestViewer from "./TestViewer";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const TextContentViewer = ({ stepId, userData }) => {
   const [content, setContent] = useState("");
   const [step, setStep] = useState(null);
@@ -19,7 +21,7 @@ const TextContentViewer = ({ stepId, userData }) => {
   const getStep = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/courseStructure/getStep/" + stepId,
+        `${API_URL}/api/courseStructure/getStep/${stepId}`,
         {
           headers: {
             "Content-Type": "application/json",

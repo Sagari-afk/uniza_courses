@@ -32,6 +32,7 @@ import { closestCorners, DndContext } from "@dnd-kit/core";
 import Step from "./Step";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+const API_URL = import.meta.env.VITE_API_URL;
 
 const SubTopic = ({ id, subtopic, load }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
@@ -71,7 +72,7 @@ const SubTopic = ({ id, subtopic, load }) => {
   const handleSubmitEditSubtopic = async (e) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/courseStructure/editSubtopic/",
+        `${API_URL}/api/courseStructure/editSubtopic/`,
         {
           method: "POST",
           headers: {
@@ -101,8 +102,7 @@ const SubTopic = ({ id, subtopic, load }) => {
   const handleSubmitDeleteSubtopic = async (e) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/courseStructure/deleteSubtopic/" +
-          subtopic.subtopicId,
+        `${API_URL}/api/courseStructure/deleteSubtopic/${subtopic.subtopicId}`,
         {
           method: "POST",
           headers: {

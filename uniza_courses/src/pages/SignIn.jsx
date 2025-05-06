@@ -5,7 +5,6 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
 import { Box, Typography } from "@mui/material";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import { useState } from "react";
@@ -13,6 +12,8 @@ import { Link, useNavigate } from "react-router-dom";
 import SecundaryBtn from "../components/core.components/SecundaryBtn";
 import { toast } from "react-toastify";
 import LightTextFieldWrapper from "../components/core.components/LightTextField";
+
+const API_URL = import.meta.env.VITE_API_URL;
 
 const SignIn = ({ setAuthToken }) => {
   const [email, setEmail] = useState("");
@@ -38,7 +39,7 @@ const SignIn = ({ setAuthToken }) => {
     console.log("Logging in with", payload);
 
     try {
-      const response = await fetch("http://localhost:3000/api/user/logIn", {
+      const response = await fetch(`${API_URL}/api/user/logIn`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

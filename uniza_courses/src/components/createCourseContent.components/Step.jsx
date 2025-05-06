@@ -9,6 +9,8 @@ import ModalCreate from "./ModalCreate";
 import { useSortable } from "@dnd-kit/sortable";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Step = ({ subtopic, step, id, load }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
@@ -21,7 +23,7 @@ const Step = ({ subtopic, step, id, load }) => {
   const getStep = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/courseStructure/getStep/" + step.id,
+        `${API_URL}/api/courseStructure/getStep/${step.id}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -46,7 +48,7 @@ const Step = ({ subtopic, step, id, load }) => {
   const handleSubmitDeleteStep = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/courseStructure/deleteStep/" + id,
+        `${API_URL}/api/courseStructure/deleteStep/$id`,
         {
           method: "POST",
           headers: {

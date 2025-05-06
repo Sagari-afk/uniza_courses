@@ -16,6 +16,8 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import TipTap from "../../components/createCourseContent.components/tiptap/TipTap";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const CreateTextStep = () => {
   const [searchParams] = useSearchParams();
   const subtopicId = searchParams.get("subtopicId");
@@ -31,9 +33,9 @@ const CreateTextStep = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   // const config = {
-  //   imageUploadURL: "http://localhost:3000/api/courseStructure/upload-image",
-  //   videoUploadURL: "http://localhost:3000/api/courseStructure/upload-video",
-  //   fileUploadURL: "http://localhost:3000/api/courseStructure/upload-file", // file doesn't work
+  //   imageUploadURL: "${API_URL}/api/courseStructure/upload-image",
+  //   videoUploadURL: "${API_URL}/api/courseStructure/upload-video",
+  //   fileUploadURL: "${API_URL}/api/courseStructure/upload-file", // file doesn't work
   //   imageUploadMethod: "POST",
   //   imageAllowedTypes: ["jpeg", "jpg", "png"],
   //   fileAllowedTypes: ["*"],
@@ -49,7 +51,7 @@ const CreateTextStep = () => {
   const getStep = async () => {
     try {
       const res = await fetch(
-        "http://localhost:3000/api/courseStructure/getStep/" + stepId,
+        `${API_URL}/api/courseStructure/getStep/${stepId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -78,8 +80,8 @@ const CreateTextStep = () => {
     try {
       const res = await fetch(
         stepId
-          ? "http://localhost:3000/api/courseStructure/update-content"
-          : "http://localhost:3000/api/courseStructure/save-content",
+          ? `${API_URL}/api/courseStructure/update-content`
+          : `${API_URL}/api/courseStructure/save-content`,
         {
           method: "POST",
           headers: {

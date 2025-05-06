@@ -12,6 +12,8 @@ import SecundaryBtn from "../core.components/SecundaryBtn";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const CourseCard = ({ course, linkTo, teacher, teachers, load }) => {
   const navigate = useNavigate();
   const isAuthorized =
@@ -38,7 +40,7 @@ const CourseCard = ({ course, linkTo, teacher, teachers, load }) => {
   const getStudentsCount = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/course/getStudentsCount/${course.id}`,
+        `${API_URL}/api/course/getStudentsCount/${course.id}`,
         {
           method: "GET",
           headers: {
@@ -63,7 +65,7 @@ const CourseCard = ({ course, linkTo, teacher, teachers, load }) => {
   const handleSubmitDeleteCourse = async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/course/deleteCourse/" + course.id,
+        `${API_URL}/api/course/deleteCourse/${course.id}`,
         {
           method: "POST",
           headers: {

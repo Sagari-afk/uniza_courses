@@ -20,6 +20,8 @@ import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import TeacherSelect from "../components/editCourse.components/TeacherSelect";
 import { toast } from "react-toastify";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const EditCourse = () => {
   const location = useLocation();
   const { id } = location.state || {};
@@ -46,17 +48,14 @@ const EditCourse = () => {
   useEffect(() => {
     const loadTeachers = async () => {
       try {
-        const response = await fetch(
-          "http://localhost:3000/api/user/getTeachers",
-          {
-            headers: {
-              "Content-Type": "application/json",
-              "x-access-token":
-                localStorage.getItem("authToken") ||
-                sessionStorage.getItem("authToken"),
-            },
-          }
-        );
+        const response = await fetch(`${API_URL}/api/user/getTeachers`, {
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token":
+              localStorage.getItem("authToken") ||
+              sessionStorage.getItem("authToken"),
+          },
+        });
         const data = await response.json();
         setTeacherOptions(data.records);
       } catch (error) {
@@ -78,9 +77,7 @@ const EditCourse = () => {
 
   const loadCourseData = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:3000/api/course/getCourse/" + id
-      );
+      const response = await fetch(`${API_URL}/api/course/getCourse/${id}`);
       if (response.ok) {
         const responseData = await response.json();
 
@@ -150,8 +147,8 @@ const EditCourse = () => {
 
       const response = await fetch(
         id
-          ? "http://localhost:3000/api/course/editCourse/" + id
-          : "http://localhost:3000/api/course/newCourse",
+          ? `${API_URL}/api/course/editCourse/${id}`
+          : `${API_URL}/api/course/newCourse`,
         {
           method: "POST",
           headers: {

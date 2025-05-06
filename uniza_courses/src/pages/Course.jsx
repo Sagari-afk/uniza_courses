@@ -25,6 +25,8 @@ import Teachers from "../components/course.components/Teachers";
 import Comments from "../components/course.components/Comments";
 import SidePanel from "../components/course.components/SidePanel";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const Course = () => {
   const location = useLocation();
   const userData = JSON.parse(sessionStorage.getItem("userData"));
@@ -41,7 +43,7 @@ const Course = () => {
   const getStudentsCount = async (courseId) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/course/getStudentsCount/${courseId}`,
+        `${API_URL}/api/course/getStudentsCount/${courseId}`,
         {
           method: "GET",
           headers: {
@@ -66,7 +68,7 @@ const Course = () => {
   const load = useCallback(async () => {
     try {
       const response = await fetch(
-        "http://localhost:3000/api/course/getCourse/" + courseId
+        `${API_URL}/api/course/getCourse/${courseId}`
       );
       if (response.ok) {
         const responseData = await response.json();
@@ -105,7 +107,7 @@ const Course = () => {
   const getIfCourseStarted = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/userProgress/getIsStarted/${courseId}/${userData.id}`,
+        `${API_URL}/api/userProgress/getIsStarted/${courseId}/${userData.id}`,
         {
           headers: {
             "Content-Type": "application/json",
