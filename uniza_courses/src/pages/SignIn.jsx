@@ -4,7 +4,6 @@ import * as React from "react";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
-import FormControl from "@mui/material/FormControl";
 import { Box, Typography } from "@mui/material";
 import PrimaryBtn from "../components/core.components/PrimaryBtn";
 import { useState } from "react";
@@ -96,7 +95,15 @@ const SignIn = ({ setAuthToken }) => {
       >
         <Header style={{ background: "transparent" }} />
         <Container
-          sx={{ overflow: "hidden", height: "100%", backgroundColor: "black" }}
+          maxWidth="sm"
+          sx={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            py: { xs: 2, sm: 4 },
+            mt: -2,
+          }}
         >
           <Box
             sx={{
@@ -105,22 +112,25 @@ const SignIn = ({ setAuthToken }) => {
               flexDirection: "column",
               justifyContent: "center",
               alignItems: "center",
-              height: "100%",
-              paddingBottom: "10rem",
               color: "white",
-              marginTop: "-2rem",
+
+              // bgcolor: "rgba(0,0,0,0.2)",
+              // border: "2px solid rgba(223, 102, 144, 0.15)",
+              borderRadius: 2,
+              p: { xs: 2, sm: 4 },
             }}
           >
             <Typography variant="h3" color="primary.main">
               Prihlasiť sa
             </Typography>
-            <FormControl
+            <Box
               component="form"
               onSubmit={handleSubmit}
               sx={{
                 display: "flex",
+                flexDirection: "column",
                 gap: 2,
-                width: "20rem",
+                minWidth: "20rem",
                 border: "solid 2px rgba(223, 102, 144, 0.15)",
                 padding: "1rem",
                 borderRadius: "8px",
@@ -141,8 +151,6 @@ const SignIn = ({ setAuthToken }) => {
                 variant="outlined"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                InputLabelProps={{ style: { color: "white" } }}
-                InputProps={{ style: { color: "white" } }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": { borderColor: "white" },
@@ -165,8 +173,6 @@ const SignIn = ({ setAuthToken }) => {
                 variant="outlined"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                InputLabelProps={{ style: { color: "white" } }}
-                InputProps={{ style: { color: "white" } }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
                     "& fieldset": { borderColor: "white" },
@@ -199,7 +205,7 @@ const SignIn = ({ setAuthToken }) => {
                   Vytvoriť nový učet
                 </SecundaryBtn>
               </Link>
-            </FormControl>
+            </Box>
           </Box>
         </Container>
       </Box>

@@ -42,6 +42,7 @@ const HomePage = () => {
             color="white"
             sx={{
               textAlign: "center",
+              fontSize: { xs: 55, sm: 95 },
             }}
           >
             Uč sa rýchlo a<br /> efektívne.

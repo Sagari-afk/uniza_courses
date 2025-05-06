@@ -99,354 +99,209 @@ const SignUp = ({ setAuthToken }) => {
   return (
     <Box
       sx={{
-        height: "100vh",
+        minHeight: "100vh",
         backgroundImage: "url(/homepage.png)",
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         backgroundColor: "rgba(0,0,0,0.6)",
         backgroundBlendMode: "overlay",
         backgroundPosition: "center 70%",
+        display: "flex",
+        flexDirection: "column",
       }}
     >
       <Box
         className="light_gradient-background-animation"
-        sx={{
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-        }}
+        sx={{ minHeight: "100vh", display: "flex" }}
       >
-        <Header style={{ background: "transparent" }} />
+        {/* <Header style={{ background: "transparent" }} /> */}
 
         <Container
-          sx={{ overflow: "hidden", height: "100%", backgroundColor: "black" }}
+          maxWidth="sm"
+          sx={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            py: { xs: 2, sm: 4 },
+          }}
         >
           <Box
+            component="form"
+            onSubmit={handleSubmit}
             sx={{
-              display: "flex",
-              gap: 6,
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              height: "100%",
-              paddingBottom: "10rem",
+              width: "100%",
+              bgcolor: "rgba(0,0,0,0.1)",
+              border: "2px solid rgba(223, 102, 144, 0.15)",
+              borderRadius: 2,
+              p: { xs: 2, sm: 4 },
               color: "white",
-              marginTop: "-3rem",
             }}
           >
-            <Typography variant="h3" color="primary.main">
+            <Typography variant="h4" align="center" gutterBottom>
               Zaregistrovať sa
             </Typography>
-            <FormControl
-              component="form"
-              onSubmit={handleSubmit}
-              sx={{
-                display: "flex",
-                gap: 2,
-                width: "fit-content",
-                border: "solid 2px rgba(223, 102, 144, 0.15)",
-                padding: "1rem",
-                borderRadius: "8px",
-              }}
-            >
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{
-                  alignItems: "center",
-                  display: "flex",
-                  justifyContent: "center",
-                }}
-              >
-                <Typography>Učiteľ</Typography>
-                <Switch checked={status} onChange={handleChange} />
-                <Typography>Študent</Typography>
-              </Stack>
 
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{
-                  alignItems: "center",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <FormLabel htmlFor="firstName" sx={{ color: "white.main" }}>
-                  Meno
-                </FormLabel>
+            {/* Teacher/Student toggle */}
+            <Stack
+              direction="row"
+              justifyContent="center"
+              alignItems="center"
+              spacing={1}
+              mb={3}
+            >
+              <Typography>Učiteľ</Typography>
+              <Switch checked={status} onChange={handleChange} />
+              <Typography>Študent</Typography>
+            </Stack>
+
+            {/* Name / Surname row */}
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={2}>
+              <Box flex={1}>
+                <FormLabel sx={{ color: "white !important" }}>Meno</FormLabel>
                 <LightTextFieldWrapper
-                  id="firstName"
-                  type="text"
-                  name="firstName"
-                  placeholder="Zuzana"
-                  required
                   fullWidth
-                  autoFocus
-                  variant="outlined"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
-                  InputLabelProps={{ style: { color: "white" } }}
-                  InputProps={{ style: { color: "white" } }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "white" },
-                      "&:hover fieldset": { borderColor: "white" },
-                      "&.Mui-focused fieldset": { borderColor: "white" },
-                    },
-                  }}
+                  placeholder="Zuzana"
                 />
-                <FormLabel htmlFor="secondName" sx={{ color: "white.main" }}>
-                  Novakova
+              </Box>
+              <Box flex={1}>
+                <FormLabel sx={{ color: "white !important" }}>
+                  Priezvisko
                 </FormLabel>
                 <LightTextFieldWrapper
-                  id="secondName"
-                  type="text"
-                  name="secondName"
-                  placeholder="Zuzana"
-                  required
                   fullWidth
-                  autoFocus
-                  variant="outlined"
                   value={secondName}
                   onChange={(e) => setSecondName(e.target.value)}
-                  InputLabelProps={{ style: { color: "white" } }}
-                  InputProps={{ style: { color: "white" } }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "white" },
-                      "&:hover fieldset": { borderColor: "white" },
-                      "&.Mui-focused fieldset": { borderColor: "white" },
-                    },
-                  }}
+                  placeholder="Novakova"
                 />
-                <FormLabel htmlFor="email" sx={{ color: "white.main" }}>
-                  Email
-                </FormLabel>
-                <LightTextFieldWrapper
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="your@stud.uniza.sk"
-                  autoComplete="email"
-                  required
-                  fullWidth
-                  variant="outlined"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  InputLabelProps={{ style: { color: "white" } }}
-                  InputProps={{ style: { color: "white" } }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "white" },
-                      "&:hover fieldset": { borderColor: "white" },
-                      "&.Mui-focused fieldset": { borderColor: "white" },
-                    },
-                  }}
-                />
-              </Stack>
-              {!status ? (
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{
-                    alignItems: "center",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <FormLabel htmlFor="institute" sx={{ color: "white.main" }}>
+              </Box>
+            </Stack>
+
+            {/* Email */}
+            <Box mb={2}>
+              <FormLabel sx={{ color: "white !important" }}>Email</FormLabel>
+              <LightTextFieldWrapper
+                fullWidth
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="your@stud.uniza.sk"
+              />
+            </Box>
+
+            {/* Teacher-only fields */}
+            {!status && (
+              <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={2}>
+                <Box flex={1}>
+                  <FormLabel sx={{ color: "white !important" }}>
                     Pracovisko
                   </FormLabel>
                   <LightTextFieldWrapper
-                    id="institute"
-                    type="text"
-                    name="institute"
-                    placeholder="Katedra informatiky"
-                    required
                     fullWidth
-                    variant="outlined"
                     value={institute}
                     onChange={(e) => setInstitute(e.target.value)}
-                    InputLabelProps={{ style: { color: "white" } }}
-                    InputProps={{ style: { color: "white" } }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": { borderColor: "white" },
-                        "&:hover fieldset": { borderColor: "white" },
-                        "&.Mui-focused fieldset": { borderColor: "white" },
-                      },
-                    }}
+                    placeholder="Katedra informatiky"
                   />
-                  <FormLabel htmlFor="office" sx={{ color: "white.main" }}>
-                    Kancelaria
+                </Box>
+                <Box flex={1}>
+                  <FormLabel sx={{ color: "white !important" }}>
+                    Kancelária
                   </FormLabel>
                   <LightTextFieldWrapper
-                    id="office"
-                    type="text"
-                    name="office"
-                    placeholder="BD300"
-                    required
                     fullWidth
-                    variant="outlined"
                     value={office}
                     onChange={(e) => setOffice(e.target.value)}
-                    InputLabelProps={{ style: { color: "white" } }}
-                    InputProps={{ style: { color: "white" } }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": { borderColor: "white" },
-                        "&:hover fieldset": { borderColor: "white" },
-                        "&.Mui-focused fieldset": { borderColor: "white" },
-                      },
-                    }}
+                    placeholder="BD300"
                   />
-
-                  <FormLabel htmlFor="phone" sx={{ color: "white.main" }}>
-                    Telefonné číslo
+                </Box>
+                <Box flex={1}>
+                  <FormLabel sx={{ color: "white !important" }}>
+                    Telefónne číslo
                   </FormLabel>
                   <LightTextFieldWrapper
-                    id="phone"
-                    type="text"
-                    name="phone"
-                    placeholder="+421 950 849 2494"
-                    required
                     fullWidth
-                    variant="outlined"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    InputLabelProps={{ style: { color: "white" } }}
-                    InputProps={{ style: { color: "white" } }}
-                    sx={{
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": { borderColor: "white" },
-                        "&:hover fieldset": { borderColor: "white" },
-                        "&.Mui-focused fieldset": { borderColor: "white" },
-                      },
-                    }}
+                    placeholder="+421 950 849 249"
                   />
-                </Stack>
-              ) : null}
+                </Box>
+              </Stack>
+            )}
 
-              {status ? (
-                <Stack
-                  direction="row"
-                  spacing={1}
-                  sx={{
-                    alignItems: "center",
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <FormLabel
-                    htmlFor="personal_nam"
-                    sx={{ color: "white.main" }}
-                  >
-                    Osobne číslo
-                  </FormLabel>
-                  <LightTextFieldWrapper
-                    id="personal_nam"
-                    type="number"
-                    name="personal_nam"
-                    placeholder="12345"
-                    required
-                    variant="outlined"
-                    value={personalNum}
-                    onChange={(e) => setPersonalNum(e.target.value)}
-                    InputLabelProps={{ style: { color: "white" } }}
-                    InputProps={{ style: { color: "white" } }}
-                    sx={{
-                      width: "80%",
-                      "& .MuiOutlinedInput-root": {
-                        "& fieldset": { borderColor: "white" },
-                        "&:hover fieldset": { borderColor: "white" },
-                        "&.Mui-focused fieldset": { borderColor: "white" },
-                      },
-                    }}
-                  />
-                </Stack>
-              ) : null}
-
-              <Stack
-                direction="row"
-                spacing={1}
-                sx={{
-                  alignItems: "center",
-                  display: "flex",
-                  justifyContent: "space-between",
-                }}
-              >
-                <FormLabel htmlFor="password" sx={{ color: "white.main" }}>
-                  Heslo
+            {/* Student-only field */}
+            {status && (
+              <Box mb={2}>
+                <FormLabel sx={{ color: "white !important" }}>
+                  Osobné číslo
                 </FormLabel>
                 <LightTextFieldWrapper
-                  name="password"
-                  placeholder="•••••••••"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  required
                   fullWidth
-                  variant="outlined"
+                  value={personalNum}
+                  onChange={(e) => setPersonalNum(e.target.value)}
+                  placeholder="123456"
+                  type="number"
+                />
+              </Box>
+            )}
+
+            {/* Passwords */}
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} mb={2}>
+              <Box flex={1}>
+                <FormLabel sx={{ color: "white !important" }}>Heslo</FormLabel>
+                <LightTextFieldWrapper
+                  fullWidth
+                  type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  InputLabelProps={{ style: { color: "white" } }}
-                  InputProps={{ style: { color: "white" } }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "white" },
-                      "&:hover fieldset": { borderColor: "white" },
-                      "&.Mui-focused fieldset": { borderColor: "white" },
-                    },
-                  }}
+                  placeholder="••••••••"
                 />
-
-                <FormLabel htmlFor="passwordCheck" sx={{ color: "white.main" }}>
+              </Box>
+              <Box flex={1}>
+                <FormLabel sx={{ color: "white !important" }}>
                   Zopakuj heslo
                 </FormLabel>
                 <LightTextFieldWrapper
-                  name="passwordCheck"
-                  placeholder="•••••••••"
-                  type="password"
-                  id="passwordCheck"
-                  autoComplete="current-password"
-                  required
                   fullWidth
-                  variant="outlined"
+                  type="password"
                   value={passwordCheck}
                   onChange={(e) => setpasswordCheck(e.target.value)}
-                  InputLabelProps={{ style: { color: "white" } }}
-                  InputProps={{ style: { color: "white" } }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      "& fieldset": { borderColor: "white" },
-                      "&:hover fieldset": { borderColor: "white" },
-                      "&.Mui-focused fieldset": { borderColor: "white" },
-                    },
-                  }}
+                  placeholder="••••••••"
                 />
-              </Stack>
+              </Box>
+            </Stack>
 
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    value="remember"
-                    color="primary"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)} // Update the rememberMe state
-                    sx={{ color: "white" }}
-                  />
-                }
-                label="Zapamatať si ma"
-                sx={{ color: "white" }}
-              />
-              {error && (
-                <Typography color="error" sx={{ marginBottom: 2 }}>
-                  {error}
+            {/* Remember me */}
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  sx={{ color: "white" }}
+                />
+              }
+              label="Zapamätať si ma"
+              sx={{ color: "white", mb: 2 }}
+            />
+
+            {error && (
+              <Typography color="error" mb={2}>
+                {error}
+              </Typography>
+            )}
+
+            <PrimaryBtn fullWidth type="submit" loading={loading}>
+              Zaregistrovať sa
+            </PrimaryBtn>
+
+            <Box textAlign="center" mt={2}>
+              <Link to="/SignIn">
+                <Typography color="primary.main">
+                  Už máte účet? Prihláste sa
                 </Typography>
-              )}
-              <PrimaryBtn type="submit">Zaregistrovať sa</PrimaryBtn>
-            </FormControl>
+              </Link>
+            </Box>
           </Box>
         </Container>
       </Box>
