@@ -3,7 +3,7 @@ import DocViewer from "react-doc-viewer";
 function PresentationViewer() {
   const docs = [
     {
-      uri: "http://localhost:3000/uploads/1746551636514.pptx",
+      uri: "",
       fileType: "pptx",
       fileName: "namesjkdf",
     },

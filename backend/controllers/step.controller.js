@@ -5,19 +5,19 @@ const fs = require("fs");
 
 const uploadImage = (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-  const fileUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+  const fileUrl = `${process.env.API_URL}/uploads/${req.file.filename}`;
   res.json({ fileUrl });
 };
 
 const uploadVideo = (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-  const fileUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+  const fileUrl = `${process.env.API_URL}/uploads/${req.file.filename}`;
   res.json({ fileUrl });
 };
 
 const upladFile = (req, res) => {
   if (!req.file) return res.status(400).json({ error: "No file uploaded" });
-  const fileUrl = `http://localhost:3000/uploads/${req.file.filename}`;
+  const fileUrl = `${process.env.API_URL}/uploads/${req.file.filename}`;
   res.json({ fileUrl });
 };
 

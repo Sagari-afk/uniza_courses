@@ -345,7 +345,7 @@ const uploadProfileImage = async (req, res) => {
   }
   const img_url = req.file ? req.file.path : null;
 
-  const url = `http://localhost:3000/${img_url}`;
+  const url = `${process.env.API_URL}/${img_url}`;
 
   res.json({ url });
 };
