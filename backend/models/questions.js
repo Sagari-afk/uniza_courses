@@ -1,27 +1,27 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Questions extends Model {
+  class Question extends Model {
     static associate(models) {
-      Questions.belongsTo(models.Step, {
+      Question.belongsTo(models.Step, {
         foreignKey: "stepId",
         onDelete: "CASCADE",
       });
-      Questions.hasMany(models.Answers, {
+      Question.hasMany(models.Answer, {
         foreignKey: "questionId",
         onDelete: "CASCADE",
       });
-      // Questions.hasMany(models.UserAnswers, {
+      // Question.hasMany(models.UserAnswers, {
       //   foreignKey: "questionId",
       //   onDelete: "CASCADE",
       // });
-      // Questions.hasMany(models.UserQuestion, {
+      // Question.hasMany(models.UserQuestion, {
       //   foreignKey: "questionId",
       //   onDelete: "CASCADE",
       // });
     }
   }
-  Questions.init(
+  Question.init(
     {
       stepId: { type: DataTypes.INTEGER, allowNull: false },
       opened: { type: DataTypes.BOOLEAN, allowNull: true },
@@ -31,9 +31,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Questions",
-      tableName: "questions",
+      modelName: "Question",
+      tableName: "question",
     }
   );
-  return Questions;
+  return Question;
 };

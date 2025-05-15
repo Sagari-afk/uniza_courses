@@ -7,6 +7,8 @@ const authMiddleware = async (req, res, next) => {
   if (req.url.startsWith("/api/course/getAllCourses")) return next();
   if (req.url.startsWith("/api/course/getCourse")) return next();
   if (req.url.startsWith("/uploads")) return next();
+  if (req.url.startsWith("/api/course/getStudentsCount")) return next();
+
   // if (req.url.startsWith("/api/courseStructure/upload-image")) return next();
   // if (req.url.startsWith("/api/courseStructure/upload-video")) return next();
   if (req.url.startsWith("/api/courseStructure/upload-file")) return next();

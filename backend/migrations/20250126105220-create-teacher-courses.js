@@ -1,11 +1,10 @@
-// миграция для создания таблицы teacher_courses
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable("teacher_courses", {
       teacherId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Teachers",
+          model: "Teacher",
           key: "id",
         },
         onDelete: "CASCADE",

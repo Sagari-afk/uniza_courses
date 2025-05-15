@@ -1,4 +1,4 @@
-const { sequelize, CourseComments } = require("../models");
+const { sequelize, CourseComment } = require("../models");
 const { body, validationResult } = require("express-validator");
 
 const newComment = [
@@ -21,7 +21,7 @@ const newComment = [
     const { commentText, commentRate, courseId } = req.body;
 
     try {
-      const courseComment = await CourseComments.create({
+      const courseComment = await CourseComment.create({
         commentText,
         commentRate,
         courseId,

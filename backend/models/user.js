@@ -5,7 +5,7 @@ const crypto = require("crypto");
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate = function (models) {
-      User.hasMany(models.CourseComments, {
+      User.hasMany(models.CourseComment, {
         foreignKey: "userId",
         onDelete: "CASCADE",
         as: "comments",

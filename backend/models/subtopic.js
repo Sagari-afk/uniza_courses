@@ -1,20 +1,20 @@
 "use strict";
 const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class SubTopic extends Model {
+  class Subtopic extends Model {
     static associate(models) {
-      SubTopic.belongsTo(models.Topic, {
+      Subtopic.belongsTo(models.Topic, {
         foreignKey: "topicId",
         onDelete: "CASCADE",
       });
-      SubTopic.hasMany(models.Step, {
+      Subtopic.hasMany(models.Step, {
         foreignKey: "subtopicId",
         onDelete: "CASCADE",
-        as: "steps",
+        as: "step",
       });
     }
   }
-  SubTopic.init(
+  Subtopic.init(
     {
       title: {
         type: DataTypes.STRING,
@@ -32,9 +32,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      tableName: "subtopics",
-      modelName: "SubTopic",
+      tableName: "subtopic",
+      modelName: "Subtopic",
     }
   );
-  return SubTopic;
+  return Subtopic;
 };

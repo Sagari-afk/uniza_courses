@@ -4,9 +4,9 @@ const {
   User,
   Course,
   Topic,
-  SubTopic,
+  Subtopic,
   Step,
-  CourseComments,
+  CourseComment,
   Teacher,
   Discipline,
 } = require("../models");
@@ -24,7 +24,7 @@ const startCourse = async (userId, courseId) => {
   }
   const topic = await Topic.findOne({ where: { courseId, order: 1 } });
   if (!topic) return "No topic found";
-  const subtopic = await SubTopic.findOne({
+  const subtopic = await Subtopic.findOne({
     where: { topicId: topic.id, order: 1 },
   });
   if (!subtopic) return "No subtopic found";
@@ -104,7 +104,7 @@ const addLastUserProgress = async (req, res) => {
         .json({ error: "Topic does not belong to the specified course" });
     }
     // subtopic validation
-    const subtopic = await SubTopic.findByPk(subtopicId);
+    const subtopic = await Subtopic.findByPk(subtopicId);
     if (!subtopic) {
       return res.status(404).json({ error: "Subtopic not found" });
     }
@@ -186,7 +186,7 @@ const nextStep = async (req, res) => {
         .json({ error: "Topic does not belong to the specified course" });
     }
     // subtopic validation
-    const subtopic = await SubTopic.findByPk(subtopicId);
+    const subtopic = await Subtopic.findByPk(subtopicId);
     if (!subtopic) {
       return res.status(404).json({ error: "Subtopic not found" });
     }
@@ -231,8 +231,8 @@ const nextStep = async (req, res) => {
       return res.status(200).json({ record, nextStep: nextStepInSubtopic });
     }
     // Current step is the last step in the current subtopic.
-    // Find all subtopics in the same topic with an order greater than the current subtopic.
-    const nextSubtopics = await SubTopic.findAll({
+    // Find all subtopic in the same topic with an order greater than the current subtopic.
+    const nextSubtopics = await Subtopic.findAll({
       where: {
         topicId,
         order: { [Op.gt]: subtopic.order },
@@ -242,7 +242,7 @@ const nextStep = async (req, res) => {
 
     let nextSubtopicWithSteps = null;
     let firstStepNextSubtopic = null;
-    // Loop through candidate subtopics until we find one that has at least one step.
+    // Loop through candidate subtopic until we find one that has at least one step.
     for (const candidateSubtopic of nextSubtopics) {
       const candidateStep = await Step.findOne({
         where: { subtopicId: candidateSubtopic.id },
@@ -266,7 +266,7 @@ const nextStep = async (req, res) => {
       });
       return res.status(200).json({ record, nextStep: firstStepNextSubtopic });
     } else {
-      return res.status(200).json({ message: "No further steps available." });
+      return res.status(200).json({ message: "No further step available." });
     }
   } catch (error) {
     console.log(error);
@@ -288,7 +288,7 @@ const changeSubtopic = async (req, res) => {
       return res.status(404).json({ error: "Course not found" });
     }
 
-    const subtopic = await SubTopic.findByPk(subtopicId);
+    const subtopic = await Subtopic.findByPk(subtopicId);
     if (!subtopic) {
       return res.status(404).json({ error: "Subtopic not found" });
     }
@@ -305,7 +305,7 @@ const changeSubtopic = async (req, res) => {
     });
     if (!firstStepInSubtopic) {
       return res.status(404).json({
-        error: "The subtopic does't have any steps",
+        error: "The subtopic does't have any step",
       });
     }
     const progressRecord = await StudentProgressHistory.findOne({
@@ -443,7 +443,7 @@ const getTestResults = async (req, res) => {
 //       where: { id: { [Op.in]: courseIds } },
 //       include: [
 //         {
-//           model: CourseComments,
+//           model: CourseComment,
 //           include: {
 //             model: User,
 //             as: "user",
@@ -455,7 +455,7 @@ const getTestResults = async (req, res) => {
 //           model: Teacher,
 //           attributes: ["id", "institute", "office", "phone"],
 //           through: { attributes: [] },
-//           as: "teachers",
+//           as: "teacher",
 //           include: [
 //             {
 //               model: User,
@@ -474,7 +474,7 @@ const getTestResults = async (req, res) => {
 //           model: Discipline,
 //           attributes: ["name"],
 //           through: { attributes: [] },
-//           as: "disciplines",
+//           as: "discipline",
 //         },
 //       ],
 //     });
@@ -498,19 +498,19 @@ const getTestResults = async (req, res) => {
 // };
 
 async function countStepsInCourse(courseId) {
-  const topics = await Topic.findAll({
+  const topic = await Topic.findAll({
     where: { courseId },
     attributes: ["id"],
     raw: true,
   });
-  const topicIds = topics.map((t) => t.id);
+  const topicIds = topic.map((t) => t.id);
 
-  const subtopics = await SubTopic.findAll({
+  const subtopic = await Subtopic.findAll({
     where: { topicId: { [Op.in]: topicIds } },
     attributes: ["id"],
     raw: true,
   });
-  const subtopicIds = subtopics.map((s) => s.id);
+  const subtopicIds = subtopic.map((s) => s.id);
 
   const totalSteps = await Step.count({
     where: { subtopicId: { [Op.in]: subtopicIds } },
@@ -552,7 +552,7 @@ const getCoursesInProgress = async (req, res) => {
       where: { id: { [Op.in]: inProgressCourseIds } },
       include: [
         {
-          model: CourseComments,
+          model: CourseComment,
           include: {
             model: User,
             as: "user",
@@ -564,7 +564,7 @@ const getCoursesInProgress = async (req, res) => {
           model: Teacher,
           attributes: ["id", "institute", "office", "phone"],
           through: { attributes: [] },
-          as: "teachers",
+          as: "teacher",
           include: [
             {
               model: User,
@@ -583,7 +583,7 @@ const getCoursesInProgress = async (req, res) => {
           model: Discipline,
           attributes: ["name"],
           through: { attributes: [] },
-          as: "disciplines",
+          as: "discipline",
         },
       ],
     });
@@ -643,7 +643,7 @@ const getCompletedCourses = async (req, res) => {
       where: { id: { [Op.in]: completedCourseIds } },
       include: [
         {
-          model: CourseComments,
+          model: CourseComment,
           include: {
             model: User,
             as: "user",
@@ -655,7 +655,7 @@ const getCompletedCourses = async (req, res) => {
           model: Teacher,
           attributes: ["id", "institute", "office", "phone"],
           through: { attributes: [] },
-          as: "teachers",
+          as: "teacher",
           include: [
             {
               model: User,
@@ -674,7 +674,7 @@ const getCompletedCourses = async (req, res) => {
           model: Discipline,
           attributes: ["name"],
           through: { attributes: [] },
-          as: "disciplines",
+          as: "discipline",
         },
       ],
     });

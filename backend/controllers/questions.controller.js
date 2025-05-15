@@ -1,5 +1,5 @@
 const path = require("path");
-const { sequelize, Questions, Answers } = require("../models");
+const { sequelize, Question, Answer } = require("../models");
 const { body, validationResult, param } = require("express-validator");
 const fs = require("fs");
 
@@ -23,10 +23,10 @@ const addQuestion = [
     const { stepId, opened } = req.body;
     console.log("stepId: ", stepId);
     console.log("opened: ", opened);
-    const order = (await Questions.count({ where: { stepId } })) + 1;
+    const order = (await Question.count({ where: { stepId } })) + 1;
 
     try {
-      const question = await Questions.create({
+      const question = await Question.create({
         stepId,
         opened,
         order,
@@ -58,7 +58,7 @@ const setQuestionText = [
 
     const { questionId, content } = req.body;
 
-    // const saveDir = path.join(__dirname, "..", "saved/questions");
+    // const saveDir = path.join(__dirname, "..", "saved/question");
 
     // if (!fs.existsSync(saveDir)) {
     //   fs.mkdirSync(saveDir, { recursive: true });
@@ -74,7 +74,7 @@ const setQuestionText = [
     // console.log("File saved successfully:", fileName);
 
     try {
-      const question = await Questions.update(
+      const question = await Question.update(
         { questionText: content },
         { where: { id: questionId } }
       );
@@ -94,7 +94,7 @@ const getQuestionHtmlContent = (req, res) => {
       return res.status(400).json({ error: "File URL is required" });
     }
 
-    const filePath = path.join(__dirname, "..", "/saved/questions/", fileUrl);
+    const filePath = path.join(__dirname, "..", "/saved/question/", fileUrl);
     console.log("File path: ", filePath);
 
     fs.readFile(filePath, "utf8", (err, content) => {
@@ -131,7 +131,7 @@ const setQuestionOpened = [
     const { questionId, opened } = req.body;
 
     try {
-      const question = await Questions.update(
+      const question = await Question.update(
         { opened },
         { where: { id: questionId } }
       );
@@ -160,18 +160,18 @@ const getQuestions = async (req, res) => {
   const { stepId } = req.params;
   console.log("stepId: ", stepId);
   try {
-    const questions = await Questions.findAll({
+    const question = await Question.findAll({
       where: { stepId },
       order: [["order", "ASC"]],
       include: [
         {
-          model: Answers,
+          model: Answer,
           required: false,
         },
       ],
     });
 
-    return res.json(questions);
+    return res.json(question);
   } catch (error) {
     console.log(error);
     return res.status(500).json(error.message);
@@ -185,7 +185,7 @@ const createAnswer = async (req, res) => {
   console.log("isCorrect: ", isCorrect);
 
   try {
-    const answer = await Answers.create({
+    const answer = await Answer.create({
       questionId,
       contentFileName: answerText || "",
       correctAnswer: isCorrect,
@@ -203,7 +203,7 @@ const deleteAnswer = async (req, res) => {
   console.log("Deleting answer with id: ", answerId);
 
   try {
-    const answer = await Answers.destroy({
+    const answer = await Answer.destroy({
       where: { id: answerId },
     });
     if (!answer) {
@@ -221,7 +221,7 @@ const getAnswers = async (req, res) => {
   const { questionId } = req.params;
   console.log("questionId: ", questionId);
   try {
-    const answers = await Answers.findAll({
+    const answers = await Answer.findAll({
       where: { questionId },
     });
 
@@ -236,11 +236,11 @@ const getQuestion = async (req, res) => {
   const { questionId } = req.params;
   console.log("questionId: ", questionId);
   try {
-    const question = await Questions.findOne({
+    const question = await Question.findOne({
       where: { id: questionId },
       include: [
         {
-          model: Answers,
+          model: Answer,
           required: false,
         },
       ],
@@ -263,7 +263,7 @@ const answerUpdate = [
     const { answerText, isCorrect } = req.body;
 
     try {
-      const answer = await Answers.update(
+      const answer = await Answer.update(
         { contentFileName: answerText, correctAnswer: isCorrect },
         { where: { id: answerId } }
       );
@@ -281,7 +281,7 @@ const deleteQuestion = async (req, res) => {
   console.log("Deleting question with id: ", questionId);
 
   try {
-    const question = await Questions.destroy({
+    const question = await Question.destroy({
       where: { id: questionId },
     });
     if (!question) {

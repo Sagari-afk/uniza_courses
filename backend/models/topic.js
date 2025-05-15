@@ -7,10 +7,10 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "courseId",
         onDelete: "CASCADE",
       });
-      Topic.hasMany(models.SubTopic, {
+      Topic.hasMany(models.Subtopic, {
         foreignKey: "topicId",
         onDelete: "CASCADE",
-        as: "subtopics",
+        as: "subtopic",
       });
     }
   }
@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      tableName: "topics",
+      tableName: "topic",
       modelName: "Topic",
     }
   );

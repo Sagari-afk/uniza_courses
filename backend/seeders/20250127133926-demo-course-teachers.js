@@ -7,30 +7,30 @@ module.exports = {
       "SELECT id FROM course",
       { type: Sequelize.QueryTypes.SELECT }
     );
-    const teachers = await queryInterface.sequelize.query(
-      "SELECT id FROM teachers",
+    const teacher = await queryInterface.sequelize.query(
+      "SELECT id FROM teacher",
       { type: Sequelize.QueryTypes.SELECT }
     );
 
     await queryInterface.bulkInsert("teacher_courses", [
       {
         courseId: courses[0].id,
-        teacherId: teachers[0].id,
+        teacherId: teacher[0].id,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
-      {
-        courseId: courses[1].id,
-        teacherId: teachers[1].id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-      {
-        courseId: courses[2].id,
-        teacherId: teachers[1].id,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
+      // {
+      //   courseId: courses[1].id,
+      //   teacherId: teacher[1].id,
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
+      // {
+      //   courseId: courses[2].id,
+      //   teacherId: teacher[1].id,
+      //   createdAt: new Date(),
+      //   updatedAt: new Date(),
+      // },
     ]);
   },
 

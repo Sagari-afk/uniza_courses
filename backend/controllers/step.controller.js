@@ -1,4 +1,4 @@
-const { sequelize, Step, Questions, Answers } = require("../models");
+const { sequelize, Step, Question, Answer } = require("../models");
 const { body, validationResult } = require("express-validator");
 const path = require("path");
 const fs = require("fs");
@@ -107,11 +107,11 @@ const getTest = async (req, res) => {
     const record = await Step.findByPk(req.params.testId, {
       include: [
         {
-          model: Questions,
-          as: "questions",
+          model: Question,
+          as: "question",
           include: [
             {
-              model: Answers,
+              model: Answer,
             },
           ],
         },

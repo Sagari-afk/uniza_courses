@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
         as: "topic",
       });
 
-      StudentProgressHistory.belongsTo(models.SubTopic, {
+      StudentProgressHistory.belongsTo(models.Subtopic, {
         foreignKey: "subtopicId",
         as: "subtopic",
       });
@@ -40,7 +40,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      tableName: "studentprogresshistories",
+      tableName: "studentProgressHistory",
       modelName: "StudentProgressHistory",
     }
   );

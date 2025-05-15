@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.bulkInsert("disciplines", [
+    await queryInterface.bulkInsert("discipline", [
       {
         name: "Multimediálne technológie",
         createdAt: new Date("2024-10-27T09:08:27.000Z"),
@@ -18,6 +18,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("disciplines", null, {});
+    await queryInterface.bulkDelete("discipline", null, {});
   },
 };

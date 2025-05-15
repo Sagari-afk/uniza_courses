@@ -4,7 +4,7 @@ module.exports = {
       disciplineId: {
         type: Sequelize.INTEGER,
         references: {
-          model: "Disciplines",
+          model: "Discipline",
           key: "id",
         },
         onDelete: "CASCADE",

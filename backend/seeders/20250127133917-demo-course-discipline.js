@@ -1,7 +1,7 @@
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    const disciplines = await queryInterface.sequelize.query(
-      "SELECT id FROM Disciplines",
+    const discipline = await queryInterface.sequelize.query(
+      "SELECT id FROM Discipline",
       { type: Sequelize.QueryTypes.SELECT }
     );
     const courses = await queryInterface.sequelize.query(
@@ -11,25 +11,25 @@ module.exports = {
 
     await queryInterface.bulkInsert("course_discipline", [
       {
-        disciplineId: disciplines[0].id,
+        disciplineId: discipline[0].id,
         courseId: courses[0].id,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        disciplineId: disciplines[1].id,
+        disciplineId: discipline[1].id,
         courseId: courses[0].id,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        disciplineId: disciplines[0].id,
+        disciplineId: discipline[0].id,
         courseId: courses[1].id,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        disciplineId: disciplines[1].id,
+        disciplineId: discipline[1].id,
         courseId: courses[2].id,
         createdAt: new Date(),
         updatedAt: new Date(),

@@ -38,7 +38,7 @@ const newTopic = [
 
 const editTopicOrder = [
   body("courseId").not().isEmpty(),
-  body("topics").isArray(),
+  body("topic").isArray(),
 
   async (req, res) => {
     console.log("mlem");
@@ -55,11 +55,11 @@ const editTopicOrder = [
     }
 
     try {
-      const { courseId, topics } = req.body;
-      for (let i = 0; i < topics.length; i++) {
+      const { courseId, topic } = req.body;
+      for (let i = 0; i < topic.length; i++) {
         await Topic.update(
           { order: i + 1 },
-          { where: { id: topics[i].topicId, courseId } }
+          { where: { id: topic[i].topicId, courseId } }
         );
       }
       return res.json({ message: "Topic order updated}" });

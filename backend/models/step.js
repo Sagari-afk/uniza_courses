@@ -3,12 +3,12 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Step extends Model {
     static associate(models) {
-      Step.belongsTo(models.SubTopic, {
+      Step.belongsTo(models.Subtopic, {
         foreignKey: "subtopicId",
         onDelete: "CASCADE",
       });
-      Step.hasMany(models.Questions, {
-        as: "questions",
+      Step.hasMany(models.Question, {
+        as: "question",
         onDelete: "CASCADE",
       });
     }
@@ -51,7 +51,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Step",
-      tableName: "steps",
+      tableName: "step",
     }
   );
   return Step;

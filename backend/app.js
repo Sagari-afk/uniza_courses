@@ -35,15 +35,15 @@ app.use("/api/user/", require("./routes/user.router"));
 app.use("/api/userProgress/", require("./routes/userProgress.router"));
 app.use("/api/course/", require("./routes/course.router"));
 app.use("/api/courseStructure/", require("./routes/courseStructure.router"));
-app.use("/api/questions/", require("./routes/question.router"));
-app.use("/api/comment/", require("./routes/course_comment.router"));
+app.use("/api/question/", require("./routes/question.router"));
+app.use("/api/comment/", require("./routes/courseComment.router"));
 
 // static uploads
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.use(express.static(path.join(__dirname, "uniza_courses", "dist")));
+app.use(express.static(path.join(__dirname, "dist")));
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "uniza_courses", "build", "index.html"));
+  res.sendFile(path.join(__dirname, "dist", "index.html"));
 });
 
 app.listen(3000, async () => {

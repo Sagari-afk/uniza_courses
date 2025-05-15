@@ -3,24 +3,24 @@ const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Course extends Model {
     static associate(models) {
-      Course.hasMany(models.CourseComments, {
+      Course.hasMany(models.CourseComment, {
         foreignKey: "courseId",
         onDelete: "CASCADE",
       });
       Course.hasMany(models.Topic, {
         foreignKey: "courseId",
         onDelete: "CASCADE",
-        as: "topics",
+        as: "topic",
       });
       Course.belongsToMany(models.Teacher, {
         through: "teacher_courses",
         foreignKey: "courseId",
-        as: "teachers",
+        as: "teacher",
       });
       Course.belongsToMany(models.Discipline, {
         through: "course_discipline",
         foreignKey: "courseId",
-        as: "disciplines",
+        as: "discipline",
       });
     }
   }

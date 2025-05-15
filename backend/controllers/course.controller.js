@@ -1,13 +1,13 @@
 const {
   sequelize,
   Course,
-  CourseComments,
+  CourseComment,
   User,
   Discipline,
   Teacher,
   Step,
   Topic,
-  SubTopic,
+  Subtopic,
   StudentProgressHistory,
 } = require("../models");
 const { body, validationResult } = require("express-validator");
@@ -17,7 +17,7 @@ const getCourses = async (req, res) => {
     const records = await Course.findAll({
       include: [
         {
-          model: CourseComments,
+          model: CourseComment,
           include: {
             model: User,
             as: "user",
@@ -29,7 +29,7 @@ const getCourses = async (req, res) => {
           model: Teacher,
           attributes: ["id", "institute", "office", "phone"],
           through: { attributes: [] },
-          as: "teachers",
+          as: "teacher",
           include: [
             {
               model: User,
@@ -48,7 +48,7 @@ const getCourses = async (req, res) => {
           model: Discipline,
           attributes: ["name"],
           through: { attributes: [] },
-          as: "disciplines",
+          as: "discipline",
         },
       ],
     });
@@ -76,7 +76,7 @@ const getCourseBy = async (req, res) => {
     const record = await Course.findByPk(req.params.id, {
       include: [
         {
-          model: CourseComments,
+          model: CourseComment,
           include: {
             model: User,
             as: "user",
@@ -87,7 +87,7 @@ const getCourseBy = async (req, res) => {
         {
           model: Teacher,
           attributes: ["id", "institute", "office", "phone"],
-          as: "teachers",
+          as: "teacher",
           include: [
             {
               model: User,
@@ -106,22 +106,22 @@ const getCourseBy = async (req, res) => {
           model: Discipline,
           attributes: ["name"],
           through: { attributes: [] },
-          as: "disciplines",
+          as: "discipline",
         },
         {
           model: Topic,
           attributes: ["title", "order", "id"],
-          as: "topics",
+          as: "topic",
           include: [
             {
-              model: SubTopic,
+              model: Subtopic,
               attributes: ["title", "order", "id"],
-              as: "subtopics",
+              as: "subtopic",
               include: [
                 {
                   model: Step,
                   attributes: ["title", "order", "id", "type"],
-                  as: "steps",
+                  as: "step",
                 },
               ],
             },
@@ -129,17 +129,17 @@ const getCourseBy = async (req, res) => {
         },
       ],
       order: [
-        [{ model: Topic, as: "topics" }, "order", "ASC"],
+        [{ model: Topic, as: "topic" }, "order", "ASC"],
         [
-          { model: Topic, as: "topics" },
-          { model: SubTopic, as: "subtopics" },
+          { model: Topic, as: "topic" },
+          { model: Subtopic, as: "subtopic" },
           "order",
           "ASC",
         ],
         [
-          { model: Topic, as: "topics" },
-          { model: SubTopic, as: "subtopics" },
-          { model: Step, as: "steps" },
+          { model: Topic, as: "topic" },
+          { model: Subtopic, as: "subtopic" },
+          { model: Step, as: "step" },
           "order",
           "ASC",
         ],
@@ -167,10 +167,10 @@ const newCourse = [
   body("description").not().isEmpty(),
 
   async (req, res) => {
-    const { name, description, disciplines, year, teachers, long_description } =
+    const { name, description, discipline, year, teacher, long_description } =
       req.body;
-    const disciplines1 = JSON.parse(disciplines);
-    const teachers1 = JSON.parse(teachers);
+    const disciplines1 = JSON.parse(discipline);
+    const teachers1 = JSON.parse(teacher);
 
     const img_url = req.file ? req.file.path : null;
 
@@ -232,17 +232,17 @@ const updateCourse = async (req, res) => {
     if (!existingCourse)
       return res.status(400).json("Course s takym id neexistuje!");
 
-    if (data.teachers) {
-      let teacherIds = data.teachers;
+    if (data.teacher) {
+      let teacherIds = data.teacher;
       if (typeof teacherIds === "string") {
         teacherIds = JSON.parse(teacherIds);
       }
       await existingCourse.setTeachers(teacherIds);
-      delete data.teachers;
+      delete data.teacher;
     }
 
-    if (data.disciplines) {
-      let disciplineInput = data.disciplines;
+    if (data.discipline) {
+      let disciplineInput = data.discipline;
       if (typeof disciplineInput === "string") {
         disciplineInput = JSON.parse(disciplineInput);
       }
@@ -257,7 +257,7 @@ const updateCourse = async (req, res) => {
       );
       const filteredDisciplineIds = disciplineIds.filter((id) => id !== null);
       await existingCourse.setDisciplines(filteredDisciplineIds);
-      delete data.disciplines;
+      delete data.discipline;
     }
     await existingCourse.update(data);
     if (req.file) {
@@ -299,7 +299,7 @@ const getAllTeachersCourses = async (req, res) => {
     const records = await Course.findAll({
       include: [
         {
-          model: CourseComments,
+          model: CourseComment,
           include: {
             model: User,
             as: "user",
@@ -311,7 +311,7 @@ const getAllTeachersCourses = async (req, res) => {
           model: Teacher,
           attributes: ["id", "institute", "office", "phone"],
           through: { attributes: [] },
-          as: "teachers",
+          as: "teacher",
           where: { id: teacher.id },
           include: [
             {
@@ -331,7 +331,7 @@ const getAllTeachersCourses = async (req, res) => {
           model: Discipline,
           attributes: ["name"],
           through: { attributes: [] },
-          as: "disciplines",
+          as: "discipline",
         },
       ],
     });

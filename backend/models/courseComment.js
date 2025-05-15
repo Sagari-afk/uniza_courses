@@ -2,20 +2,20 @@
 const { Model } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-  class CourseComments extends Model {
+  class CourseComment extends Model {
     static associate(models) {
-      CourseComments.belongsTo(models.Course, {
+      CourseComment.belongsTo(models.Course, {
         foreignKey: "courseId",
         onDelete: "CASCADE",
       });
-      CourseComments.belongsTo(models.User, {
+      CourseComment.belongsTo(models.User, {
         foreignKey: "userId",
         onDelete: "CASCADE",
         as: "user",
       });
     }
   }
-  CourseComments.init(
+  CourseComment.init(
     {
       courseId: {
         type: DataTypes.INTEGER,
@@ -36,9 +36,9 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "CourseComments",
-      tableName: "coursecomments",
+      modelName: "CourseComment",
+      tableName: "courseComment",
     }
   );
-  return CourseComments;
+  return CourseComment;
 };

@@ -1,4 +1,4 @@
-const { sequelize, SubTopic } = require("../models");
+const { sequelize, Subtopic } = require("../models");
 const { body, validationResult } = require("express-validator");
 
 const newSubTopic = [
@@ -18,10 +18,10 @@ const newSubTopic = [
     }
 
     const { title, topicId } = req.body;
-    const order = (await SubTopic.count({ where: { topicId } })) + 1;
+    const order = (await Subtopic.count({ where: { topicId } })) + 1;
 
     try {
-      const subtopic = await SubTopic.create({
+      const subtopic = await Subtopic.create({
         title,
         topicId,
         order,
@@ -36,7 +36,7 @@ const newSubTopic = [
 ];
 
 const editSubtopicOrder = [
-  body("subtopics").not().isEmpty(),
+  body("subtopic").not().isEmpty(),
 
   async (req, res) => {
     const errors = validationResult(req);
@@ -50,12 +50,12 @@ const editSubtopicOrder = [
       return res.status(400).json(errMessage);
     }
 
-    const { subtopics } = req.body;
+    const { subtopic } = req.body;
     try {
-      for (let i = 0; i < subtopics.length; i++) {
-        await SubTopic.update(
+      for (let i = 0; i < subtopic.length; i++) {
+        await Subtopic.update(
           { order: i + 1 },
-          { where: { id: subtopics[i].subtopicId } }
+          { where: { id: subtopic[i].subtopicId } }
         );
       }
       return res.json("Subtopic order updated");
@@ -84,7 +84,7 @@ const editSubtopic = [
 
     const { subtopicId, title } = req.body;
     try {
-      await SubTopic.update({ title }, { where: { id: subtopicId } });
+      await Subtopic.update({ title }, { where: { id: subtopicId } });
       return res.json("Subtopic updated");
     } catch (error) {
       console.log(error);
@@ -108,7 +108,7 @@ const deleteSubtopic = [
 
     const subtopicId = req.params.subtopicId;
     try {
-      await SubTopic.destroy({ where: { id: subtopicId } });
+      await Subtopic.destroy({ where: { id: subtopicId } });
       return res.json("Subtopic deleted");
     } catch (error) {
       console.log(error);
