@@ -5,7 +5,7 @@ module.exports = {
       { type: Sequelize.QueryTypes.SELECT }
     );
 
-    await queryInterface.bulkInsert("Students", [
+    await queryInterface.bulkInsert("students", [
       {
         userId: users[0].id,
         personalNum: "318224",
@@ -16,6 +16,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete("Students", null, {});
+    await queryInterface.bulkDelete("students", null, {});
   },
 };

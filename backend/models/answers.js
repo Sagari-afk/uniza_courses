@@ -7,14 +7,6 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "questionId",
         onDelete: "CASCADE",
       });
-      // Answers.hasMany(models.UserAnswers, {
-      //   foreignKey: 'answerId',
-      //   onDelete: 'CASCADE',
-      // });
-      // Answers.hasMany(models.UserQuestion, {
-      //   foreignKey: 'answerId',
-      //   onDelete: 'CASCADE',
-      // });
     }
   }
   Answers.init(
@@ -26,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "Answers",
+      tableName: "answers",
     }
   );
   return Answers;

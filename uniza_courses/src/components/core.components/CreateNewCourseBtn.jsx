@@ -17,7 +17,6 @@ const CreateNewCourseBtn = ({ actions, icon, sx, direction, sx_actions }) => {
           icon={action.icon}
           component="a"
           href={action.link}
-          tooltipTitle={action.name}
           sx={{ ...sx_actions }}
         />
       ))}

@@ -4,11 +4,11 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     const courses = await queryInterface.sequelize.query(
-      "SELECT id FROM Course",
+      "SELECT id FROM course",
       { type: Sequelize.QueryTypes.SELECT }
     );
     const teachers = await queryInterface.sequelize.query(
-      "SELECT id FROM Teachers",
+      "SELECT id FROM teachers",
       { type: Sequelize.QueryTypes.SELECT }
     );
 

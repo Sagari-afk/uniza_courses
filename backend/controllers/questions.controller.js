@@ -1,6 +1,6 @@
 const path = require("path");
 const { sequelize, Questions, Answers } = require("../models");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, param } = require("express-validator");
 const fs = require("fs");
 
 const addQuestion = [
@@ -253,25 +253,28 @@ const getQuestion = async (req, res) => {
   }
 };
 
-const answerUpdate = async (req, res) => {
-  const answerId = req.params.answerId;
-  const { answerText, isCorrect } = req.body;
-  console.log("answerId: ", answerId);
-  console.log("answerText: ", answerText);
-  console.log("isCorrect: ", isCorrect);
+const answerUpdate = [
+  body("answerText").notEmpty(),
+  body("isCorrect").isBoolean(),
+  param("answerId").notEmpty(),
 
-  try {
-    const answer = await Answers.update(
-      { contentFileName: answerText, correctAnswer: isCorrect },
-      { where: { id: answerId } }
-    );
+  async (req, res) => {
+    const answerId = req.params.answerId;
+    const { answerText, isCorrect } = req.body;
 
-    return res.json(answer);
-  } catch (error) {
-    console.log(error);
-    return res.status(500).json(error.message);
-  }
-};
+    try {
+      const answer = await Answers.update(
+        { contentFileName: answerText, correctAnswer: isCorrect },
+        { where: { id: answerId } }
+      );
+
+      return res.json(answer);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json(error.message);
+    }
+  },
+];
 
 const deleteQuestion = async (req, res) => {
   const { questionId } = req.params;
